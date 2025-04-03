@@ -3,11 +3,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class YutBoard extends JPanel {
+public class YutBoardV2 extends JPanel {
 
     private int numSides;
 
-    public YutBoard(int numSides) {
+    public YutBoardV2(int numSides) {
         this.numSides = numSides;
     }
 
@@ -89,7 +89,7 @@ public class YutBoard extends JPanel {
         JFrame frame = new JFrame(sides + "각 윷놀이 판");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(650, 650);
-        frame.add(new YutBoard(sides));
+        frame.add(new YutBoardV2(sides));
         frame.setVisible(true);
     }
 }
