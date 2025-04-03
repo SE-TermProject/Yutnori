@@ -1,5 +1,6 @@
 # Yutnori 
-![yutnori](https://github.com/user-attachments/assets/d300272d-0ffa-415e-b236-ac554dbbed09)
+![yutnori](https://github.com/user-attachments/assets/cc086cb2-c013-4077-97ad-ce6ba85cb1fd)
+
 
 ## develop period
 2025.04.03 ~
