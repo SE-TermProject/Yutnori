@@ -51,8 +51,10 @@ public class YutBoardV2 extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int size = 30;
-        int centerX = getWidth() / 2;
-        int centerY = getHeight() / 2;
+        int centerX = 350;
+        int centerY = 350;
+        //int centerX = getWidth() / 2;
+        //int centerY = getHeight() / 2;
         int radius = 200;
 
         Point center = new Point(centerX, centerY);
@@ -79,7 +81,7 @@ public class YutBoardV2 extends JPanel {
         // 출발 위치: 오른쪽 아래 꼭짓점
         Point start = vertices.get(0);
         for (Point p : vertices) {
-            if (p.x >= start.x && p.y >= start.y) {
+            if ( p.y >= start.y && p.x >= start.x ) {
                 start = p;
             }
         }
@@ -100,5 +102,6 @@ public class YutBoardV2 extends JPanel {
 
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
         g2.drawOval(x - size / 2, y - size / 2, size, size);
+        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
     }
 }

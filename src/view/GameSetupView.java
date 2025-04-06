@@ -53,7 +53,7 @@ public class GameSetupView extends JFrame {
             System.out.println("Sides: " + sides + ", Players: " + playerCount + ", Pieces: " + pieceCount);
 
             // 실제 게임 화면으로 이동
-            JFrame gameFrame = new JFrame("Yut Game");
+            JFrame gameFrame = new JFrame("YutNori");
             gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             gameFrame.setSize(700, 700);
             YutBoardV2 board = new YutBoardV2(sides, playerCount, pieceCount);
