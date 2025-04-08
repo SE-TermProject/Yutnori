@@ -53,35 +53,50 @@ public class YutBoardV2 extends JPanel {
         int size = 30;
         int centerX = 350;
         int centerY = 350;
-        //int centerX = getWidth() / 2;
-        //int centerY = getHeight() / 2;
         int radius = 200;
 
         Point center = new Point(centerX, centerY);
         drawCircle(g2, center.x, center.y, size);
 
+        // 밑변이 수평이 되도록 시작 각도 조정
+        double startAngle;
+        switch (numSides) {
+            case 4:
+                startAngle = Math.PI / 4; // 사각형
+                break;
+            case 5:
+                startAngle = Math.PI / 2 + Math.PI / 5; // 오각형
+                break;
+            case 6:
+                startAngle = Math.PI / 6; // 육각형
+                break;
+            default:
+                startAngle = -Math.PI / 2; // 디폴트 (기존)
+                break;
+        }
+
         List<Point> vertices = new ArrayList<>();
         for (int i = 0; i < numSides; i++) {
-            double angle = 2 * Math.PI * i / numSides - Math.PI / 2;
+            double angle = 2 * Math.PI * i / numSides + startAngle;
             int x = centerX + (int) (radius * Math.cos(angle));
             int y = centerY + (int) (radius * Math.sin(angle));
             vertices.add(new Point(x, y));
         }
 
         for (Point vertex : vertices) {
-            drawBetween(g2, vertex, center, 3, size, false); // 중심 ↔ 꼭짓점: 점 2개
+            drawBetween(g2, vertex, center, 3, size, false); // 중심 ↔ 꼭짓점
         }
 
         for (int i = 0; i < vertices.size(); i++) {
             Point from = vertices.get(i);
             Point to = vertices.get((i + 1) % vertices.size());
-            drawBetween(g2, from, to, 5, size, true); // 변 하나당 점 6개
+            drawBetween(g2, from, to, 5, size, true); // 변 위 점들
         }
 
-        // 출발 위치: 오른쪽 아래 꼭짓점
+        // 출발 위치 표시 (가장 아래쪽의 오른쪽 꼭짓점)
         Point start = vertices.get(0);
         for (Point p : vertices) {
-            if ( p.y >= start.y && p.x >= start.x ) {
+            if (p.y >= start.y && p.x >= start.x) {
                 start = p;
             }
         }
