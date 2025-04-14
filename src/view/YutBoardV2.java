@@ -58,7 +58,7 @@ public class YutBoardV2 extends JPanel {
         Point center = new Point(centerX, centerY);
         drawCircle(g2, center.x, center.y, size);
 
-        // 밑변이 수평이 되도록 시작 각도 조정
+        // 시작 각도 조정
         double startAngle;
         switch (numSides) {
             case 4:
@@ -68,10 +68,10 @@ public class YutBoardV2 extends JPanel {
                 startAngle = Math.PI / 2 + Math.PI / 5; // 오각형
                 break;
             case 6:
-                startAngle = Math.PI / 6; // 육각형
+                startAngle = 0; // 밑변이 수평한 육각형
                 break;
             default:
-                startAngle = -Math.PI / 2; // 디폴트 (기존)
+                startAngle = -Math.PI / 2; // 디폴트
                 break;
         }
 
@@ -93,14 +93,34 @@ public class YutBoardV2 extends JPanel {
             drawBetween(g2, from, to, 5, size, true); // 변 위 점들
         }
 
-        // 출발 위치 표시 (가장 아래쪽의 오른쪽 꼭짓점)
+        // 출발 위치 표시
         Point start = vertices.get(0);
-        for (Point p : vertices) {
-            if (p.y >= start.y && p.x >= start.x) {
-                start = p;
+
+        if (numSides == 6) {
+            // 육각형 → y값이 가장 큰 꼭짓점 (아래쪽)
+            for (Point p : vertices) {
+                if (p.y > start.y) {
+                    start = p;
+                }
+            }
+        } else if (numSides == 5) {
+            // 오각형 → x값이 가장 큰 꼭짓점 (오른쪽)
+            for (Point p : vertices) {
+                if (p.y >= start.y && p.x >= start.x) {
+                    start = p;
+                }
+            }
+        } else {
+            // 기본: 아래 + 오른쪽 (기존 방식)
+            for (Point p : vertices) {
+                if (p.y >= start.y && p.x >= start.x) {
+                    start = p;
+                }
             }
         }
+
         g2.drawString("출발", start.x - 15, start.y + 5);
+
     }
 
     private void drawBetween(Graphics2D g2, Point from, Point to, int divisions, int size, boolean includeEnds) {
