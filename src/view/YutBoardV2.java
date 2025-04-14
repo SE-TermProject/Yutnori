@@ -135,8 +135,21 @@ public class YutBoardV2 extends JPanel {
         }
     }
 
+    private Point convertToBoardIndex(int x, int y) {
+        int boardX = 0, boardY = 0;
+
+        if (x == 491) {
+            boardY = (491 - y) / 56;
+        } else if (y == 491) {
+            boardY = 20 - (491 - x) / 56 ;
+        }
+
+        return new Point(boardX, boardY);
+    }
+
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
         g2.drawOval(x - size / 2, y - size / 2, size, size);
-        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
+        Point boardIndex = convertToBoardIndex(x, y);
+        g2.drawString("[" + boardIndex.x + ", " + boardIndex.y + "]", x + size / 2, y + size / 2);
     }
 }
