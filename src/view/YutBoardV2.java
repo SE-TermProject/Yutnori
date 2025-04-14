@@ -142,6 +142,10 @@ public class YutBoardV2 extends JPanel {
             boardY = (491 - y) / 56;
         } else if (y == 491) {
             boardY = 20 - (491 - x) / 56 ;
+        } else if (x == 209) {
+            boardY = 10 - (209 - y) / 56;
+        } else if (y == 209) {
+            boardY = 5 + (491 - x) / 56;
         }
 
         return new Point(boardX, boardY);
