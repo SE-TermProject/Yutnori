@@ -135,25 +135,47 @@ public class YutBoardV2 extends JPanel {
         }
     }
 
-    private Point convertToBoardIndex(int x, int y) {
+    private int[] convertToBoardIndex(int x, int y) {
         int boardX = 0, boardY = 0;
 
         if (x == 491) {
             boardY = (491 - y) / 56;
+            return new int[]{0, boardY};
         } else if (y == 491) {
-            boardY = 20 - (491 - x) / 56 ;
+            boardY = 20 - (491 - x) / 56;
+            return new int[]{0, boardY};
         } else if (x == 209) {
             boardY = 10 - (209 - y) / 56;
+            return new int[]{0, boardY};
         } else if (y == 209) {
             boardY = 5 + (491 - x) / 56;
+            return new int[]{0, boardY};
+        } else {
+            if (x == 256 && y == 256) return new int[]{2, 11};
+            if (x == 444 && y == 256) return new int[]{1, 6};
+            if (x == 303 && y == 303) return new int[]{2, 12};
+            if (x == 397 && y == 303) return new int[]{1, 7};
+            if (x == 350 && y == 350) return new int[]{1, 1};
+            if (x == 303 && y == 397) return new int[]{1, 9};
+            if (x == 397 && y == 397) return new int[]{2, 14};
+            if (x == 256 && y == 444) return new int[]{1, 10};
+            if (x == 444 && y == 444) return new int[]{2, 15};
         }
 
-        return new Point(boardX, boardY);
+        return new int[]{boardX, boardY};
     }
 
+//    private void drawCircle(Graphics2D g2, int x, int y, int size) {
+//        g2.drawOval(x - size / 2, y - size / 2, size, size);
+//        Point boardIndex = convertToBoardIndex(x, y);
+//        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
+////        g2.drawString("[" + boardIndex.x + ", " + boardIndex.y + "]", x + size / 2, y + size / 2);
+//    }
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
         g2.drawOval(x - size / 2, y - size / 2, size, size);
-        Point boardIndex = convertToBoardIndex(x, y);
-        g2.drawString("[" + boardIndex.x + ", " + boardIndex.y + "]", x + size / 2, y + size / 2);
+        int[] boardIndex = convertToBoardIndex(x, y);
+//        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
+        g2.drawString("[" + boardIndex[0] + ", " + boardIndex[1] + "]", x + size / 2, y + size / 2);
     }
+
 }
