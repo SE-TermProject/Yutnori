@@ -2,8 +2,10 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class YutBoardV2 extends JPanel {
 
@@ -15,19 +17,19 @@ public class YutBoardV2 extends JPanel {
     private final JButton throwButton;
     private final JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
 
+    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
+
     public YutBoardV2(int numSides, int playerCount, int pieceCount) {
         this.numSides = numSides;
         this.playerCount = playerCount;
         this.pieceCount = pieceCount;
 
-        setLayout(null); // 절대 위치 사용
+        setLayout(null);
 
-        // 윷 결과 표시 라벨
         resultLabel = new JLabel("윷 결과: ", SwingConstants.CENTER);
         resultLabel.setBounds(220, 20, 200, 30);
         add(resultLabel);
 
-        // 윷 던지기 버튼
         throwButton = new JButton("윷 던지기");
         throwButton.setBounds(240, 60, 160, 40);
         add(throwButton);
@@ -55,12 +57,11 @@ public class YutBoardV2 extends JPanel {
         throwMo = new JButton("모");
         throwMo.setBounds(420, 120, 60, 30);
         add(throwMo);
+
+        populateBoardIndexMap();
     }
 
-    public JButton getThrowButton() {
-        return throwButton;
-    }
-
+    public JButton getThrowButton() { return throwButton; }
     public JButton getThrowBackdo() { return throwBackdo; }
     public JButton getThrowDo() { return throwDo; }
     public JButton getThrowGae() { return throwGae; }
@@ -83,31 +84,20 @@ public class YutBoardV2 extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int size = 30;
-        int centerX = 350;
-        int centerY = 350;
-        int radius = 200;
+        int centerX = 350, centerY = 350, radius = 200;
 
         Point center = new Point(centerX, centerY);
         drawCircle(g2, center.x, center.y, size);
 
-        // 시작 각도 조정
         double startAngle;
         switch (numSides) {
-            case 4:
-                startAngle = Math.PI / 4; // 사각형
-                break;
-            case 5:
-                startAngle = Math.PI / 2 + Math.PI / 5; // 오각형
-                break;
-            case 6:
-                startAngle = 0; // 밑변이 수평한 육각형
-                break;
-            default:
-                startAngle = -Math.PI / 2; // 디폴트
-                break;
+            case 4: startAngle = Math.PI / 4; break;
+            case 5: startAngle = Math.PI / 2 + Math.PI / 5; break;
+            case 6: startAngle = 0; break;
+            default: startAngle = -Math.PI / 2;
         }
 
-        List<Point> vertices = new ArrayList<>();
+        List<Point> vertices = new ArrayList<Point>();
         for (int i = 0; i < numSides; i++) {
             double angle = 2 * Math.PI * i / numSides + startAngle;
             int x = centerX + (int) (radius * Math.cos(angle));
@@ -116,49 +106,27 @@ public class YutBoardV2 extends JPanel {
         }
 
         for (Point vertex : vertices) {
-            drawBetween(g2, vertex, center, 3, size, false); // 중심 ↔ 꼭짓점
+            drawBetween(g2, vertex, center, 3, size, false);
         }
 
         for (int i = 0; i < vertices.size(); i++) {
-            Point from = vertices.get(i);
-            Point to = vertices.get((i + 1) % vertices.size());
-            drawBetween(g2, from, to, 5, size, true); // 변 위 점들
+            drawBetween(g2, vertices.get(i), vertices.get((i + 1) % vertices.size()), 5, size, true);
         }
 
-        // 출발 위치 표시
         Point start = vertices.get(0);
-
-        if (numSides == 6) {
-            // 육각형 → y값이 가장 큰 꼭짓점 (아래쪽)
-            for (Point p : vertices) {
-                if (p.y > start.y) {
-                    start = p;
-                }
-            }
-        } else if (numSides == 5) {
-            // 오각형 → x값이 가장 큰 꼭짓점 (오른쪽)
-            for (Point p : vertices) {
-                if (p.y >= start.y && p.x >= start.x) {
-                    start = p;
-                }
-            }
-        } else {
-            // 기본: 아래 + 오른쪽 (기존 방식)
-            for (Point p : vertices) {
-                if (p.y >= start.y && p.x >= start.x) {
-                    start = p;
-                }
+        for (Point p : vertices) {
+            if ((numSides == 6 && p.y > start.y) ||
+                    (numSides == 5 && p.y >= start.y && p.x >= start.x) ||
+                    (numSides != 5 && numSides != 6 && p.y >= start.y && p.x >= start.x)) {
+                start = p;
             }
         }
-
         g2.drawString("출발", start.x - 15, start.y + 5);
-
     }
 
     private void drawBetween(Graphics2D g2, Point from, Point to, int divisions, int size, boolean includeEnds) {
         int start = includeEnds ? 0 : 1;
         int end = includeEnds ? divisions : divisions - 1;
-
         for (int i = start; i <= end; i++) {
             double t = i / (double) divisions;
             int x = (int) (from.x * (1 - t) + to.x * t);
@@ -167,138 +135,66 @@ public class YutBoardV2 extends JPanel {
         }
     }
 
-    private int[] convertToBoardIndex(int x, int y) {
-        int boardX = 0, boardY = 0;
-
-        if(numSides == 4){
-
-            if (x == 491) {
-                boardY = (491 - y) / 56;
-                return new int[]{0, boardY};
-            } else if (y == 491) {
-                boardY = 20 - (491 - x) / 56;
-                return new int[]{0, boardY};
-            } else if (x == 209) {
-                boardY = 10 - (209 - y) / 56;
-                return new int[]{0, boardY};
-            } else if (y == 209) {
-                boardY = 5 + (491 - x) / 56;
-                return new int[]{0, boardY};
-            } else {
-                if (x == 256 && y == 256) return new int[]{2, 11};
-                if (x == 444 && y == 256) return new int[]{1, 6};
-                if (x == 303 && y == 303) return new int[]{2, 12};
-                if (x == 397 && y == 303) return new int[]{1, 7};
-                if (x == 350 && y == 350) return new int[]{1, 1};
-                if (x == 303 && y == 397) return new int[]{1, 9};
-                if (x == 397 && y == 397) return new int[]{2, 14};
-                if (x == 256 && y == 444) return new int[]{1, 10};
-                if (x == 444 && y == 444) return new int[]{2, 15};
-            }
-        }
-
-        if (numSides == 5){
-                if (x == 350 && y == 216) return new int[]{2, 11};
-                if (x == 350 && y == 283) return new int[]{2, 12};
-                if (x == 223 && y == 309) return new int[]{3, 16};
-                if (x == 286 && y == 329) return new int[]{3, 17};
-                if (x == 350 && y == 350) return new int[]{1, 8};  // 중심점
-                if (x == 413 && y == 329) return new int[]{1, 7};
-                if (x == 311 && y == 403) return new int[]{1, 9};
-                if (x == 389 && y == 403) return new int[]{2, 14};
-                if (x == 272 && y == 457) return new int[]{1, 10};
-                if (x == 428 && y == 457) return new int[]{2, 15};
-
-                // 가장자리 좌표
-                if (x == 350 && y == 150) return new int[]{0, 10};
-                if (x == 388 && y == 177) return new int[]{0, 9};
-                if (x == 426 && y == 205) return new int[]{0, 8};
-                if (x == 464 && y == 233) return new int[]{0, 7};
-                if (x == 502 && y == 261) return new int[]{0, 6};
-                if (x == 540 && y == 289) return new int[]{0, 5};
-                if (x == 476 && y == 309) return new int[]{1, 6};
-                if (x == 525 && y == 333) return new int[]{0, 4};
-                if (x == 510 && y == 377) return new int[]{0, 3};
-                if (x == 496 && y == 422) return new int[]{0, 2};
-                if (x == 481 && y == 466) return new int[]{0, 1};
-                if (x == 467 && y == 511) return new int[]{0, 0};
-                if (x == 420 && y == 511) return new int[]{0, 24};
-                if (x == 373 && y == 511) return new int[]{0, 23};
-                if (x == 326 && y == 511) return new int[]{0, 22};
-                if (x == 279 && y == 511) return new int[]{0, 21};
-                if (x == 233 && y == 511) return new int[]{0, 20};
-                if (x == 218 && y == 466) return new int[]{0, 19};
-                if (x == 203 && y == 422) return new int[]{0, 18};
-                if (x == 189 && y == 377) return new int[]{0, 17};
-                if (x == 174 && y == 333) return new int[]{0, 16};
-                if (x == 160 && y == 289) return new int[]{0, 15};
-                if (x == 198 && y == 261) return new int[]{0, 14};
-                if (x == 236 && y == 233) return new int[]{0, 13};
-                if (x == 274 && y == 205) return new int[]{0, 12};
-                if (x == 312 && y == 177) return new int[]{0, 11};
-            }
-        if (numSides == 6){
-                // 내부 좌표
-                if (x == 283 && y == 234) return new int[]{3, 16};
-                if (x == 416 && y == 234) return new int[]{2, 11};
-                if (x == 316 && y == 292) return new int[]{3, 17};
-                if (x == 383 && y == 292) return new int[]{2, 12};
-                if (x == 216 && y == 350) return new int[]{4, 21};
-                if (x == 283 && y == 350) return new int[]{4, 22};
-                if (x == 350 && y == 350) return new int[]{1, 8};
-                if (x == 416 && y == 350) return new int[]{1, 7};
-                if (x == 483 && y == 350) return new int[]{1, 6};
-                if (x == 317 && y == 407) return new int[]{2, 14};
-                if (x == 383 && y == 407) return new int[]{3, 19};
-                if (x == 284 && y == 465) return new int[]{2, 15};
-                if (x == 416 && y == 465) return new int[]{3, 20};
-
-                // 가장자리 좌표
-                if (x == 250 && y == 177) return new int[]{0, 15};
-                if (x == 290 && y == 177) return new int[]{0, 14};
-                if (x == 330 && y == 177) return new int[]{0, 13};
-                if (x == 370 && y == 177) return new int[]{0, 12};
-                if (x == 410 && y == 177) return new int[]{0, 11};
-                if (x == 450 && y == 177) return new int[]{0, 10};
-                if (x == 470 && y == 211) return new int[]{0, 9};
-                if (x == 490 && y == 246) return new int[]{0, 8};
-                if (x == 510 && y == 280) return new int[]{0, 7};
-                if (x == 530 && y == 315) return new int[]{0, 6};
-                if (x == 550 && y == 350) return new int[]{0, 5};
-                if (x == 530 && y == 384) return new int[]{0, 4};
-                if (x == 510 && y == 419) return new int[]{0, 3};
-                if (x == 490 && y == 453) return new int[]{0, 2};
-                if (x == 470 && y == 488) return new int[]{0, 1};
-                if (x == 450 && y == 523) return new int[]{0, 0};
-                if (x == 410 && y == 523) return new int[]{0, 29};
-                if (x == 370 && y == 523) return new int[]{0, 28};
-                if (x == 330 && y == 523) return new int[]{0, 27};
-                if (x == 290 && y == 523) return new int[]{0, 26};
-                if (x == 251 && y == 523) return new int[]{0, 25};
-                if (x == 230 && y == 488) return new int[]{0, 24};
-                if (x == 210 && y == 453) return new int[]{0, 23};
-                if (x == 190 && y == 419) return new int[]{0, 22};
-                if (x == 170 && y == 384) return new int[]{0, 21};
-                if (x == 150 && y == 350) return new int[]{0, 20};
-                if (x == 170 && y == 315) return new int[]{0, 19};
-                if (x == 190 && y == 280) return new int[]{0, 18};
-                if (x == 210 && y == 246) return new int[]{0, 17};
-                if (x == 230 && y == 211) return new int[]{0, 16};
-
-                // 못 찾았을 경우 기본값
-                return new int[]{-1, -1};
-        }
-
-
-        return new int[]{boardX, boardY};
-    }
-
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
         g2.drawOval(x - size / 2, y - size / 2, size, size);
-        int[] boardIndex = convertToBoardIndex(x, y);
-        g2.drawString("[" + boardIndex[0] + ", " + boardIndex[1] + "]", x + size / 2, y + size / 2);
-//        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
-//        g2.drawString("(" + y + ")", x - size / 2, y - size / 2 - 5);
+        int[] index = coordinateToIndexMap.getOrDefault(new Point(x, y), new int[]{-1, -1});
+        g2.drawString("[" + index[0] + ", " + index[1] + "]", x + size / 2, y + size / 2);
     }
 
+    // ✅ 완성된 좌표-인덱스 매핑 함수
+    private void populateBoardIndexMap() {
+        int[][] data;
+        if (numSides == 4) {
+            data = new int[][] {
+                    // 중심점
+                    {350, 350, 1, 1},
+
+                    // 대각선
+                    {256, 256, 2, 11}, {303, 303, 2, 12},
+                    {444, 256, 1, 6}, {397, 303, 1, 7},
+                    {303, 397, 1, 9}, {256, 444, 1, 10},
+                    {397, 397, 2, 14}, {444, 444, 2, 15},
+
+                    // 외곽 선상 점들 (왼쪽 -> 위 -> 오른쪽 -> 아래 방향)
+                    {209, 350, 0, 0}, {209, 294, 0, 1}, {209, 238, 0, 2}, {209, 182, 0, 3},
+                    {265, 182, 0, 4}, {321, 182, 0, 5}, {377, 182, 0, 6}, {433, 182, 0, 7},
+                    {491, 182, 0, 8}, {491, 238, 0, 9}, {491, 294, 0, 10}, {491, 350, 0, 11},
+                    {491, 406, 0, 12}, {491, 462, 0, 13}, {491, 518, 0, 14},
+                    {433, 518, 0, 15}, {377, 518, 0, 16}, {321, 518, 0, 17}, {265, 518, 0, 18},
+                    {209, 518, 0, 19}, {209, 462, 0, 20}, {209, 406, 0, 21}
+            };
+        } else if (numSides == 5) {
+            data = new int[][] {
+                    {350, 216, 2, 11}, {350, 283, 2, 12}, {223, 309, 3, 16}, {286, 329, 3, 17},
+                    {350, 350, 1, 8}, {413, 329, 1, 7}, {311, 403, 1, 9}, {389, 403, 2, 14},
+                    {272, 457, 1, 10}, {428, 457, 2, 15}, {350, 150, 0, 10}, {388, 177, 0, 9},
+                    {426, 205, 0, 8}, {464, 233, 0, 7}, {502, 261, 0, 6}, {540, 289, 0, 5},
+                    {476, 309, 1, 6}, {525, 333, 0, 4}, {510, 377, 0, 3}, {496, 422, 0, 2},
+                    {481, 466, 0, 1}, {467, 511, 0, 0}, {420, 511, 0, 24}, {373, 511, 0, 23},
+                    {326, 511, 0, 22}, {279, 511, 0, 21}, {233, 511, 0, 20}, {218, 466, 0, 19},
+                    {203, 422, 0, 18}, {189, 377, 0, 17}, {174, 333, 0, 16}, {160, 289, 0, 15},
+                    {198, 261, 0, 14}, {236, 233, 0, 13}, {274, 205, 0, 12}, {312, 177, 0, 11}
+            };
+        } else if (numSides == 6) {
+            data = new int[][] {
+                    {283, 234, 3, 16}, {416, 234, 2, 11}, {316, 292, 3, 17}, {383, 292, 2, 12},
+                    {216, 350, 4, 21}, {283, 350, 4, 22}, {350, 350, 1, 8}, {416, 350, 1, 7},
+                    {483, 350, 1, 6}, {317, 407, 2, 14}, {383, 407, 3, 19}, {284, 465, 2, 15},
+                    {416, 465, 3, 20}, {250, 177, 0, 15}, {290, 177, 0, 14}, {330, 177, 0, 13},
+                    {370, 177, 0, 12}, {410, 177, 0, 11}, {450, 177, 0, 10}, {470, 211, 0, 9},
+                    {490, 246, 0, 8}, {510, 280, 0, 7}, {530, 315, 0, 6}, {550, 350, 0, 5},
+                    {530, 384, 0, 4}, {510, 419, 0, 3}, {490, 453, 0, 2}, {470, 488, 0, 1},
+                    {450, 523, 0, 0}, {410, 523, 0, 29}, {370, 523, 0, 28}, {330, 523, 0, 27},
+                    {290, 523, 0, 26}, {251, 523, 0, 25}, {230, 488, 0, 24}, {210, 453, 0, 23},
+                    {190, 419, 0, 22}, {170, 384, 0, 21}, {150, 350, 0, 20}, {170, 315, 0, 19},
+                    {190, 280, 0, 18}, {210, 246, 0, 17}, {230, 211, 0, 16}
+            };
+        } else {
+            data = new int[0][];
+        }
+
+        for (int[] entry : data) {
+            coordinateToIndexMap.put(new Point(entry[0], entry[1]), new int[]{entry[2], entry[3]});
+        }
+    }
 }
