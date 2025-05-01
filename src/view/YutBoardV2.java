@@ -13,6 +13,7 @@ public class YutBoardV2 extends JPanel {
 
     private final JLabel resultLabel;
     private final JButton throwButton;
+    private final JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
 
     public YutBoardV2(int numSides, int playerCount, int pieceCount) {
         this.numSides = numSides;
@@ -30,11 +31,42 @@ public class YutBoardV2 extends JPanel {
         throwButton = new JButton("윷 던지기");
         throwButton.setBounds(240, 60, 160, 40);
         add(throwButton);
+
+        throwBackdo = new JButton("빽도");
+        throwBackdo.setBounds(70, 120, 60, 30);
+        add(throwBackdo);
+
+        throwDo = new JButton("도");
+        throwDo.setBounds(140, 120, 60, 30);
+        add(throwDo);
+
+        throwGae = new JButton("개");
+        throwGae.setBounds(210, 120, 60, 30);
+        add(throwGae);
+
+        throwGeol = new JButton("걸");
+        throwGeol.setBounds(280, 120, 60, 30);
+        add(throwGeol);
+
+        throwYut = new JButton("윷");
+        throwYut.setBounds(350, 120, 60, 30);
+        add(throwYut);
+
+        throwMo = new JButton("모");
+        throwMo.setBounds(420, 120, 60, 30);
+        add(throwMo);
     }
 
     public JButton getThrowButton() {
         return throwButton;
     }
+
+    public JButton getThrowBackdo() { return throwBackdo; }
+    public JButton getThrowDo() { return throwDo; }
+    public JButton getThrowGae() { return throwGae; }
+    public JButton getThrowGeol() { return throwGeol; }
+    public JButton getThrowYut() { return throwYut; }
+    public JButton getThrowMo() { return throwMo; }
 
     public void updateResult(String result) {
         resultLabel.setText("윷 결과: " + result);

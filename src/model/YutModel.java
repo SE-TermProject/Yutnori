@@ -11,16 +11,18 @@ public class YutModel {
     public String throwYut() {
         int rand = random.nextInt(32); // 0부터 31까지의 랜덤 값 생성
 
-        if (rand < 5) {
+        if (rand < 4) {
             result = "빽도"; // 16.5% (5/32)
         } else if (rand < 11) {
             result = "도"; // 18.75% (6/32)
         } else if (rand < 23) {
             result = "개"; // 37.5% (12/32)
-        } else if (rand < 31) {
+        } else if (rand < 30) {
             result = "걸"; // 25% (8/32)
-        } else {
+        } else if (rand < 31) {
             result = "윷"; // 16.5% (5/32)
+        } else {
+            result = "모"; // 3.125% (1/32)
         }
         return result;
     }
