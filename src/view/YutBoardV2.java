@@ -190,11 +190,11 @@ public class YutBoardV2 extends JPanel {
                 if (x == 496 && y == 422) return new int[]{0, 2};
                 if (x == 481 && y == 466) return new int[]{0, 1};
                 if (x == 467 && y == 511) return new int[]{0, 0};
-                if (x == 420 && y == 514) return new int[]{0, 24};
-                if (x == 373 && y == 514) return new int[]{0, 23};
-                if (x == 326 && y == 513) return new int[]{0, 22};
-                if (x == 279 && y == 513) return new int[]{0, 21};
-                if (x == 233 && y == 513) return new int[]{0, 20};
+                if (x == 420 && y == 511) return new int[]{0, 24};
+                if (x == 373 && y == 511) return new int[]{0, 23};
+                if (x == 326 && y == 511) return new int[]{0, 22};
+                if (x == 279 && y == 511) return new int[]{0, 21};
+                if (x == 233 && y == 511) return new int[]{0, 20};
                 if (x == 218 && y == 466) return new int[]{0, 19};
                 if (x == 203 && y == 422) return new int[]{0, 18};
                 if (x == 189 && y == 377) return new int[]{0, 17};
@@ -213,8 +213,8 @@ public class YutBoardV2 extends JPanel {
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
         g2.drawOval(x - size / 2, y - size / 2, size, size);
         int[] boardIndex = convertToBoardIndex(x, y);
-//        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
         g2.drawString("[" + boardIndex[0] + ", " + boardIndex[1] + "]", x + size / 2, y + size / 2);
+//        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
     }
 
 }
