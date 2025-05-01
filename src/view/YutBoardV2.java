@@ -205,6 +205,57 @@ public class YutBoardV2 extends JPanel {
                 if (x == 274 && y == 205) return new int[]{0, 12};
                 if (x == 312 && y == 177) return new int[]{0, 11};
             }
+        if (numSides == 6){
+                // 내부 좌표
+                if (x == 283 && y == 234) return new int[]{3, 16};
+                if (x == 416 && y == 234) return new int[]{2, 11};
+                if (x == 316 && y == 292) return new int[]{3, 17};
+                if (x == 383 && y == 292) return new int[]{2, 12};
+                if (x == 216 && y == 350) return new int[]{4, 21};
+                if (x == 283 && y == 350) return new int[]{4, 22};
+                if (x == 350 && y == 350) return new int[]{1, 8};
+                if (x == 416 && y == 350) return new int[]{1, 7};
+                if (x == 483 && y == 350) return new int[]{1, 6};
+                if (x == 317 && y == 407) return new int[]{2, 14};
+                if (x == 383 && y == 407) return new int[]{3, 19};
+                if (x == 284 && y == 465) return new int[]{2, 15};
+                if (x == 416 && y == 465) return new int[]{3, 20};
+
+                // 가장자리 좌표
+                if (x == 250 && y == 177) return new int[]{0, 15};
+                if (x == 290 && y == 177) return new int[]{0, 14};
+                if (x == 330 && y == 177) return new int[]{0, 13};
+                if (x == 370 && y == 177) return new int[]{0, 12};
+                if (x == 410 && y == 177) return new int[]{0, 11};
+                if (x == 450 && y == 177) return new int[]{0, 10};
+                if (x == 470 && y == 211) return new int[]{0, 9};
+                if (x == 490 && y == 246) return new int[]{0, 8};
+                if (x == 510 && y == 280) return new int[]{0, 7};
+                if (x == 530 && y == 315) return new int[]{0, 6};
+                if (x == 550 && y == 350) return new int[]{0, 5};
+                if (x == 530 && y == 384) return new int[]{0, 4};
+                if (x == 510 && y == 419) return new int[]{0, 3};
+                if (x == 490 && y == 453) return new int[]{0, 2};
+                if (x == 470 && y == 488) return new int[]{0, 1};
+                if (x == 450 && y == 523) return new int[]{0, 0};
+                if (x == 410 && y == 523) return new int[]{0, 29};
+                if (x == 370 && y == 523) return new int[]{0, 28};
+                if (x == 330 && y == 523) return new int[]{0, 27};
+                if (x == 290 && y == 523) return new int[]{0, 26};
+                if (x == 251 && y == 523) return new int[]{0, 25};
+                if (x == 230 && y == 488) return new int[]{0, 24};
+                if (x == 210 && y == 453) return new int[]{0, 23};
+                if (x == 190 && y == 419) return new int[]{0, 22};
+                if (x == 170 && y == 384) return new int[]{0, 21};
+                if (x == 150 && y == 350) return new int[]{0, 20};
+                if (x == 170 && y == 315) return new int[]{0, 19};
+                if (x == 190 && y == 280) return new int[]{0, 18};
+                if (x == 210 && y == 246) return new int[]{0, 17};
+                if (x == 230 && y == 211) return new int[]{0, 16};
+
+                // 못 찾았을 경우 기본값
+                return new int[]{-1, -1};
+        }
 
 
         return new int[]{boardX, boardY};
@@ -215,6 +266,7 @@ public class YutBoardV2 extends JPanel {
         int[] boardIndex = convertToBoardIndex(x, y);
         g2.drawString("[" + boardIndex[0] + ", " + boardIndex[1] + "]", x + size / 2, y + size / 2);
 //        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
+//        g2.drawString("(" + y + ")", x - size / 2, y - size / 2 - 5);
     }
 
 }
