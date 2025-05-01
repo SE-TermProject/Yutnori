@@ -139,9 +139,9 @@ public class YutBoardV2 extends JPanel {
         g2.drawOval(x - size / 2, y - size / 2, size, size);
         int[] index = coordinateToIndexMap.getOrDefault(new Point(x, y), new int[]{-1, -1});
         g2.drawString("[" + index[0] + ", " + index[1] + "]", x + size / 2, y + size / 2);
+//        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
     }
 
-    // ✅ 완성된 좌표-인덱스 매핑 함수
     private void populateBoardIndexMap() {
         int[][] data;
         if (numSides == 4) {
