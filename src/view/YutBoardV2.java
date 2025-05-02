@@ -17,7 +17,8 @@ public class YutBoardV2 extends JPanel {
     private final JButton throwButton;
     private final JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
 
-    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
+//    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
+    private final Map<Point, List<int[]>> coordinateToIndexMap = new HashMap<>();
 
     public YutBoardV2(int numSides, int playerCount, int pieceCount) {
         this.numSides = numSides;
@@ -135,12 +136,26 @@ public class YutBoardV2 extends JPanel {
         }
     }
 
-    private void drawCircle(Graphics2D g2, int x, int y, int size) {
-        g2.drawOval(x - size / 2, y - size / 2, size, size);
-        int[] index = coordinateToIndexMap.getOrDefault(new Point(x, y), new int[]{-1, -1});
-        g2.drawString("[" + index[0] + ", " + index[1] + "]", x + size / 2, y + size / 2);
-//        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
+//    private void drawCircle(Graphics2D g2, int x, int y, int size) {
+//        g2.drawOval(x - size / 2, y - size / 2, size, size);
+//        int[] index = coordinateToIndexMap.getOrDefault(new Point(x, y), new int[]{-1, -1});
+//        g2.drawString("[" + index[0] + ", " + index[1] + "]", x + size / 2, y + size / 2);
+////        g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
+//    }
+private void drawCircle(Graphics2D g2, int x, int y, int size) {
+    g2.drawOval(x - size / 2, y - size / 2, size, size);
+
+    Point point = new Point(x, y);
+    List<int[]> indices = coordinateToIndexMap.get(point);
+
+    if (indices != null) {
+        int offsetY = 0;
+        for (int[] idx : indices) {
+            g2.drawString("[" + idx[0] + ", " + idx[1] + "]", x + size / 2, y + size / 2 + offsetY);
+            offsetY += 12; // 여러 개 있을 경우 줄바꿈
+        }
     }
+}
 
     private void populateBoardIndexMap() {
         int[][] data;
@@ -192,7 +207,10 @@ public class YutBoardV2 extends JPanel {
         }
 
         for (int[] entry : data) {
-            coordinateToIndexMap.put(new Point(entry[0], entry[1]), new int[]{entry[2], entry[3]});
+            Point point = new Point(entry[0], entry[1]);
+            coordinateToIndexMap
+                    .computeIfAbsent(point, k -> new ArrayList<>())
+                    .add(new int[]{entry[2], entry[3]});
         }
     }
 }
