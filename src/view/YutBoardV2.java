@@ -73,6 +73,11 @@ public class YutBoardV2 extends JPanel {
             }
             players.add(new Player(i, pieces));
         }
+
+        System.out.println("플레이어 및 말 초기화 완료:");
+        for (Player player : players) {
+            System.out.println("  - Player " + player.getId() + "의 말 개수: " + player.getPieces().size());
+        }
     }
 
     public JButton getThrowButton() { return throwButton; }
