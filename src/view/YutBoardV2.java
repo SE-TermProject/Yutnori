@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import model.Player;
+import model.Piece;
+
 public class YutBoardV2 extends JPanel {
 
     private final int numSides;
@@ -19,6 +22,7 @@ public class YutBoardV2 extends JPanel {
 
 //    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
     private final Map<Point, List<int[]>> coordinateToIndexMap = new HashMap<>();
+    private final List<Player> players;
 
     public YutBoardV2(int numSides, int playerCount, int pieceCount) {
         this.numSides = numSides;
@@ -60,6 +64,15 @@ public class YutBoardV2 extends JPanel {
         add(throwMo);
 
         populateBoardIndexMap();
+
+        players = new ArrayList<>();
+        for (int i = 0; i < playerCount; i++) {
+            List<Piece> pieces = new ArrayList<>();
+            for (int j = 0; j < pieceCount; j++) {
+                pieces.add(new Piece());
+            }
+            players.add(new Player(i, pieces));
+        }
     }
 
     public JButton getThrowButton() { return throwButton; }
