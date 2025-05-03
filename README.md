@@ -1,3 +1,10 @@
+# Yutnori 
+![yutnori](https://github.com/user-attachments/assets/cc086cb2-c013-4077-97ad-ce6ba85cb1fd)
+
+
+## develop period
+2025.04.03 ~
+
 ## Commit Convention
 타입(#이슈번호): 부연 설명 및 이유
 > ex. feat(#1): Login 화면 UI 구현
