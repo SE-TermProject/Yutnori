@@ -1,8 +1,7 @@
 package view;
 
 import controller.YutController;
-import model.YutModel;
-import view.YutBoardV2;
+import model.Yut;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +59,7 @@ public class GameSetupView extends JFrame {
             gameFrame.add(board);
 
             // 모델 + 컨트롤러 연결
-            YutModel model = new YutModel();
+            Yut model = new Yut();
             new YutController(model, board);
 
             gameFrame.setVisible(true);

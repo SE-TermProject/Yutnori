@@ -2,7 +2,7 @@ package model;
 
 import java.util.Random;
 
-public class YutModel {
+public class Yut {
 
     private final Random random = new Random();
     private String result;
