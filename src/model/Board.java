@@ -12,7 +12,7 @@ public class Board {
     }
 
     /* 위치가 비어있는지 확인 */
-    public boolean isOccupied(s) {
+    public boolean isOccupied() {
 
     }
 
