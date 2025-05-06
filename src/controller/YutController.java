@@ -12,7 +12,7 @@ public class YutController {
         view.getThrowButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String result = model.throwYut();
+                String result = model.getRandomResult();
                 view.updateResult(result);
             }
         });
