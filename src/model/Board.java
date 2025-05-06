@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
@@ -13,12 +14,12 @@ public class Board {
 
     /* 위치가 비어있는지 확인 */
     public boolean isOccupied() {
-
+        return false;
     }
 
     /* 이동 가능한 위치 계산 */
     public List<int[]> findPossiblePos() {
-
+        return new ArrayList<int[]>();
     }
 
     /* 실제 말 이동 처리 */
