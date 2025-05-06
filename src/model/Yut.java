@@ -2,13 +2,14 @@ package model;
 
 import java.util.Random;
 
-public class YutModel {
+public class Yut {
 
     private final Random random = new Random();
     private String result;
 
     // 윷 던지기 (각 경우의 확률 설정)
-    public String throwYut() {
+    // returnType YutResult.enum 으로 변경해야 함!!!!!!!!!!!! (변경하고 삭제해주세요)
+    public String getRandomResult() {
         int rand = random.nextInt(32); // 0부터 31까지의 랜덤 값 생성
 
         if (rand < 4) {
