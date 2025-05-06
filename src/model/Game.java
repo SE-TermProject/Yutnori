@@ -7,10 +7,11 @@ public class Game {
     private final int numSides;
     private final List<Player> players;
     private final Board board;
-    private final int currentPlayerIndex;
+    private int currentPlayerIndex;
     private List<Yut> yutResults;
 
     public Game(int numSides, int playerCount, int pieceCount) {
+        this.numSides = numSides;
         this.board = new Board(numSides);
         this.players = new ArrayList<>();
         this.yutResults = new ArrayList<>();
@@ -23,6 +24,10 @@ public class Game {
             }
             players.add(new Player(i, pieces));
         }
+    }
+
+    public int getNumSides() {
+        return numSides;
     }
 
     public Board getBoard() {
