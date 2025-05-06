@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    private List<Player> players;
-    private Board board;
-    private int currentPlayerIndex;
+    private final int numSides;
+    private final List<Player> players;
+    private final Board board;
+    private final int currentPlayerIndex;
     private List<Yut> yutResults;
 
     public Game(int numSides, int playerCount, int pieceCount) {
