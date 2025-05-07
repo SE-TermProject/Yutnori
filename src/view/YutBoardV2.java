@@ -7,14 +7,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import model.Game;
 import model.Player;
 import model.Piece;
 
 public class YutBoardV2 extends JPanel {
-
-    private final int numSides;
-    private final int playerCount;
-    private final int pieceCount;
 
     private final JLabel resultLabel;
     private final JButton throwButton;
@@ -22,13 +19,10 @@ public class YutBoardV2 extends JPanel {
 
 //    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
     private final Map<Point, List<int[]>> coordinateToIndexMap = new HashMap<>();
-    private final List<Player> players;
+//    private final List<Player> players;
+    private Game game;
 
-    public YutBoardV2(int numSides, int playerCount, int pieceCount) {
-        this.numSides = numSides;
-        this.playerCount = playerCount;
-        this.pieceCount = pieceCount;
-
+    public YutBoardV2() {
         setLayout(null);
 
         resultLabel = new JLabel("윷 결과: ", SwingConstants.CENTER);
@@ -62,22 +56,11 @@ public class YutBoardV2 extends JPanel {
         throwMo = new JButton("모");
         throwMo.setBounds(420, 120, 60, 30);
         add(throwMo);
+    }
 
+    public void setGame(Game game) {
+        this.game = game;
         populateBoardIndexMap();
-
-        players = new ArrayList<>();
-        for (int i = 0; i < playerCount; i++) {
-            List<Piece> pieces = new ArrayList<>();
-            for (int j = 0; j < pieceCount; j++) {
-                pieces.add(new Piece());
-            }
-            players.add(new Player(i, pieces));
-        }
-
-        System.out.println("플레이어 및 말 초기화 완료:");
-        for (Player player : players) {
-            System.out.println("  - Player " + player.getId() + "의 말 개수: " + player.getPieces().size());
-        }
     }
 
     public JButton getThrowButton() { return throwButton; }
@@ -99,6 +82,7 @@ public class YutBoardV2 extends JPanel {
     }
 
     private void drawBoard(Graphics g) {
+        int numSides = game.getNumSides();
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -176,6 +160,7 @@ private void drawCircle(Graphics2D g2, int x, int y, int size) {
 }
 
     private void populateBoardIndexMap() {
+        int numSides = game.getNumSides();
         int[][] data;
         if (numSides == 4) {
             data = new int[][] {

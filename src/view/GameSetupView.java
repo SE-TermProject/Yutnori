@@ -1,7 +1,6 @@
 package view;
 
 import controller.YutController;
-import model.Yut;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,19 +49,8 @@ public class GameSetupView extends JFrame {
 
             // 설정 확인용 로그
             System.out.println("Sides: " + sides + ", Players: " + playerCount + ", Pieces: " + pieceCount);
-
-            // 실제 게임 화면으로 이동
-            JFrame gameFrame = new JFrame("YutNori");
-            gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            gameFrame.setSize(700, 700);
-            YutBoardV2 board = new YutBoardV2(sides, playerCount, pieceCount);
-            gameFrame.add(board);
-
-            // 모델 + 컨트롤러 연결
-            Yut model = new Yut();
-            new YutController(model, board);
-
-            gameFrame.setVisible(true);
+            YutBoardV2 board = new YutBoardV2();
+            new YutController(sides, playerCount, pieceCount, board);
             this.dispose(); // 설정창 닫기
         });
 

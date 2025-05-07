@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    private List<Player> players;
-    private Board board;
+    private final int numSides;
+    private final List<Player> players;
+    private final Board board;
     private int currentPlayerIndex;
     private List<Yut> yutResults;
 
     public Game(int numSides, int playerCount, int pieceCount) {
+        this.numSides = numSides;
         this.board = new Board(numSides);
         this.players = new ArrayList<>();
         this.yutResults = new ArrayList<>();
@@ -22,6 +24,10 @@ public class Game {
             }
             players.add(new Player(i, pieces));
         }
+    }
+
+    public int getNumSides() {
+        return numSides;
     }
 
     public Board getBoard() {
@@ -47,11 +53,10 @@ public class Game {
     }
 
     /* 윷 던지기 */
-    public YutResult throwYut(boolean isRandom, YutResult chosen) {
+    // returnType "YutResult"로 변경 필요!!!
+    public String throwYut() {
         Yut yut = new Yut();
-        YutResult result = isRandom ? yut.getRandomResult() : chosen;
-        yut.setType(result);
-        yutResults.add(yut);
+        String result = yut.getRandomResult();
         return result;
     }
 
@@ -67,6 +72,6 @@ public class Game {
 
     /* 승리 조건 확인 */
     public boolean checkWin() {
-
+        return false;
     }
 }
