@@ -65,6 +65,9 @@ public class YutController {
                         else {
                             if(game.getCurrentPlayer().getPieces().contains(piece)) { // 현재 차례인 사용자의 말이라면
                                 System.out.println("말이 선택되었습니다.");
+                                if (piece.getPosition().length == 0) { // 새로운 말 추가
+                                    piece.setPosition(new int[]{0,0});
+                                }
                             }
                             else System.out.println("현재 사용자의 말이 아닙니다.");
                         }
