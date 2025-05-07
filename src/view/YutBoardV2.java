@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import model.Game;
-import model.Player;
-import model.Piece;
-
 public class YutBoardV2 extends JPanel {
 
     private final JLabel resultLabel;
@@ -20,7 +16,8 @@ public class YutBoardV2 extends JPanel {
 //    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
     private final Map<Point, List<int[]>> coordinateToIndexMap = new HashMap<>();
 //    private final List<Player> players;
-    private Game game;
+    private final List<PieceButton> pieceButtons = new ArrayList<>();
+    private int numSides = 4;  // 기본값, 실제 값은 controller에서 설정
 
     public YutBoardV2() {
         setLayout(null);
@@ -58,11 +55,6 @@ public class YutBoardV2 extends JPanel {
         add(throwMo);
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-        populateBoardIndexMap();
-    }
-
     public JButton getThrowButton() { return throwButton; }
     public JButton getThrowBackdo() { return throwBackdo; }
     public JButton getThrowDo() { return throwDo; }
@@ -75,14 +67,28 @@ public class YutBoardV2 extends JPanel {
         resultLabel.setText("윷 결과: " + result);
     }
 
+    public void setNumSides(int numSides) {
+        this.numSides = numSides;
+    }
+
+    public void setPieceButtons(List<PieceButton> pieceButtons) {
+        for (PieceButton pieceButton : pieceButtons) {
+            this.add(pieceButton);
+        }
+        this.pieceButtons.clear();
+        this.pieceButtons.addAll(pieceButtons);
+        repaint();
+
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBoard(g);
+
     }
 
     private void drawBoard(Graphics g) {
-        int numSides = game.getNumSides();
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -159,8 +165,7 @@ private void drawCircle(Graphics2D g2, int x, int y, int size) {
     }
 }
 
-    private void populateBoardIndexMap() {
-        int numSides = game.getNumSides();
+    public void populateBoardIndexMap() {
         int[][] data;
         if (numSides == 4) {
             data = new int[][] {
