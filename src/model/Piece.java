@@ -1,20 +1,19 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 public class Piece {
 
     private int[][] position;
     private boolean isGrouped;
     private boolean isFinished;
-    private List<int[]> prePositions; // 이전에 이동했던 위치 저장
+    private Stack<int[]> prePositions; // 이전에 이동했던 위치 저장
 
     public Piece() {
         this.position = new int[0][0]; // 초기값
         this.isGrouped = false;
         this.isFinished = false;
-        this.prePositions = new ArrayList<>();
+        this.prePositions = new Stack<>();
     }
 
     // Getters and Setters
@@ -42,9 +41,11 @@ public class Piece {
         isFinished = finished;
     }
 
-    public List<int[]> getPrePositions() { return prePositions; }
+    public Stack<int[]> getPrePositions() { return prePositions; }
 
-    public void addPrePosition(int[] prePosition) { this.prePositions.add(prePosition); }
+    public int[] peekPrePosition() { return prePositions.peek(); }
 
-    public void deletePrePosition(int prePosition) { this.prePositions.remove(prePosition); }
+    public void pushPrePosition(int[] prePosition) { this.prePositions.push(prePosition); }
+
+    public int[] popPrePosition(int prePosition) { return this.prePositions.pop(); }
 }
