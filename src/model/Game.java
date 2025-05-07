@@ -74,4 +74,7 @@ public class Game {
     public boolean checkWin() {
         return false;
     }
+
+    /* 윷 결과 반환 */
+    public List<Yut> getYutResults() { return this.yutResults; }
 }
