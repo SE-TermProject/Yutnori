@@ -19,13 +19,38 @@ public class Board {
     }
 
     /* 이동 가능한 위치 계산 */
-    public List<int[]> findPossiblePos(int row, int col, int step) {
+    public List<int[]> findPossiblePos(Piece piece, int row, int col, int step) {
+
         // 해당 인덱스의 칸(cells[row][col])에서 윷 결과(step)으로 이동 가능한 위치 계산
         ArrayList<int[]> possiblePos = new ArrayList<>(); // 해당 위치에서 이동 가능한 모든 위치를 담을 배열
         int[] nextPos = new int[2]; // 다음으로 이동 가능한 경로 계산하기 위한 배열
 
         /* 빽도인 경우 */
         if (step < 0) {
+            if (row == 0) { // 가장 바깥쪽에 있는 말인 경우
+                if (col == 0) { // 출발점인 경우
+                    // finish
+                    return possiblePos; // 비어있는 배열을 반환
+                }
+                else if (col == (numSides - 1) * 5) {
+                    int[] recentPos = piece.peekPrePosition();
+                    possiblePos.add(new int[]{recentPos[0], recentPos[1]});
+                }
+                else possiblePos.add(new int[]{row, col + step});
+            }
+            else { // 안쪽에 있는 말인 경우
+                if (col == 5 * row + 3) { // 중심점인 경우
+                    int[] recentPos = piece.peekPrePosition();
+                    possiblePos.add(new int[]{recentPos[0], recentPos[1]});
+                }
+                else {
+                    nextPos[0] = row; nextPos[1] = col + step;
+                    if (nextPos[1] == nextPos[0] * 5) { // 꼭짓점으로 이동하는 경우
+                        nextPos[0] = 0;
+                    }
+                    possiblePos.add(new int[]{nextPos[0], nextPos[1]});
+                }
+            }
         }
 
         /* 가장 바깥쪽에 있는 말인 경우 */
