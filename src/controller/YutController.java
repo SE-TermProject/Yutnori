@@ -19,7 +19,7 @@ public class YutController {
         this.game = new Game(sides, playerCount, pieceCount);
 
         board.setNumSides(game.getNumSides());
-        board.populateBoardIndexMap();
+        board.setBoard(game.getBoard());
 
         List<PieceButton> pieceButtons = generateInitialPieceButtons();
         board.setPieceButtons(pieceButtons);
