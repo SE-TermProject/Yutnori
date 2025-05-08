@@ -23,20 +23,18 @@ public class YutController {
     public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
         this.game = new Game(sides, playerCount, pieceCount);
         this.board = board;
+    }
 
+    public void initializeGameUI() {
         board.setNumSides(game.getBoard().getNumSides());
         board.setBoard(game.getBoard());
 
-        List<PieceButton> pieceButtons = generateInitialPieceButtons();
-        board.setPieceButtons(pieceButtons);
+        setupThrowButtons();
+        setupInitialPieceButtons();
+        setupFrame();
+    }
 
-        // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
-        JFrame gameFrame = new JFrame("YutNori");
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setSize(700, 700);
-        gameFrame.add(board);
-        gameFrame.setVisible(true);
-
+    private void setupThrowButtons() {
         // 랜덤 윷 던지기 버튼
         board.getThrowButton().addActionListener(new ActionListener() {
             @Override
@@ -53,7 +51,20 @@ public class YutController {
         board.getThrowGeol().addActionListener(e -> handleManualThrow(YutResult.GUL));
         board.getThrowYut().addActionListener(e -> handleManualThrow(YutResult.YUT));
         board.getThrowMo().addActionListener(e -> handleManualThrow(YutResult.MO));
+    }
 
+    private void setupInitialPieceButtons() {
+        List<PieceButton> pieceButtons = generateInitialPieceButtons();
+        board.setPieceButtons(pieceButtons);
+    }
+
+    private void setupFrame() {
+        // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
+        JFrame gameFrame = new JFrame("YutNori");
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setSize(700, 700);
+        gameFrame.add(board);
+        gameFrame.setVisible(true);
     }
 
     private List<PieceButton> generateInitialPieceButtons() {
