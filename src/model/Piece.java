@@ -9,7 +9,7 @@ public class Piece {
     private boolean isFinished;
     private Stack<int[]> prePositions; // 이전에 이동했던 위치 저장
 
-    private Board board; // isFinished에서 사용
+    private Board board; // isFinished()에서 사용
 
     public Piece() {
         this.position = new int[0]; // 초기값
