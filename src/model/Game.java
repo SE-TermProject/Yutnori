@@ -89,7 +89,7 @@ public class Game {
         Player currentPlayer = getCurrentPlayer(); // 현재 차례인 플레이어
         List<Piece> currentPlayerPieces = currentPlayer.getPieces(); // 현재 차레인 플레이어의 모든 말
         for (Piece piece : currentPlayerPieces) {
-            if (!piece.isFinished()) { // 아직 완료되지 않은 말들 -> 이동할 수 있는 말
+            if (!piece.isFinished(board.getNumSides())) { // 아직 완료되지 않은 말들 -> 이동할 수 있는 말
 
                 List<int[]> possiblePos = new ArrayList<>();
                 int[] position = Arrays.copyOf(piece.getPosition(), piece.getPosition().length);

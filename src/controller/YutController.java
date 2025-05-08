@@ -75,7 +75,7 @@ public class YutController {
                         if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
                             System.out.println("윷을 먼저 던져야 합니다.");
                         }
-                        else if (piece.isFinished()) { // 이미 finish된 말이라면
+                        else if (piece.isFinished(board.getNumSides())) { // 이미 finish된 말이라면
                             System.out.println("이 pieces는 이미 종료되었습니다.");
                         }
                         else {

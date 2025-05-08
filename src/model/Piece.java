@@ -9,8 +9,6 @@ public class Piece {
     private boolean isFinished;
     private Stack<int[]> prePositions; // 이전에 이동했던 위치 저장
 
-    private Board board; // isFinished()에서 사용
-
     public Piece() {
         this.position = new int[0]; // 초기값
         this.isGrouped = false;
@@ -36,20 +34,21 @@ public class Piece {
     }
 
     //position[0] = row, [1] = col
-    public boolean isFinished() {
+    public boolean isFinished(int numSide) {
+
+        if(position.length == 0) return isFinished;
 
         int now_row = position[0];
         int now_col = position[1];
-        int num_side = board.getNumSides();
 
         // 4각형
-        if(num_side == 4){
+        if(numSide == 4){
             if(now_row == 0 && now_col > 20) { isFinished = true; }
             if(now_row != 0 && now_col > 16) { isFinished = true; }
             return isFinished;
         }
         // 5각형
-        else if(num_side ==5) {
+        else if(numSide ==5) {
             if(now_row == 0 && now_col > 25) { isFinished = true; }
             if(now_row != 0 && now_col > 16) { isFinished = true; }
             return isFinished;

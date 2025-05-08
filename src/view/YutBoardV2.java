@@ -71,6 +71,7 @@ public class YutBoardV2 extends JPanel {
     public void setNumSides(int numSides) {
         this.numSides = numSides;
     }
+
     public int getNumSides() { return numSides; };
 
     public void setBoard(Board board) {
