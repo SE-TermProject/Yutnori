@@ -61,4 +61,9 @@ public class PieceButton extends JButton {
         setLocation(adjustedX, adjustedY);
     }
 
+    public void getoutColor() {
+        this.currentColor = Color.GRAY;
+        repaint();
+    }
+
 }
