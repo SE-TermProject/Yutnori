@@ -27,10 +27,10 @@ public class YutBoardV2 extends JPanel {
         setLayout(null);
 
         throwButton = new JButton("랜덤 윷 던지기");
-        throwButton.setBounds(605, 300, 300, 45);
+        throwButton.setBounds(605, 420, 300, 45);
         add(throwButton);
 
-        int y = 350;
+        int y = 470;
         int w = 60;
         int h = 35;
 
@@ -59,16 +59,16 @@ public class YutBoardV2 extends JPanel {
         add(throwMo);
 
         turnLabel = new JLabel("A님의 차례입니다.");
-        turnLabel.setBounds(650, 400, 200, 30);
+        turnLabel.setBounds(600, 500, 200, 30);
         add(turnLabel);
 
-        resultLabel = new JLabel("윷 결과: ", SwingConstants.CENTER);
-        resultLabel.setBounds(650, 420, 180, 30);
+        resultLabel = new JLabel("윷 결과");
+        resultLabel.setBounds(600, 530, 180, 30);
         add(resultLabel);
 
         resultPanel = new JPanel();
-        resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        resultPanel.setBounds(650, 450, 300, 50);
+        resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        resultPanel.setBounds(590, 560, 300, 100);
         add(resultPanel);
     }
 

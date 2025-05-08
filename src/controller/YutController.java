@@ -54,9 +54,9 @@ public class YutController {
             if (!result.isBonusTurn()) {
                 game.nextTurn();
                 board.updateTurnLabel(game.getCurrentPlayer().getId());
-                System.out.println("턴 종료 → 다음 플레이어로 넘어감");
+//                System.out.println("턴 종료 → 다음 플레이어로 넘어감");
             } else {
-                System.out.println("보너스! 한 번 더 던질 수 있습니다.");
+//                System.out.println("보너스! 한 번 더 던질 수 있습니다.");
             }
         });
 
