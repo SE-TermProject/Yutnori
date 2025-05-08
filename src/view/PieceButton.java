@@ -36,6 +36,18 @@ public class PieceButton extends JButton {
         super.paintComponent(g);
         g.setColor(getColorByPlayer(playerId, isReal));
         g.fillOval(0, 0, getWidth(), getHeight());
+
+        int groupSize = piece.getPieceGroup().size() + 1;
+        if(groupSize > 1) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 10));
+            String text = String.valueOf(groupSize);
+            FontMetrics fm = g.getFontMetrics();
+            int textWidth = fm.stringWidth(text);
+            int textHeight = fm.getAscent();
+
+            g.drawString(text, (getWidth() - textWidth) / 2, (getHeight() - textHeight) / 2);
+        }
     }
 
     private Color getColorByPlayer(int playerId, boolean isRealPiece) {
