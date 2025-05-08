@@ -1,5 +1,7 @@
 package view;
 
+import model.YutResult;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -7,10 +9,12 @@ import java.util.Arrays;
 public class CandidatePieceButton extends JButton {
     private final int[] position;
     private final int playerId;  // 플레이어 식별용
+    private final YutResult yutResult;
 
-    public CandidatePieceButton(int[] position, int playerId) {
+    public CandidatePieceButton(int[] position, int playerId, YutResult yutResult) {
         this.position = Arrays.copyOf(position, 2);
         this.playerId = playerId;
+        this.yutResult = yutResult;
 
         setPreferredSize(new Dimension(20, 20));
         setEnabled(false);  // 기본 비활성화
@@ -23,6 +27,10 @@ public class CandidatePieceButton extends JButton {
 
     public int[] getPosition() {
         return position;
+    }
+
+    public YutResult getYutResult() {
+        return yutResult;
     }
 
     @Override

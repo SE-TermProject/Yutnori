@@ -114,10 +114,17 @@ public class YutController {
         HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
         List<int[]> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
 
-        for (int[] pos : piecePossiblePos) {
+        for (int i = 0; i < piecePossiblePos.size(); i++) {
+            int[] pos = piecePossiblePos.get(i);
             Point point = game.getBoard().indexToPoint(pos);
 
-            CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex());
+            int[] prePos = selectedPiece.getPosition(); int index = i;
+            if (prePos.length == 0) prePos = new int[]{0, 0};
+            if (prePos[0] == 0 && prePos[1] % 5 == 0 && prePos[1] > 0 && prePos[1] / 5 <= game.getBoard().getNumSides() - 2) { // 가장자리 꼭짓점 위치라면
+                // 각 이동 가능한 칸의 수가 두개씩이므로 인덱스 수정
+                index = i / 2;
+            }
+            CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), game.getYutResults().get(index));
             btn.setBounds(point.x, point.y, 20, 20);
             btn.setPixelPosition(point);
             btn.setEnabled(true);
@@ -149,7 +156,7 @@ public class YutController {
                     board.animatePieceMovement(selectedPiece, piecePath);  // 말 실제 이동
                     selectedPiece.getPiece().setPosition(destinationBtn.getPosition());
 
-                    System.out.println("이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");
+                    System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");
                     board.deletePieceButton(possiblePosButtons);
                 }
             });
