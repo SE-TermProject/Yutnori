@@ -45,6 +45,14 @@ public class Piece {
         }
     }
 
+    // 그룹에서 말 제거
+    public void removeGroupedPiece(Piece piece) {
+        if(pieceGroup.contains(piece)) {
+            pieceGroup.remove(piece);
+            piece.setGrouped(false);
+        }
+    }
+
     public boolean isFinished() {
         return isFinished;
     }
