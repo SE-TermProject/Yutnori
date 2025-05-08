@@ -85,6 +85,25 @@ public class YutBoardV2 extends JPanel {
 
     }
 
+    public void setPossiblePieceButtons(List<PieceButton> possiblePieceButtons) {
+        for (PieceButton pieceButton : possiblePieceButtons) {
+            this.add(pieceButton);
+        }
+        this.pieceButtons.clear();
+        this.pieceButtons.addAll(possiblePieceButtons);
+        repaint();
+    }
+
+    public void deletePieceButton(List<PieceButton> possiblePieceButtons) {
+        for (PieceButton btn : possiblePieceButtons) {
+            this.remove(btn);                          // 화면에서 제거
+            this.pieceButtons.remove(btn);             // 실제 말 리스트에서도 제거 시도
+        }
+
+        revalidate();  // 레이아웃 갱신
+        repaint();     // 화면 다시 그리기
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
