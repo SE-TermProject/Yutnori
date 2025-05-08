@@ -175,11 +175,8 @@ public class YutController {
         List<YutResult> yutResults = game.getYutResults();
         List<int[]> possiblePos = new ArrayList<>();
         for (YutResult result: yutResults) {
-            selectedPiece.isFinished(numSides, result.getStep());
+            return selectedPiece.isFinished(numSides, result.getStep());
         }
-
-        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
-        List<int[]> piecePossiblePos = currentPossiblePos.get(selectedPiece);
 
         return true;
     }
