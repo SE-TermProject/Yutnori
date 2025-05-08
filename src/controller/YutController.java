@@ -12,10 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class YutController {
     private final Game game;
@@ -174,20 +172,16 @@ public class YutController {
     private boolean possibleGetout(Piece selectedPiece) {
         int numSides = game.getBoard().getNumSides();
 
-        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
-
-        for(Map.Entry<Piece, List<int[]>> entry : currentPossiblePos.entrySet()) {
-            Piece piece = entry.getKey();
-            List<int[]> positions = entry.getValue();
-
-            for(int[] pos : positions) {  // 입력된 piece의 예상 위치가 내보내기가 가능한 위치인 경우
-                piece.setPosition(pos);
-                if(piece.isFinished(numSides)){
-                    return true;
-                };
-            }
+        List<YutResult> yutResults = game.getYutResults();
+        List<int[]> possiblePos = new ArrayList<>();
+        for (YutResult result: yutResults) {
+            selectedPiece.isFinished(numSides, result.getStep());
         }
-        return false;
+
+        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
+        List<int[]> piecePossiblePos = currentPossiblePos.get(selectedPiece);
+
+        return true;
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {

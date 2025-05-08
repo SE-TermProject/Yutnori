@@ -62,6 +62,10 @@ public class Piece {
         }
     }
 
+    public boolean isFinished(int numSide, int step) {
+
+    }
+
     public boolean isFinished() { return isFinished; }
 
     public void setFinished(boolean finished) {
