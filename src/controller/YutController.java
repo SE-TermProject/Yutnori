@@ -17,9 +17,11 @@ import java.util.List;
 
 public class YutController {
     private final Game game;
+    private final YutBoardV2 yutBoard;
 
     public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
         this.game = new Game(sides, playerCount, pieceCount);
+        yutBoard = board;
 
         board.setNumSides(game.getBoard().getNumSides());
         board.setBoard(game.getBoard());
@@ -69,6 +71,9 @@ public class YutController {
                             if(game.getCurrentPlayer().getPieces().contains(piece)) { // 현재 차례인 사용자의 말이라면
                                 System.out.println("말이 선택되었습니다.");
 
+                                // 이동 가능 위치 버튼 생성 및 표시
+                                List<PieceButton> previewButtons = generatePossiblePieceButtons(piece);
+                                yutBoard.setPossiblePieceButtons(previewButtons);
                             }
                             else System.out.println("현재 사용자의 말이 아닙니다.");
                         }
@@ -93,11 +98,15 @@ public class YutController {
 
             PieceButton btn = new PieceButton(selectedPiece, game.getCurrentPlayerIndex(), false);
             btn.setBounds(point.x, point.y, 20, 20);
+            btn.setPixelPosition(point);
             btn.setEnabled(true);
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     /* 말 이동 로직 추가해야 함 */
+
+                    // 모든 이동 가능한 경로에 있던 버튼 제거
+                    yutBoard.deletePieceButton(possiblePosButtons);
                 }
             });
             possiblePosButtons.add(btn);
