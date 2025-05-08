@@ -86,6 +86,13 @@ public class YutController {
                                 // 이동 가능 위치 버튼 생성 및 표시
                                 List<CandidatePieceButton> previewButtons = generatePossiblePieceButtons(piece);
                                 board.setPossiblePieceButtons(previewButtons);
+
+                                // 내보내기가 가능할 때, 버튼 생성
+                                if(possibleGetout(piece)) {
+                                    JButton Getout = board.getEndPiece();
+                                    Getout.setEnabled(true);
+
+                                }
                               
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
@@ -159,16 +166,17 @@ public class YutController {
 
     private boolean possibleGetout(Piece selectedPiece) {
         int numSides = game.getBoard().getNumSides();
+
         HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
 
         for(Map.Entry<Piece, List<int[]>> entry : currentPossiblePos.entrySet()) {
             Piece piece = entry.getKey();
             List<int[]> positions = entry.getValue();
 
-            for(int[] pos : positions) {
+            for(int[] pos : positions) {  // 입력된 piece의 예상 위치가 내보내기가 가능한 위치인 경우
                 piece.setPosition(pos);
                 if(piece.isFinished(numSides)){
-                    return true;    // 입력된 piece의 예상 위치가 내보내기가 가능한 위치인 경우
+                    return true;
                 };
             }
         }
