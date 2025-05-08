@@ -234,7 +234,16 @@ public class Board {
     }
 
     public List<Point> pathIndexToPoint(List<int[]> pathIdx) {
+        List<Point> result = new ArrayList<>();
 
+        for (int[] targetIdx : pathIdx) {
+            Point point = indexToPoint(targetIdx);
+            if (point != null) {
+                result.add(point);
+            }
+        }
+
+        return result;
     }
 
     /* 상대 말 잡기 처리 */
