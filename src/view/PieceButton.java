@@ -8,10 +8,12 @@ import java.awt.*;
 public class PieceButton extends JButton {
     private final Piece piece;
     private final int playerId;  // 플레이어 식별용
+    private final boolean isReal;
 
-    public PieceButton(Piece piece, int playerId) {
+    public PieceButton(Piece piece, int playerId, boolean isReal) {
         this.piece = piece;
         this.playerId = playerId;
+        this.isReal = isReal;
 
         setPreferredSize(new Dimension(20, 20));
         setEnabled(false);  // 기본 비활성화
@@ -32,18 +34,29 @@ public class PieceButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(getColorByPlayer(playerId));
+        g.setColor(getColorByPlayer(playerId, isReal));
         g.fillOval(0, 0, getWidth(), getHeight());
     }
 
-    private Color getColorByPlayer(int playerId) {
-        return switch (playerId) {
-            case 0 -> Color.RED;
-            case 1 -> Color.BLUE;
-            case 2 -> Color.GREEN;
-            case 3 -> Color.YELLOW;
-            default -> Color.GRAY;
-        };
+    private Color getColorByPlayer(int playerId, boolean isRealPiece) {
+        if (isRealPiece) { // 실제 존재하는 말인 경우
+            return switch (playerId) {
+                case 0 -> Color.RED;
+                case 1 -> Color.BLUE;
+                case 2 -> Color.GREEN;
+                case 3 -> Color.YELLOW;
+                default -> Color.GRAY;
+            };
+        }
+        else { // 이동 경로를 보여주기 위한 예비 말인 경우
+            return switch (playerId) {
+                case 0 -> new Color(255, 150, 150); // 연한 빨강
+                case 1 -> new Color(150, 150, 255); // 연한 파랑
+                case 2 -> new Color(150, 255, 150); // 연한 초록
+                case 3 -> new Color(255, 255, 180); // 연한 노랑
+                default -> new Color(200, 200, 200); // 연한 회색
+            };
+        }
     }
 
     public void setPixelPosition(Point center) {

@@ -3,20 +3,25 @@ package controller;
 import model.Game;
 import model.Piece;
 import model.Player;
+import model.YutResult;
 import view.PieceButton;
 import view.YutBoardV2;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class YutController {
     private final Game game;
+    private final YutBoardV2 yutBoard;
 
     public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
         this.game = new Game(sides, playerCount, pieceCount);
+        yutBoard = board;
 
         board.setNumSides(game.getBoard().getNumSides());
         board.setBoard(game.getBoard());
@@ -48,7 +53,7 @@ public class YutController {
         for (Player player : game.getPlayers()) {
             int currentX = startX;
             for (Piece piece : player.getPieces()) {
-                PieceButton btn = new PieceButton(piece, player.getId());
+                PieceButton btn = new PieceButton(piece, player.getId(), true);
                 btn.setBounds(currentX, startY, 20, 20);
                 btn.setEnabled(true);
                 btn.addActionListener(new ActionListener() {
@@ -66,6 +71,9 @@ public class YutController {
                             if(game.getCurrentPlayer().getPieces().contains(piece)) { // 현재 차례인 사용자의 말이라면
                                 System.out.println("말이 선택되었습니다.");
 
+                                // 이동 가능 위치 버튼 생성 및 표시
+                                List<PieceButton> previewButtons = generatePossiblePieceButtons(piece);
+                                yutBoard.setPossiblePieceButtons(previewButtons);
                             }
                             else System.out.println("현재 사용자의 말이 아닙니다.");
                         }
@@ -77,5 +85,32 @@ public class YutController {
             startY += playerGapY;
         }
         return pieceButtons;
+    }
+
+    /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */
+    private List<PieceButton> generatePossiblePieceButtons(Piece selectedPiece) {
+        List<PieceButton> possiblePosButtons = new ArrayList<>();
+        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
+        List<int[]> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
+
+        for (int[] pos : piecePossiblePos) {
+            Point point = game.getBoard().indexToPoint(pos);
+
+            PieceButton btn = new PieceButton(selectedPiece, game.getCurrentPlayerIndex(), false);
+            btn.setBounds(point.x, point.y, 20, 20);
+            btn.setPixelPosition(point);
+            btn.setEnabled(true);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    /* 말 이동 로직 추가해야 함 */
+
+                    // 모든 이동 가능한 경로에 있던 버튼 제거
+                    yutBoard.deletePieceButton(possiblePosButtons);
+                }
+            });
+            possiblePosButtons.add(btn);
+        }
+        return possiblePosButtons;
     }
 }
