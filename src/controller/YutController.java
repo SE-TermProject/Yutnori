@@ -71,6 +71,8 @@ public class YutController {
                             if(game.getCurrentPlayer().getPieces().contains(piece)) { // 현재 차례인 사용자의 말이라면
                                 System.out.println("말이 선택되었습니다.");
 
+                                yutBoard.getThrowButton().setEnabled(false);
+
                                 // 이동 가능 위치 버튼 생성 및 표시
                                 List<PieceButton> previewButtons = generatePossiblePieceButtons(piece);
                                 yutBoard.setPossiblePieceButtons(previewButtons);
