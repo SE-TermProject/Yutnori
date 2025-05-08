@@ -1,17 +1,20 @@
 package view;
 
-import model.Piece;
+import model.YutResult;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
-public class PieceButton extends JButton {
-    private final Piece piece;
+public class CandidatePieceButton extends JButton {
+    private final int[] position;
     private final int playerId;  // 플레이어 식별용
+    private final YutResult yutResult;
 
-    public PieceButton(Piece piece, int playerId) {
-        this.piece = piece;
+    public CandidatePieceButton(int[] position, int playerId, YutResult yutResult) {
+        this.position = Arrays.copyOf(position, 2);
         this.playerId = playerId;
+        this.yutResult = yutResult;
 
         setPreferredSize(new Dimension(20, 20));
         setEnabled(false);  // 기본 비활성화
@@ -22,15 +25,12 @@ public class PieceButton extends JButton {
         setOpaque(false);
     }
 
-    public Piece getPiece() {
-        return piece;
-    }
-    public int getPlayerId() {
-        return playerId;
+    public int[] getPosition() {
+        return position;
     }
 
-    public int[] getPosition() {
-        return piece.getPosition();
+    public YutResult getYutResult() {
+        return yutResult;
     }
 
     @Override
@@ -38,27 +38,15 @@ public class PieceButton extends JButton {
         super.paintComponent(g);
         g.setColor(getColorByPlayer(playerId));
         g.fillOval(0, 0, getWidth(), getHeight());
-
-        int groupSize = piece.getPieceGroup().size() + 1;
-        if(groupSize > 1) {
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.BOLD, 10));
-            String text = String.valueOf(groupSize);
-            FontMetrics fm = g.getFontMetrics();
-            int textWidth = fm.stringWidth(text);
-            int textHeight = fm.getAscent();
-
-            g.drawString(text, (getWidth() - textWidth) / 2, (getHeight() - textHeight) / 2);
-        }
     }
 
     private Color getColorByPlayer(int playerId) {
         return switch (playerId) {
-            case 0 -> Color.RED;
-            case 1 -> Color.BLUE;
-            case 2 -> Color.GREEN;
-            case 3 -> Color.YELLOW;
-            default -> Color.GRAY;
+            case 0 -> new Color(255, 150, 150); // 연한 빨강
+            case 1 -> new Color(150, 150, 255); // 연한 파랑
+            case 2 -> new Color(150, 255, 150); // 연한 초록
+            case 3 -> new Color(255, 255, 180); // 연한 노랑
+            default -> new Color(200, 200, 200); // 연한 회색
         };
     }
 
@@ -70,5 +58,4 @@ public class PieceButton extends JButton {
         int adjustedY = center.y - height / 2;
         setLocation(adjustedX, adjustedY);
     }
-
 }
