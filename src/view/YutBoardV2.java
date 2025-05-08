@@ -69,6 +69,7 @@ public class YutBoardV2 extends JPanel {
     public JButton getThrowGeol() { return throwGeol; }
     public JButton getThrowYut() { return throwYut; }
     public JButton getThrowMo() { return throwMo; }
+    public JButton getEndPiece() { return endPiece; }
 
     public void updateResult(String result) {
         resultLabel.setText("윷 결과: " + result);
