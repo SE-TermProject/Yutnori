@@ -62,6 +62,8 @@ public class Piece {
         }
     }
 
+    public boolean isFinished() { return isFinished; }
+
     public void setFinished(boolean finished) {
         isFinished = finished;
     }
