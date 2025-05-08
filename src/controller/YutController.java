@@ -50,7 +50,29 @@ public class YutController {
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 btn.setBounds(currentX, startY, 20, 20);
-                btn.setEnabled(false);
+                btn.setEnabled(true);
+                btn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        /* 말 선택 */
+                        System.out.print("Piece clicked - " );
+                        if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
+                            System.out.println("윷을 먼저 던져야 합니다.");
+                        }
+                        else if (piece.isFinished()) { // 이미 finish된 말이라면
+                            System.out.println("이 pieces는 이미 종료되었습니다.");
+                        }
+                        else {
+                            if(game.getCurrentPlayer().getPieces().contains(piece)) { // 현재 차례인 사용자의 말이라면
+                                System.out.println("말이 선택되었습니다.");
+                                if (piece.getPosition().length == 0) { // 새로운 말 추가
+                                    piece.setPosition(new int[]{0,0});
+                                }
+                            }
+                            else System.out.println("현재 사용자의 말이 아닙니다.");
+                        }
+                    }
+                });
                 pieceButtons.add(btn);
                 currentX += pieceGapX;
             }
