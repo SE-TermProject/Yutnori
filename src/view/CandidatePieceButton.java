@@ -21,6 +21,10 @@ public class CandidatePieceButton extends JButton {
         setOpaque(false);
     }
 
+    public int[] getPosition() {
+        return position;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -29,6 +29,10 @@ public class PieceButton extends JButton {
         return playerId;
     }
 
+    public int[] getPosition() {
+        return piece.getPosition();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
