@@ -20,7 +20,7 @@ public class YutController {
     public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
         this.game = new Game(sides, playerCount, pieceCount);
 
-        board.setNumSides(game.getNumSides());
+        board.setNumSides(game.getBoard().getNumSides());
         board.setBoard(game.getBoard());
 
         List<PieceButton> pieceButtons = generateInitialPieceButtons();
