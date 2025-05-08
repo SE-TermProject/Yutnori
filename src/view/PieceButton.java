@@ -46,4 +46,13 @@ public class PieceButton extends JButton {
         };
     }
 
+    public void setPixelPosition(Point center) {
+        // 버튼 크기를 고려해서 중심에 배치되도록 보정
+        int width = getPreferredSize().width;
+        int height = getPreferredSize().height;
+        int adjustedX = center.x - width / 2;
+        int adjustedY = center.y - height / 2;
+        setLocation(adjustedX, adjustedY);
+    }
+
 }

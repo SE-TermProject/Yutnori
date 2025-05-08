@@ -170,4 +170,22 @@ public class YutBoardV2 extends JPanel {
             }
         }
     }
+
+    /* 말이 한 칸씩 이동 */
+    public void animatePieceMovement(PieceButton pieceButton, List<Point> path) {
+        new Thread(() -> {
+            for (Point point : path) {
+                SwingUtilities.invokeLater(() -> {
+                    pieceButton.setPixelPosition(point);
+                    repaint();
+                });
+
+                try {
+                    Thread.sleep(300);  // 이동 간 딜레이
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }).start();
+    }
 }
