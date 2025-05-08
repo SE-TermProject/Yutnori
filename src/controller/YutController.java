@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class YutController {
     private final Game game;
@@ -124,6 +125,24 @@ public class YutController {
             possiblePosButtons.add(btn);
         }
         return possiblePosButtons;
+    }
+
+    private boolean possibleGetout(Piece selectedPiece) {
+        int numSides = game.getBoard().getNumSides();
+        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
+
+        for(Map.Entry<Piece, List<int[]>> entry : currentPossiblePos.entrySet()) {
+            Piece piece = entry.getKey();
+            List<int[]> positions = entry.getValue();
+
+            for(int[] pos : positions) {
+                piece.setPosition(pos);
+                if(piece.isFinished(numSides)){
+                    return true;    // 입력된 piece의 예상 위치가 내보내기가 가능한 위치인 경우
+                };
+            }
+        }
+        return false;
     }
 
     private void movePiece(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons) {
