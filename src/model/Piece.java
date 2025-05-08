@@ -37,6 +37,10 @@ public class Piece {
         isGrouped = grouped;
     }
 
+    public List<Piece> getPieceGroup() {
+        return pieceGroup;
+    }
+
     // 그룹에 말 추가
     public void addGroupedPiece(Piece piece) {
         if(piece != null && !pieceGroup.contains(piece)) {
