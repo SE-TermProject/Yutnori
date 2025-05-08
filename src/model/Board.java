@@ -116,14 +116,14 @@ public class Board {
     }
 
     /* 한 칸씩 이동하기 위한 이동 경로 계산 */
-    public List<int[]> calculatePath(int[] from, int[] to) {
+    public List<Point> calculatePath(int[] from, int[] to) {
         List<int[]> path = new ArrayList<>();
 
         // 빽도인 경우
         if (to[1] == from[1] - 1) {
             path.add(from);
             path.add(to);
-            return path;
+            return pathIndexToPoint(path);
         }
 
         // 빽도가 아닌 도,개,걸,윷,모의 경우
@@ -217,7 +217,7 @@ public class Board {
             }
         }
 
-        return path;
+        return pathIndexToPoint(path);
     }
 
     private boolean isCenterPoint(int x, int y) {
@@ -233,7 +233,7 @@ public class Board {
         return false;
     }
 
-    public List<Point> pathIndexToPoint(List<int[]> pathIdx) {
+    private List<Point> pathIndexToPoint(List<int[]> pathIdx) {
         List<Point> result = new ArrayList<>();
 
         for (int[] targetIdx : pathIdx) {
