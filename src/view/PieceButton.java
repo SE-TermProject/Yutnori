@@ -38,7 +38,7 @@ public class PieceButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(getColorByPlayer(playerId));
+        g.setColor(currentColor);
         g.fillOval(0, 0, getWidth(), getHeight());
     }
 
