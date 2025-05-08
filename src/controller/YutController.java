@@ -84,7 +84,7 @@ public class YutController {
 
                                 // 이동 가능 위치 버튼 생성 및 표시
                                 List<CandidatePieceButton> previewButtons = generatePossiblePieceButtons(piece);
-                                yutBoard.setPossiblePieceButtons(previewButtons);
+                                board.setPossiblePieceButtons(previewButtons);
                             }
                             else System.out.println("현재 사용자의 말이 아닙니다.");
                         }
@@ -103,6 +103,7 @@ public class YutController {
     private void handleManualThrow(YutResult result) {
         game.setManualYutResult(result);
         board.updateResult(result.toString());
+    }
 
     /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */
     private List<CandidatePieceButton> generatePossiblePieceButtons(Piece selectedPiece) {
@@ -123,7 +124,7 @@ public class YutController {
                     /* 말 이동 로직 추가해야 함 */
 
                     // 모든 이동 가능한 경로에 있던 버튼 제거
-                    yutBoard.deletePieceButton(possiblePosButtons);
+                    board.deletePieceButton(possiblePosButtons);
                 }
             });
             possiblePosButtons.add(btn);
