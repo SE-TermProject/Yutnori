@@ -99,6 +99,124 @@ public class Board {
 
     }
 
+    /* 한 칸씩 이동하기 위한 이동 경로 계산 */
+    public List<int[]> calculatePath(int[] from, int[] to) {
+        List<int[]> path = new ArrayList<>();
+
+        // 빽도인 경우
+        if (to[1] == from[1] - 1) {
+            path.add(from);
+            path.add(to);
+            return path;
+        }
+
+        // 빽도가 아닌 도,개,걸,윷,모의 경우
+        if (from[0] == to[0]) {
+            for (int i = from[1]; i <= to[1]; i++) {
+                path.add(new int[]{from[0], i});
+            }
+        } else if (from[0] < to[0]) {
+            path.add(from);  // 현재 위치 추가
+
+            int curX = from[1] / 5;
+            int curY = from[1] + 1;
+            // 1. 만약 출발 지점이 분기점이라면
+            if (from[0] == 0 && from[1] % 5 == 0) {
+                // 1-1. 만약 도착 지점이 중심점 & 중심점 이전에 있다면 해당 칸까지의 이동거리 추가
+                if (to[1] - from[1] <= 3) {
+                    for (int i = curY; i <= to[1]; i++) {
+                        path.add(new int[]{curX, i});
+                    }
+                } else if (numSides == 4) {   // 1-2. 만약 도착 지점이 중심점을 넘어선다면
+                    for (int i = curY; i <= to[1]; i++) {
+                        path.add(new int[]{curX, i});
+                    }
+                } else {
+                    while (true) {
+                        path.add(new int[]{curX, curY});
+
+                        // 현재 지점이 도착 지점이라면 while 문 종료
+                        if (curX == to[0] && curY == to[1]) {
+                            break;
+                        }
+
+                        // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
+                        // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
+                        if (isCenterPoint(curX, curY)) {
+                            curX = numSides / 2;
+                            curY = 5 * (numSides / 2) - 2;
+                        }
+                        curY++;
+                    }
+                }
+            } else {
+                // 2. 출발 지점이 분기점이 아니라면
+                while (true) {
+                    path.add(new int[]{curX, curY});
+
+                    // 현재 지점이 도착 지점이라면 while 문 종료
+                    if (curX == to[0] && curY == to[1]) {
+                        break;
+                    }
+
+                    // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
+                    // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
+                    if (isCenterPoint(curX, curY)) {
+                        curX = numSides / 2;
+                        curY = 5 * (numSides / 2) - 2;
+                    }
+                    curY++;
+                }
+            }
+        } else { // from[0] > to[0]
+            path.add(new int[]{from[0], from[1]});
+
+            int pointX = from[1] / 5;
+            int pointY = from[1] + 1;
+            while (true) {
+                // 현재 위치가 중간칸들을 빠져나가는 곳이라면
+                // numSides가 4라면 (1,11) -> (0, 15)
+                // numSides가 5라면 (1,11) -> (0, 20)
+                // numSides가 6이라면 (2,16) -> (0,25)
+                if (pointX == numSides / 3 && pointY == (numSides / 2) * 5 + 1) {
+                    pointX = 0;
+                    pointY = 5 * (numSides - 1);
+                }
+
+                path.add(new int[]{pointX, pointY});
+
+                // 현재 지점이 도착 지점이라면 while 문 종료
+                if (pointX == to[0] && pointY == to[1]) {
+                    break;
+                }
+
+                // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
+                // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
+                if (isCenterPoint(pointX, pointY)) {
+                    pointX = numSides / 2;
+                    pointY = 5 * (numSides / 2) - 2;
+                }
+
+                pointY++;
+            }
+        }
+
+        return path;
+    }
+
+    private boolean isCenterPoint(int x, int y) {
+        int[][] centerPoints = {  // 중심점 인덱스
+                {1, 8}, {2, 13}, {3, 18}, {4,23}
+        };
+
+        for (int[] cp : centerPoints) {
+            if (cp[0] == x && cp[1] == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* 상대 말 잡기 처리 */
     public void catchPiece() {
 
