@@ -12,6 +12,7 @@ public class YutBoardV2 extends JPanel {
     private final JLabel resultLabel;
     private final JButton throwButton;
     private final JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
+    private final JButton endPiece;
 
 //    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
 //    private final List<Player> players;
@@ -54,6 +55,10 @@ public class YutBoardV2 extends JPanel {
         throwMo = new JButton("모");
         throwMo.setBounds(420, 120, 60, 30);
         add(throwMo);
+
+        endPiece = new JButton("내보내기");
+        endPiece.setBounds(480, 550, 80, 40);
+        add(endPiece);
     }
 
     public JButton getThrowButton() { return throwButton; }
