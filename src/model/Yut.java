@@ -5,30 +5,35 @@ import java.util.Random;
 public class Yut {
 
     private final Random random = new Random();
-    private String result;
+    private YutResult result;
 
     // 윷 던지기 (각 경우의 확률 설정)
-    // returnType YutResult.enum 으로 변경해야 함!!!!!!!!!!!! (변경하고 삭제해주세요)
     public String getRandomResult() {
         int rand = random.nextInt(32); // 0부터 31까지의 랜덤 값 생성
 
         if (rand < 4) {
-            result = "빽도"; // 16.5% (5/32)
+            result = YutResult.BackDo;
         } else if (rand < 11) {
-            result = "도"; // 18.75% (6/32)
+            result = YutResult.DO;
         } else if (rand < 23) {
-            result = "개"; // 37.5% (12/32)
+            result = YutResult.GAE;
         } else if (rand < 30) {
-            result = "걸"; // 25% (8/32)
+            result = YutResult.GUL;
         } else if (rand < 31) {
-            result = "윷"; // 16.5% (5/32)
+            result = YutResult.YUT;
         } else {
-            result = "모"; // 3.125% (1/32)
+            result = YutResult.MO;
         }
+        return result.toString();
+    }
+
+    // 마지막 던진 결과 반환
+    public YutResult getResult() {
         return result;
     }
 
-    public String getResult() {
-        return result;
+    // 수동으로 결과 설정
+    public void setManualResult(YutResult result) {
+        this.result = result;
     }
 }

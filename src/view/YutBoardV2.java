@@ -16,6 +16,7 @@ public class YutBoardV2 extends JPanel {
 //    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
 //    private final List<Player> players;
     private final List<PieceButton> pieceButtons = new ArrayList<>();
+    private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
     private int numSides = 4;  // 기본값, 실제 값은 controller에서 설정
     private Board board;
 
@@ -26,7 +27,7 @@ public class YutBoardV2 extends JPanel {
         resultLabel.setBounds(220, 20, 200, 30);
         add(resultLabel);
 
-        throwButton = new JButton("윷 던지기");
+        throwButton = new JButton("랜덤 윷 던지기");
         throwButton.setBounds(240, 60, 160, 40);
         add(throwButton);
 
@@ -85,19 +86,19 @@ public class YutBoardV2 extends JPanel {
 
     }
 
-    public void setPossiblePieceButtons(List<PieceButton> possiblePieceButtons) {
-        for (PieceButton pieceButton : possiblePieceButtons) {
+    public void setPossiblePieceButtons(List<CandidatePieceButton> possiblePieceButtons) {
+        for (CandidatePieceButton pieceButton : possiblePieceButtons) {
             this.add(pieceButton);
         }
-        this.pieceButtons.clear();
-        this.pieceButtons.addAll(possiblePieceButtons);
+        this.candidatePieceButtons.clear();
+        this.candidatePieceButtons.addAll(possiblePieceButtons);
         repaint();
     }
 
-    public void deletePieceButton(List<PieceButton> possiblePieceButtons) {
-        for (PieceButton btn : possiblePieceButtons) {
+    public void deletePieceButton(List<CandidatePieceButton> possiblePieceButtons) {
+        for (CandidatePieceButton btn : possiblePieceButtons) {
             this.remove(btn);                          // 화면에서 제거
-            this.pieceButtons.remove(btn);             // 실제 말 리스트에서도 제거 시도
+            this.candidatePieceButtons.remove(btn);             // 실제 말 리스트에서도 제거 시도
         }
 
         revalidate();  // 레이아웃 갱신
