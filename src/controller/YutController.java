@@ -119,12 +119,22 @@ public class YutController {
 
     // 지정 윷 결과 처리 메서드
     private void handleManualThrow(YutResult result) {
-        game.setManualYutResult(result);
-        board.updateResultList(List.of(result));
+        // 1. 이전 턴 결과가 보너스 턴이 아니면 → 초기화
+        if (!game.getYutResults().isEmpty() &&
+                !game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
+            game.getYutResults().clear();
+            board.updateResultList(new ArrayList<>());
+        }
 
-        List<YutResult> latest = new ArrayList<>();
-        latest.add(result);
-        board.updateResultList(latest);
+        // 2. 지정된 윷 결과 적용
+        game.setManualYutResult(result);
+        board.updateResultList(game.getYutResults());
+
+        // 3. 보너스가 아니면 턴 넘기고 라벨 갱신
+        if (!result.isBonusTurn()) {
+            game.nextTurn();
+            board.updateTurnLabel(game.getCurrentPlayer().getId());
+        }
     }
 
     /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */
