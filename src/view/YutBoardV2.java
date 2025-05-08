@@ -27,7 +27,7 @@ public class YutBoardV2 extends JPanel {
         resultLabel.setBounds(220, 20, 200, 30);
         add(resultLabel);
 
-        throwButton = new JButton("윷 던지기");
+        throwButton = new JButton("랜덤 윷 던지기");
         throwButton.setBounds(240, 60, 160, 40);
         add(throwButton);
 
