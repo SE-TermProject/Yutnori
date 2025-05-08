@@ -3,6 +3,7 @@ package controller;
 import model.Game;
 import model.Piece;
 import model.Player;
+import model.YutResult;
 import view.PieceButton;
 import view.YutBoardV2;
 
@@ -34,7 +35,7 @@ public class YutController {
         board.getThrowButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String result = game.throwYut();
+                YutResult result = game.throwYut();
                 board.updateResult(result);
             }
         });
