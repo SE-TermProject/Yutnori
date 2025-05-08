@@ -8,7 +8,7 @@ public class Game {
     private final List<Player> players;
     private final Board board;
     private int currentPlayerIndex;
-    private List<Yut> yutResults;
+    private List<YutResult> yutResults;
 
     public Game(int numSides, int playerCount, int pieceCount) {
         this.numSides = numSides;
@@ -76,5 +76,5 @@ public class Game {
     }
 
     /* 윷 결과 반환 */
-    public List<Yut> getYutResults() { return this.yutResults; }
+    public List<YutResult> getYutResults() { return this.yutResults; }
 }
