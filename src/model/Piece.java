@@ -37,6 +37,14 @@ public class Piece {
         isGrouped = grouped;
     }
 
+    // 그룹에 말 추가
+    public void addGroupedPiece(Piece piece) {
+        if(piece != null && !pieceGroup.contains(piece)) {
+            pieceGroup.add(piece);
+            piece.setGrouped(true);
+        }
+    }
+
     public boolean isFinished() {
         return isFinished;
     }
