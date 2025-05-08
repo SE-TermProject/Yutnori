@@ -1,11 +1,8 @@
 package model;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class Board {
     private int numSides;
@@ -91,7 +88,7 @@ public class Board {
     }
 
     /* 이동 가능한 위치 계산 */
-    public List<int[]> findPossiblePos(Piece piece, int row, int col, int step) {
+    public List<int[]> findPossiblePos(Stack<int[]> prePositions, int row, int col, int step) {
 
         // 해당 인덱스의 칸(cells[row][col])에서 윷 결과(step)으로 이동 가능한 위치 계산
         ArrayList<int[]> possiblePos = new ArrayList<>(); // 해당 위치에서 이동 가능한 모든 위치를 담을 배열
@@ -105,14 +102,14 @@ public class Board {
                     return possiblePos; // 비어있는 배열을 반환
                 }
                 else if (col == (numSides - 1) * 5) {
-                    int[] recentPos = piece.peekPrePosition();
+                    int[] recentPos = prePositions.peek();
                     possiblePos.add(new int[]{recentPos[0], recentPos[1]});
                 }
                 else possiblePos.add(new int[]{row, col + step});
             }
             else { // 안쪽에 있는 말인 경우
                 if (col == 5 * row + 3) { // 중심점인 경우
-                    int[] recentPos = piece.peekPrePosition();
+                    int[] recentPos = prePositions.peek();
                     possiblePos.add(new int[]{recentPos[0], recentPos[1]});
                 }
                 else {
