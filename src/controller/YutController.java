@@ -18,11 +18,11 @@ import java.util.List;
 
 public class YutController {
     private final Game game;
-    private final YutBoardV2 yutBoard;
+    private final YutBoardV2 board;
 
     public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
         this.game = new Game(sides, playerCount, pieceCount);
-        yutBoard = board;
+        this.board = board;
 
         board.setNumSides(game.getBoard().getNumSides());
         board.setBoard(game.getBoard());
@@ -37,13 +37,23 @@ public class YutController {
         gameFrame.add(board);
         gameFrame.setVisible(true);
 
+        // 랜덤 윷 던지기 버튼
         board.getThrowButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String result = game.throwYut();
-                board.updateResult(result);
+                YutResult result = game.throwYut();
+                board.updateResult(String.valueOf(result));
             }
         });
+
+        // 지정 윷 던지기 버튼
+        board.getThrowBackdo().addActionListener(e -> handleManualThrow(YutResult.BackDo));
+        board.getThrowDo().addActionListener(e -> handleManualThrow(YutResult.DO));
+        board.getThrowGae().addActionListener(e -> handleManualThrow(YutResult.GAE));
+        board.getThrowGeol().addActionListener(e -> handleManualThrow(YutResult.GUL));
+        board.getThrowYut().addActionListener(e -> handleManualThrow(YutResult.YUT));
+        board.getThrowMo().addActionListener(e -> handleManualThrow(YutResult.MO));
+
     }
 
     private List<PieceButton> generateInitialPieceButtons() {
@@ -87,6 +97,12 @@ public class YutController {
         }
         return pieceButtons;
     }
+
+
+    // 지정 윷 결과 처리 메서드
+    private void handleManualThrow(YutResult result) {
+        game.setManualYutResult(result);
+        board.updateResult(result.toString());
 
     /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */
     private List<CandidatePieceButton> generatePossiblePieceButtons(Piece selectedPiece) {

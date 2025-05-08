@@ -6,7 +6,8 @@ public class Game {
     private final List<Player> players;
     private final Board board;
     private int currentPlayerIndex;
-    private List<YutResult> yutResults;
+    private final List<YutResult> yutResults;
+    private final Yut yut = new Yut();
 
     public Game(int numSides, int playerCount, int pieceCount) {
         this.board = new Board(numSides);
@@ -47,11 +48,18 @@ public class Game {
 
     /* 윷 던지기 */
     // returnType "YutResult"로 변경 필요!!!
-    public String throwYut() {
+    public YutResult throwYut() {
         Yut yut = new Yut();
-        String result = yut.getRandomResult();
+        YutResult result = YutResult.valueOf(yut.getRandomResult());
+        yutResults.add(result);
         return result;
     }
+
+    public void setManualYutResult(YutResult result) {
+        yut.setManualResult(result);
+        yutResults.add(result);
+    }
+
 
     /* 말 이동 (선택된 말과 윷 결과 기반으로 이동 처리) */
     public void movePiece() {
