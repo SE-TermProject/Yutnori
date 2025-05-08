@@ -184,7 +184,7 @@ public class Board {
         for (int[] pos : possiblePos) System.out.print(Arrays.toString(pos));
         System.out.println();
 
-        return new ArrayList<int[]>();
+        return possiblePos;
     }
 
     /* 실제 말 이동 처리 */

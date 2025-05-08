@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Game {
@@ -77,4 +78,18 @@ public class Game {
 
     /* 윷 결과 반환 */
     public List<YutResult> getYutResults() { return this.yutResults; }
+
+    public HashMap<Piece, List<int[]>> findCurrentPossiblePos() {
+        HashMap<Piece, List<int[]>> currentPossiblePos = new HashMap<>();
+        Player currentPlayer = getCurrentPlayer(); // 현재 차례인 플레이어
+        List<Piece> currenPlayerPieces = currentPlayer.getPieces(); // 현재 차레인 플레이어의 모든 말
+        for (Piece piece : currenPlayerPieces) {
+            if (!piece.isFinished()) { // 아직 완료되지 않은 말들 -> 이동할 수 있는 말
+                for (List<YutResult>)
+                List<int[]> possiblePos = board.findPossiblePos(piece.getPrePositions(), piece.getPosition()[0], piece.getPosition()[1], )
+            }
+        }
+
+        return currentPossiblePos;
+    }
 }
