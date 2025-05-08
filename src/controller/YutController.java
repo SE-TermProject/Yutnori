@@ -39,19 +39,24 @@ public class YutController {
 
         // 랜덤 윷 던지기
         board.getThrowButton().addActionListener(e -> {
-            // 턴이 이미 끝나고, 다음 플레이어가 버튼 누른 경우 → 이전 결과 초기화
-            if (!game.getYutResults().isEmpty() && !game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
-                game.getYutResults().clear(); // 이전 턴 결과 지우기
+            // 1. 이전 턴 결과가 보너스 턴이 아니면 → 초기화
+            if (!game.getYutResults().isEmpty() &&
+                    !game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
+                game.getYutResults().clear();
                 board.updateResultList(new ArrayList<>());
             }
 
-            // 이번 턴 던지기
-            YutResult result = game.throwYut(); // 한 번만 던짐
-            board.updateResultList(game.getYutResults()); // 결과 전체 보여주기
+            // 2. 윷 한 번 던지기
+            YutResult result = game.throwYut();
+            board.updateResultList(game.getYutResults());
 
-            // 보너스 아니면 턴 넘김 (다음 플레이어는 다음에 버튼 눌러야 함)
+            // 3. 보너스가 아니면 턴 넘기고 라벨 갱신
             if (!result.isBonusTurn()) {
                 game.nextTurn();
+                board.updateTurnLabel(game.getCurrentPlayer().getId());
+                System.out.println("턴 종료 → 다음 플레이어로 넘어감");
+            } else {
+                System.out.println("보너스! 한 번 더 던질 수 있습니다.");
             }
         });
 

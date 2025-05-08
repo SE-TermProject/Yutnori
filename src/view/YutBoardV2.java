@@ -107,6 +107,11 @@ public class YutBoardV2 extends JPanel {
         resultPanel.repaint();
     }
 
+    public void updateTurnLabel(int playerId) {
+        turnLabel.setText((char)('A' + playerId) + "님의 차례입니다.");
+    }
+
+
     public void setNumSides(int numSides) {
         this.numSides = numSides;
     }
