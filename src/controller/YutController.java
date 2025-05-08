@@ -91,6 +91,12 @@ public class YutController {
                                 if(possibleGetout(piece)) {
                                     JButton Getout = board.getEndPiece();
                                     Getout.setEnabled(true);
+                                    Getout.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            handleGetoutButtonClick(btn);
+                                        }
+                                    });
 
                                 }
                               
@@ -181,5 +187,9 @@ public class YutController {
             }
         }
         return false;
+    }
+
+    private void handleGetoutButtonClick(PieceButton btn) {
+
     }
 }
