@@ -71,8 +71,7 @@ public class PieceButton extends JButton {
         this.Pos = new int[]{x, y};
     }
 
-    public void rePos(int x, int y) {
-        this.Pos[0] = x;
-        this.Pos[1] = y;
+    public int[] getPos() {
+        return Pos;
     }
 }
