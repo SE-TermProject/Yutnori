@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class YutController {
@@ -79,5 +80,28 @@ public class YutController {
             startY += playerGapY;
         }
         return pieceButtons;
+    }
+
+    /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */
+    private List<PieceButton> generatePossiblePieceButtons(Piece selectedPiece) {
+        List<PieceButton> possiblePosButtons = new ArrayList<>();
+        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
+        List<int[]> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
+
+        for (int[] pos : piecePossiblePos) {
+            Point point = game.getBoard().indexToPoint(pos);
+
+            PieceButton btn = new PieceButton(selectedPiece, game.getCurrentPlayerIndex(), false);
+            btn.setBounds(point.x, point.y, 20, 20);
+            btn.setEnabled(true);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    /* 말 이동 로직 추가해야 함 */
+                }
+            });
+            possiblePosButtons.add(btn);
+        }
+        return possiblePosButtons;
     }
 }
