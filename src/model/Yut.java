@@ -31,4 +31,9 @@ public class Yut {
     public YutResult getResult() {
         return result;
     }
+
+    // 수동으로 결과 설정
+    public void setManualResult(YutResult result) {
+        this.result = result;
+    }
 }

@@ -7,6 +7,7 @@ public class Game {
     private final Board board;
     private int currentPlayerIndex;
     private final List<YutResult> yutResults;
+    private final Yut yut = new Yut();
 
     public Game(int numSides, int playerCount, int pieceCount) {
         this.board = new Board(numSides);
@@ -52,6 +53,11 @@ public class Game {
         YutResult result = YutResult.valueOf(yut.getRandomResult());
         yutResults.add(result);
         return result;
+    }
+
+    public void setManualYutResult(YutResult result) {
+        yut.setManualResult(result);
+        yutResults.add(result);
     }
 
 
