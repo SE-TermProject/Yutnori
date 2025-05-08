@@ -243,6 +243,13 @@ public class Board {
             }
         }
 
+        System.out.println("말의 이동 경로: ");
+        for (int i = 0; i < result.size(); i++) {
+            Point p = result.get(i);
+            int[] idx = pathIdx.get(i);
+            System.out.printf("%d번째: (%d, %d) || (%d, %d)%n", i, idx[0], idx[1], p.x, p.y);
+        }
+
         return result;
     }
 
