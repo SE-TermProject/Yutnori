@@ -64,6 +64,8 @@ public class Piece {
 
     public boolean isFinished(int numSide, int step) {
 
+        // 테스트 출력문
+        System.out.println("isFinished " + numSide + " " + step + "\n");
         return true;
     }
 
