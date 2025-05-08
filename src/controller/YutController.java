@@ -33,18 +33,28 @@ public class YutController {
         // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
         JFrame gameFrame = new JFrame("YutNori");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setSize(700, 700);
+        gameFrame.setSize(1000, 700);
         gameFrame.add(board);
         gameFrame.setVisible(true);
 
-        // 랜덤 윷 던지기 버튼
-        board.getThrowButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                YutResult result = game.throwYut();
-                board.updateResult(String.valueOf(result));
+        // 랜덤 윷 던지기
+        board.getThrowButton().addActionListener(e -> {
+            // 턴이 이미 끝나고, 다음 플레이어가 버튼 누른 경우 → 이전 결과 초기화
+            if (!game.getYutResults().isEmpty() && !game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
+                game.getYutResults().clear(); // 이전 턴 결과 지우기
+                board.updateResultList(new ArrayList<>());
+            }
+
+            // 이번 턴 던지기
+            YutResult result = game.throwYut(); // 한 번만 던짐
+            board.updateResultList(game.getYutResults()); // 결과 전체 보여주기
+
+            // 보너스 아니면 턴 넘김 (다음 플레이어는 다음에 버튼 눌러야 함)
+            if (!result.isBonusTurn()) {
+                game.nextTurn();
             }
         });
+
 
         // 지정 윷 던지기 버튼
         board.getThrowBackdo().addActionListener(e -> handleManualThrow(YutResult.BackDo));
@@ -105,7 +115,11 @@ public class YutController {
     // 지정 윷 결과 처리 메서드
     private void handleManualThrow(YutResult result) {
         game.setManualYutResult(result);
-        board.updateResult(result.toString());
+        board.updateResultList(List.of(result));
+
+        List<YutResult> latest = new ArrayList<>();
+        latest.add(result);
+        board.updateResultList(latest);
     }
 
     /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */

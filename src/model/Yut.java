@@ -11,15 +11,15 @@ public class Yut {
     public String getRandomResult() {
         int rand = random.nextInt(32); // 0부터 31까지의 랜덤 값 생성
 
-        if (rand < 4) {
+        if (rand < 2) {
             result = YutResult.BackDo;
-        } else if (rand < 11) {
+        } else if (rand < 3) {
             result = YutResult.DO;
-        } else if (rand < 23) {
+        } else if (rand < 4) {
             result = YutResult.GAE;
-        } else if (rand < 30) {
+        } else if (rand < 5) {
             result = YutResult.GUL;
-        } else if (rand < 31) {
+        } else if (rand < 20) {
             result = YutResult.YUT;
         } else {
             result = YutResult.MO;

@@ -47,11 +47,10 @@ public class Game {
     }
 
     /* 윷 던지기 */
-    // returnType "YutResult"로 변경 필요!!!
     public YutResult throwYut() {
-        Yut yut = new Yut();
         YutResult result = YutResult.valueOf(yut.getRandomResult());
-        yutResults.add(result);
+        yutResults.add(result);  // 누적 리스트에 저장
+        System.out.println("던진 결과: " + result);
         return result;
     }
 
