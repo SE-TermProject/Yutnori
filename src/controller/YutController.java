@@ -75,6 +75,9 @@ public class YutController {
                                 // 이동 가능 위치 버튼 생성 및 표시
                                 List<CandidatePieceButton> previewButtons = generatePossiblePieceButtons(piece);
                                 yutBoard.setPossiblePieceButtons(previewButtons);
+
+                                // 버튼 선택 후 실제 이동
+                                movePiece(btn, previewButtons);
                             }
                             else System.out.println("현재 사용자의 말이 아닙니다.");
                         }
@@ -101,17 +104,38 @@ public class YutController {
             btn.setBounds(point.x, point.y, 20, 20);
             btn.setPixelPosition(point);
             btn.setEnabled(true);
-            btn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    /* 말 이동 로직 추가해야 함 */
-
-                    // 모든 이동 가능한 경로에 있던 버튼 제거
-                    yutBoard.deletePieceButton(possiblePosButtons);
-                }
-            });
+            //btn.getPiece().setPosition(pos);  // 각 버튼들의 인덱스 저장
             possiblePosButtons.add(btn);
         }
         return possiblePosButtons;
+    }
+
+    private void movePiece(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons) {
+        int[] from;
+        if (selectedPiece.getPosition().length == 0) {
+            // 아직 말이 출발하지 않은 상태일 경우
+            from = new int[] {0, 0};
+        } else {
+            from = selectedPiece.getPosition();  // 출발 지점의 index
+        }
+        System.out.println("말의 출발 지점: [" + from[0] + ", " + from[1] + "]");
+
+        for (CandidatePieceButton btn : possiblePosButtons) {
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CandidatePieceButton destinationBtn = (CandidatePieceButton) e.getSource();
+                    int[] to = destinationBtn.getPosition();  // 도착 지점의 index
+
+                    /* 말 이동 로직 */
+                    List<Point> piecePath = game.getBoard().calculatePath(from, to);
+                    yutBoard.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
+                    yutBoard.animatePieceMovement(selectedPiece, piecePath);  // 말 실제 이동
+                    selectedPiece.getPiece().setPosition(destinationBtn.getPosition());
+
+                    System.out.println("이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");
+                }
+            });
+        }
     }
 }
