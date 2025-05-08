@@ -34,7 +34,7 @@ public class Piece {
     }
 
     public void setGrouped(boolean grouped) {
-        isGrouped = grouped;
+        this.isGrouped = grouped;
     }
 
     public List<Piece> getPieceGroup() {
