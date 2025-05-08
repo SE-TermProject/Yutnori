@@ -67,6 +67,7 @@ public class YutController {
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 btn.setBounds(currentX, startY, 20, 20);
+                btn.setPos(currentX, startY);  //  초기 위치 저장
                 btn.setEnabled(true);
                 btn.addActionListener(new ActionListener() {
                     @Override
@@ -190,6 +191,12 @@ public class YutController {
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {
-
+        int startX, startY;
+        if(btn != null){
+            startX = btn.getPos()[0];
+            startY = btn.getPos()[1];
+            btn.setBounds(startX, startY, 20, 20);
+            btn.GetoutColor();
+        }
     }
 }
