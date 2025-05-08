@@ -3,10 +3,12 @@ package controller;
 import model.Game;
 import model.Piece;
 import model.Player;
+import model.YutResult;
 import view.PieceButton;
 import view.YutBoardV2;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class YutController {
         for (Player player : game.getPlayers()) {
             int currentX = startX;
             for (Piece piece : player.getPieces()) {
-                PieceButton btn = new PieceButton(piece, player.getId());
+                PieceButton btn = new PieceButton(piece, player.getId(), true);
                 btn.setBounds(currentX, startY, 20, 20);
                 btn.setEnabled(true);
                 btn.addActionListener(new ActionListener() {
