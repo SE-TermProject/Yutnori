@@ -50,7 +50,7 @@ public class Game {
     public YutResult throwYut() {
         YutResult result = YutResult.valueOf(yut.getRandomResult());
         yutResults.add(result);  // 누적 리스트에 저장
-        System.out.println("던진 결과: " + result);
+//        System.out.println("던진 결과: " + result);
         return result;
     }
 
