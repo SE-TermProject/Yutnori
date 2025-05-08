@@ -15,6 +15,10 @@ public class Board {
         initializeCoordinateMap();
     }
 
+    public int getNumSides() {
+        return numSides;
+    }
+
     public int[][] getIndicesAt(Point point) {
         return coordinateToIndexMap.get(point);
     }
@@ -82,6 +86,18 @@ public class Board {
             int[][] array = list.toArray(new int[0][]);
             coordinateToIndexMap.put(e.getKey(), array);
         }
+    }
+
+    /* index -> point */
+    public Point indexToPoint(int[] index) {
+        for (Map.Entry<Point, int[][]> entry : coordinateToIndexMap.entrySet()) {
+            for (int[] idx : entry.getValue()) {
+                if (idx[0] == index[0] && idx[1] == index[1]) {
+                    return entry.getKey();  // 일치하는 좌표 반환
+                }
+            }
+        }
+        return null;
     }
 
     /* 위치가 비어있는지 확인 */
@@ -215,6 +231,10 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public List<Point> pathIndexToPoint(List<int[]> pathIdx) {
+
     }
 
     /* 상대 말 잡기 처리 */
