@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class Piece {
@@ -8,6 +10,8 @@ public class Piece {
     private boolean isGrouped;
     private boolean isFinished;
     private Stack<int[]> prePositions; // 이전에 이동했던 위치 저장
+
+    private List<Piece> pieceGroup = new ArrayList<Piece>();
 
     public Piece() {
         this.position = new int[0]; // 초기값
