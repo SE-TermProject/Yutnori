@@ -8,10 +8,12 @@ import java.awt.*;
 public class PieceButton extends JButton {
     private final Piece piece;
     private final int playerId;  // 플레이어 식별용
+    private Color currentColor;
 
     public PieceButton(Piece piece, int playerId) {
         this.piece = piece;
         this.playerId = playerId;
+        this.currentColor = getColorByPlayer(playerId);
 
         setPreferredSize(new Dimension(20, 20));
         setEnabled(false);  // 기본 비활성화
