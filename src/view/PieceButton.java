@@ -41,8 +41,8 @@ public class PieceButton extends JButton {
 
         int groupSize = piece.getPieceGroup().size() + 1;
         if(groupSize > 1) {
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.BOLD, 10));
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Arial", Font.BOLD, 16));
             String text = String.valueOf(groupSize);
             FontMetrics fm = g.getFontMetrics();
             int textWidth = fm.stringWidth(text);
