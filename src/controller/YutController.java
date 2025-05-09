@@ -309,6 +309,33 @@ public class YutController {
                             System.out.println("말을 잡아 윷을 한 번 더 던질 수 있습니다!");
                             board.getThrowButton().setEnabled(true);  // 윷 던지기 버튼 활성화
                             enableManualThrowButtons(true);           // 수동 윷 버튼들 활성화
+                        } else {
+                            System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
+                            game.consumeResult(btn.getYutResult());
+                            board.updateResultList(game.getYutResults());
+
+
+                            if (game.checkWin()) {
+                                JOptionPane.showMessageDialog(board, "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex()) + " 승리!");
+                                System.exit(0);  // 게임 종료
+                                return;
+                            }
+
+                            if (!game.hasRemainingMoves()) {
+                                if (!game.getYutResults().isEmpty() && game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
+                                    board.getThrowButton().setEnabled(true);
+                                    enableManualThrowButtons(true);
+                                } else {
+                                    game.nextTurn();
+                                    board.updateTurnLabel(game.getCurrentPlayer().getId());
+                                    board.getThrowButton().setEnabled(true);
+                                    enableManualThrowButtons(true);
+                                    hasNonBonusYut = false; // 턴 종료 시 초기화
+                                }
+                            } else {
+                                board.getThrowButton().setEnabled(false);
+                                enableManualThrowButtons(false);
+                            }
                         }
 
                         System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
