@@ -127,7 +127,7 @@ public class YutController {
                         }
                         else {
                             if (game.getYutResults().get(0) == YutResult.BackDo
-                                    && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
+                                    && game.getCurrentPlayer().getPieces().stream().filter(p -> !p.isFinished()).allMatch(p -> {
                                 int[] pos = p.getPosition();
                                 return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
                             })) {
@@ -233,7 +233,7 @@ public class YutController {
         }
 
         if (game.getYutResults().get(0) == YutResult.BackDo
-                && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
+                && game.getCurrentPlayer().getPieces().stream().filter(p -> !p.isFinished()).allMatch(p -> {
             int[] pos = p.getPosition();
             return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
         })) {
