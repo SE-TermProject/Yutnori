@@ -57,16 +57,28 @@ public class Piece {
 
     public boolean isFinished(int numSide, int step) {
 
+        if(position.length == 0) { return isFinished; }
         // 빽도일 때
         if(step < 0) {
             return false;
         }
         else{
-
+            // 테두리에 말이 존재할 때
+            if(position[0] == 0){
+                if(position[1] + step > 5 * numSide){
+                    isFinished = true;
+                }
+            }
+            // 안쪽, 도착지점과 연결된 경로에 있을 때
+            else if(position[0] == numSide / 2){
+                if(position[1] + step > 5 * ((numSide / 2) + 1) + 1){
+                    isFinished = true;
+                }
+            }
         }
         // 테스트 출력
-        System.out.println("isFinished " + numSide + " " + step + "\n");
-        return true;
+        System.out.println(isFinished  + "\n");
+        return isFinished;
     }
 
     public boolean isFinished() { return isFinished; }

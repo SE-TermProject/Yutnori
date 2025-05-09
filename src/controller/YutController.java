@@ -89,7 +89,7 @@ public class YutController {
                                 // 내보내기가 가능할 때, 버튼 생성
                                 if(possibleGetout(piece)) {
                                     JButton Getout = board.getEndPiece();
-                                    Getout.setEnabled(true);
+                                    Getout.setVisible(true);
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
@@ -171,14 +171,18 @@ public class YutController {
 
     private boolean possibleGetout(Piece selectedPiece) {
         int numSides = game.getBoard().getNumSides();
-
+        boolean possibleOut = false;
         List<YutResult> yutResults = game.getYutResults();
-        List<int[]> possiblePos = new ArrayList<>();
-        for (YutResult result: yutResults) {
-            return selectedPiece.isFinished(numSides, result.getStep());
-        }
 
-        return true;
+        for (YutResult result: yutResults) {
+            possibleOut = selectedPiece.isFinished(numSides, result.getStep());
+            // 내보낼 수 있는 경우가 존재하면 내보내기 버튼 생성
+            if(possibleOut){
+                break;
+            }
+        }
+        System.out.println("possible "+possibleOut + "\n");
+        return possibleOut;
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {
