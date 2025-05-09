@@ -39,27 +39,20 @@ public class YutController {
 
         // 랜덤 윷 던지기
         board.getThrowButton().addActionListener(e -> {
-            // 1. 이전 턴 결과가 보너스 턴이 아니면 → 초기화
-            if (!game.getYutResults().isEmpty() &&
-                    !game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
-                game.getYutResults().clear();
-                board.updateResultList(new ArrayList<>());
-            }
+            if (!game.getYutResults().isEmpty()) return;
 
-            // 2. 윷 한 번 던지기
             YutResult result = game.throwYut();
             board.updateResultList(game.getYutResults());
 
-            // 3. 보너스가 아니면 턴 넘기고 라벨 갱신
-            if (!result.isBonusTurn()) {
-                game.nextTurn();
-                board.updateTurnLabel(game.getCurrentPlayer().getId());
-//                System.out.println("턴 종료 → 다음 플레이어로 넘어감");
+            // 보너스 턴이면 버튼 유지
+            if (result.isBonusTurn()) {
+                board.getThrowButton().setEnabled(true);
+                enableManualThrowButtons(true);
             } else {
-//                System.out.println("보너스! 한 번 더 던질 수 있습니다.");
+                board.getThrowButton().setEnabled(false);
+                enableManualThrowButtons(false);
             }
         });
-
 
         // 지정 윷 던지기 버튼
         board.getThrowBackdo().addActionListener(e -> handleManualThrow(YutResult.BackDo));
@@ -119,21 +112,16 @@ public class YutController {
 
     // 지정 윷 결과 처리 메서드
     private void handleManualThrow(YutResult result) {
-        // 1. 이전 턴 결과가 보너스 턴이 아니면 → 초기화
-        if (!game.getYutResults().isEmpty() &&
-                !game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
-            game.getYutResults().clear();
-            board.updateResultList(new ArrayList<>());
-        }
-
-        // 2. 지정된 윷 결과 적용
         game.setManualYutResult(result);
         board.updateResultList(game.getYutResults());
 
-        // 3. 보너스가 아니면 턴 넘기고 라벨 갱신
-        if (!result.isBonusTurn()) {
-            game.nextTurn();
-            board.updateTurnLabel(game.getCurrentPlayer().getId());
+        // 보너스 턴일 경우 버튼 다시 활성화
+        if (result.isBonusTurn()) {
+            board.getThrowButton().setEnabled(true);
+            enableManualThrowButtons(true);
+        } else {
+            board.getThrowButton().setEnabled(false);
+            enableManualThrowButtons(false);
         }
     }
 
@@ -176,6 +164,8 @@ public class YutController {
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    if (game.getYutResults().isEmpty()) return;
+
                     CandidatePieceButton destinationBtn = (CandidatePieceButton) e.getSource();
                     int[] to = destinationBtn.getPosition();  // 도착 지점의 index
 
@@ -187,8 +177,35 @@ public class YutController {
 
                     System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");
                     board.deletePieceButton(possiblePosButtons);
+                    game.consumeResult();
+                    board.updateResultList(game.getYutResults());
+
+
+                    if (!game.hasRemainingMoves()) {
+                        if (!game.getYutResults().isEmpty() &&
+                                game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
+                            board.getThrowButton().setEnabled(true);
+                            enableManualThrowButtons(true);
+                        } else {
+                            game.nextTurn();
+                            board.updateTurnLabel(game.getCurrentPlayer().getId());
+                            board.getThrowButton().setEnabled(true);
+                            enableManualThrowButtons(true);
+                        }
+                    } else {
+                        board.getThrowButton().setEnabled(false);
+                        enableManualThrowButtons(false);
+                    }
                 }
             });
         }
     }
-}
+        private void enableManualThrowButtons(boolean enabled) {
+            board.getThrowBackdo().setEnabled(enabled);
+            board.getThrowDo().setEnabled(enabled);
+            board.getThrowGae().setEnabled(enabled);
+            board.getThrowGeol().setEnabled(enabled);
+            board.getThrowYut().setEnabled(enabled);
+            board.getThrowMo().setEnabled(enabled);
+        }
+    }

@@ -59,6 +59,22 @@ public class Game {
         yutResults.add(result);
     }
 
+    /* 윷 결과 하나 소비 */
+    public void consumeResult() {
+        if (!yutResults.isEmpty()) {
+            yutResults.remove(0);
+        }
+
+        System.out.println("현재 플레이어: " + currentPlayerIndex);
+        System.out.println("남은 윷 결과: ");
+        for (YutResult yutResult : yutResults) {
+            System.out.println(yutResult);
+        }
+    }
+
+    public boolean hasRemainingMoves() {
+        return !yutResults.isEmpty();
+    }
 
     /* 말 이동 (선택된 말과 윷 결과 기반으로 이동 처리) */
     public void movePiece() {
