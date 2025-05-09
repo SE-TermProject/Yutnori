@@ -41,10 +41,10 @@ public class YutController {
     }
 
     private void setupThrowButtons() {
+        if (!game.getYutResults().isEmpty() && !game.getYutResults().get(0).isBonusTurn()) return;
+
         // 랜덤 윷 던지기
         board.getThrowButton().addActionListener(e -> {
-            if (!game.getYutResults().isEmpty()) return;
-
             YutResult result = game.throwYut();
             board.updateResultList(game.getYutResults());
 
