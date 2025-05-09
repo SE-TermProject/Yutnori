@@ -12,6 +12,7 @@ public class Piece {
     private Stack<int[]> prePositions; // 이전에 이동했던 위치 저장
 
     private List<Piece> pieceGroup = new ArrayList<Piece>();
+    private Player owner;
 
     public Piece() {
         this.position = new int[0]; // 초기값
@@ -29,6 +30,11 @@ public class Piece {
         this.prePositions = new Stack<>();
         this.pieceGroup.clear();
     }
+
+    public Player getOwner() { return owner; }
+
+    public void setOwner(Player owner) { this.owner = owner; }
+
     public int[] getPosition() {
         return position;
     }
