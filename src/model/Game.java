@@ -75,8 +75,10 @@ public class Game {
     }
 
     /* 말 이동 (선택된 말과 윷 결과 기반으로 이동 처리) */
-    public void movePiece() {
+    public void movePiece(Piece piece) {
+        // 말 이동 로직
 
+        
     }
 
     /* 턴 넘기기 */
