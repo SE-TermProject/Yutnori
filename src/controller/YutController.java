@@ -128,6 +128,7 @@ public class YutController {
                                 List<CandidatePieceButton> previewButtons = generatePossiblePieceButtons(piece);
                                 board.setPossiblePieceButtons(previewButtons);
 
+
                                 // 내보내기가 가능할 때, 버튼 켜기
                                 if(possibleGetout(piece)) {
                                     JButton Getout = board.getEndPiece();
@@ -140,6 +141,7 @@ public class YutController {
                                         }
                                     });
                                 }
+
                               
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
