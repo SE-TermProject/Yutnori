@@ -15,11 +15,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 public class YutController {
     private final Game game;
     private final YutBoardV2 board;
+    private boolean hasNonBonusYut = false; // 일반 윷이 한 번이라도 나왔는지 추적
 
     public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
         this.game = new Game(sides, playerCount, pieceCount);
@@ -42,6 +44,10 @@ public class YutController {
 
             YutResult result = game.throwYut();
             board.updateResultList(game.getYutResults());
+
+            if (!result.isBonusTurn()) {
+                hasNonBonusYut = true;
+            }
 
             if (game.getYutResults().get(0) == YutResult.BackDo
                     && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
@@ -80,7 +86,7 @@ public class YutController {
         // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
         JFrame gameFrame = new JFrame("YutNori");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setSize(700, 700);
+        gameFrame.setSize(1000, 700);
         gameFrame.add(board);
         gameFrame.setVisible(true);
     }
@@ -95,6 +101,7 @@ public class YutController {
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 btn.setBounds(currentX, startY, 20, 20);
+                btn.setPos(currentX, startY);
                 btn.setEnabled(true);
                 btn.addActionListener(new ActionListener() {
                     @Override
@@ -106,6 +113,9 @@ public class YutController {
                         }
                         else if (piece.isFinished()) { // 이미 finish된 말이라면
                             System.out.println("이 pieces는 이미 종료되었습니다.");
+                        }
+                        else if (!canMoveNow()) {
+                            System.out.println("아직 이동할 수 없습니다. 보너스 턴이 끝날 때까지 기다려야 합니다.");
                         }
                         else {
                             if (game.getYutResults().get(0) == YutResult.BackDo
@@ -123,6 +133,19 @@ public class YutController {
                                 // 이동 가능 위치 버튼 생성 및 표시
                                 List<CandidatePieceButton> previewButtons = generatePossiblePieceButtons(piece);
                                 board.setPossiblePieceButtons(previewButtons);
+
+                                // 내보내기가 가능할 때, 버튼 켜기
+                                if(possibleGetout(piece)) {
+                                    JButton Getout = board.getEndPiece();
+                                    Getout.setEnabled(true);
+                                    Getout.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            handleGetoutButtonClick(btn, previewButtons);
+                                            Getout.setEnabled(false);
+                                        }
+                                    });
+                                }
 
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
@@ -143,6 +166,10 @@ public class YutController {
     private void handleManualThrow(YutResult result) {
         game.setManualYutResult(result);
         board.updateResultList(game.getYutResults());
+
+        if (!result.isBonusTurn()) {
+            hasNonBonusYut = true;
+        }
 
         if (game.getYutResults().get(0) == YutResult.BackDo
                 && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
@@ -166,23 +193,19 @@ public class YutController {
     /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */
     private List<CandidatePieceButton> generatePossiblePieceButtons(Piece selectedPiece) {
         List<CandidatePieceButton> possiblePosButtons = new ArrayList<>();
-        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
-        List<int[]> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
+        HashMap<Piece, HashMap<YutResult, List<int[]>>> currentPossiblePos = game.findCurrentPossiblePos();
+        HashMap<YutResult, List<int[]>> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
 
-        for (int i = 0; i < piecePossiblePos.size(); i++) {
-            int[] pos = piecePossiblePos.get(i);
-            Point point = game.getBoard().indexToPoint(pos);
+        List<YutResult> results = game.getYutResults();
+        for (YutResult yutResult : results) {
+            for (int[] pos : piecePossiblePos.get(yutResult)) {
+                Point point = game.getBoard().indexToPoint(pos);
 
-            int[] prePos = selectedPiece.getPosition(); int index = i;
-            if (prePos.length == 0) prePos = new int[]{0, 0};
-            if (prePos[0] == 0 && prePos[1] % 5 == 0 && prePos[1] > 0 && prePos[1] / 5 <= game.getBoard().getNumSides() - 2) { // 가장자리 꼭짓점 위치라면
-                // 각 이동 가능한 칸의 수가 두개씩이므로 인덱스 수정
-                index = i / 2;
+                CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), yutResult);
+                btn.setPixelPosition(point);
+                btn.setEnabled(true);
+                possiblePosButtons.add(btn);
             }
-            CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), game.getYutResults().get(index));
-            btn.setPixelPosition(point);
-            btn.setEnabled(true);
-            possiblePosButtons.add(btn);
         }
         return possiblePosButtons;
     }
@@ -226,6 +249,13 @@ public class YutController {
 
                         System.out.println("현재 플레이어 : " + currentPlayer.getId());
 
+                        int[] finalTo = selectedPiece.getPosition();
+                        selectedPiece.getPiece().recordPrePositions(game.getBoard().getNumSides(), new int[]{from[0], from[1]}, new int[]{finalTo[0], finalTo[1]}, destinationBtn.getYutResult()); // 이전에 이동했던 위치 저장
+                        System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + finalTo[0] + ", " + finalTo[1] + "]");
+
+                        game.consumeResult(btn.getYutResult());
+                        board.updateResultList(game.getYutResults());
+
                         System.out.println("=== 현재 모든 말의 위치와 소유자 ===");
                         for (Player player : game.getPlayers()) {
                             for (Piece p : player.getPieces()) {
@@ -235,18 +265,18 @@ public class YutController {
                             }
                         }
 
-                        for(Player player : game.getPlayers()) {
+                        for (Player player : game.getPlayers()) {
                             for (Piece otherPiece : player.getPieces()) {
-                                if(otherPiece != selectedPiece.getPiece() && Arrays.equals(otherPiece.getPosition(), currentPosition)) {
-                                    if(otherPiece.getOwner().getId() == currentPlayer.getId()) {
+                                if (otherPiece != selectedPiece.getPiece() && Arrays.equals(otherPiece.getPosition(), currentPosition)) {
+                                    if (otherPiece.getOwner().getId() == currentPlayer.getId()) {
                                         System.out.println("자기 팀의 말을 업습니다.");
                                         selectedPiece.getPiece().addGroupedPiece(otherPiece);
                                     } else {
                                         System.out.println("상대 팀의 말을 잡습니다.");
 
-                                        if(otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
+                                        if (otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
                                             List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
-                                            for(Piece grouped : group) {
+                                            for (Piece grouped : group) {
                                                 otherPiece.removeGroupedPiece(grouped);
                                                 grouped.resetPosition();
                                             }
@@ -258,7 +288,7 @@ public class YutController {
                                 }
                             }
                         }
-                        if(catchPieces) {
+                        if (catchPieces) {
                             // 윷 한 번 더 던지기
                             System.out.println("말을 잡아 윷을 한 번 더 던질 수 있습니다!");
                             board.getThrowButton().setEnabled(true);  // 윷 던지기 버튼 활성화
@@ -266,12 +296,18 @@ public class YutController {
                         }
 
                         System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
-                        game.consumeResult();
+                        game.consumeResult(btn.getYutResult());
                         board.updateResultList(game.getYutResults());
 
+
+                        if (game.checkWin()) {
+                            JOptionPane.showMessageDialog(board, "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex()) + " 승리!");
+                            System.exit(0);  // 게임 종료
+                            return;
+                        }
+
                         if (!game.hasRemainingMoves()) {
-                            if (!game.getYutResults().isEmpty() &&
-                                    game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
+                            if (!game.getYutResults().isEmpty() && game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
                                 board.getThrowButton().setEnabled(true);
                                 enableManualThrowButtons(true);
                             } else {
@@ -279,14 +315,41 @@ public class YutController {
                                 board.updateTurnLabel(game.getCurrentPlayer().getId());
                                 board.getThrowButton().setEnabled(true);
                                 enableManualThrowButtons(true);
+                                hasNonBonusYut = false; // 턴 종료 시 초기화
                             }
                         } else {
                             board.getThrowButton().setEnabled(false);
                             enableManualThrowButtons(false);
                         }
-                    });  // 말 실제 이동
+                    });
                 }
             });
+        }
+    }
+
+    private boolean possibleGetout(Piece selectedPiece) {
+        int numSides = game.getBoard().getNumSides();
+        boolean possibleOut = false;
+        List<YutResult> yutResults = game.getYutResults();
+
+        for (YutResult result: yutResults) {
+            possibleOut = selectedPiece.isFinished(numSides, result.getStep());
+            // 내보낼 수 있는 경우가 존재하면 내보내기 버튼 생성
+            if(possibleOut){
+                break;
+            }
+        }
+        return possibleOut;
+    }
+
+    private void handleGetoutButtonClick(PieceButton btn, List<CandidatePieceButton> possiblePosButtons) {
+        int startX, startY;
+        if(btn != null){
+            startX = btn.getPos()[0];
+            startY = btn.getPos()[1];
+            btn.setBounds(startX, startY, 20, 20);
+            btn.GetoutColor();
+            movePiece(btn, possiblePosButtons);
         }
     }
 
@@ -304,12 +367,20 @@ public class YutController {
         JOptionPane.showMessageDialog(null, "모든 말이 판에 올라가지 않았고, 빽도가 나와 낙 처리됩니다.", "낙 발생", JOptionPane.WARNING_MESSAGE);
 
         System.out.println("빽도 나옴 -> 낙 처리");
-        game.consumeResult();
+        game.consumeResult(YutResult.BackDo);
         board.updateResultList(game.getYutResults());
 
         game.nextTurn();
         board.updateTurnLabel(game.getCurrentPlayer().getId());
         board.getThrowButton().setEnabled(true);
         enableManualThrowButtons(true);
+    }
+
+    private boolean canMoveNow() {
+        List<YutResult> results = game.getYutResults();
+        if (results.isEmpty()) return false;
+
+        // 이번 턴에 일반 윷이 하나라도 나왔으면 이동 가능
+        return hasNonBonusYut;
     }
 }

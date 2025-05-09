@@ -13,6 +13,7 @@ public class YutBoardV2 extends JPanel {
     private final JLabel resultLabel;
     private final JButton throwButton;
     private final JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
+    private final JButton endPiece;
     private JLabel turnLabel;
     private JPanel resultPanel;
 
@@ -58,6 +59,11 @@ public class YutBoardV2 extends JPanel {
         throwMo.setBounds(850, y, w, h);
         add(throwMo);
 
+        endPiece = new JButton("내보내기");
+        endPiece.setBounds(480, 550, 90, 40);
+        endPiece.setEnabled(false);
+        add(endPiece);
+
         turnLabel = new JLabel("A님의 차례입니다.");
         turnLabel.setBounds(600, 500, 200, 30);
         add(turnLabel);
@@ -93,6 +99,7 @@ public class YutBoardV2 extends JPanel {
     public JButton getThrowGeol() { return throwGeol; }
     public JButton getThrowYut() { return throwYut; }
     public JButton getThrowMo() { return throwMo; }
+    public JButton getEndPiece() { return endPiece; }
 
     public void updateResult(List<YutResult> results) {
         resultPanel.removeAll();
@@ -115,6 +122,8 @@ public class YutBoardV2 extends JPanel {
     public void setNumSides(int numSides) {
         this.numSides = numSides;
     }
+
+    public int getNumSides() { return numSides; }
 
     public void setBoard(Board board) {
         this.board = board;
