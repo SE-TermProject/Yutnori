@@ -115,6 +115,22 @@ public class YutBoardV2 extends JPanel {
     public JButton getThrowMo() { return throwMo; }
     public JButton getEndPiece() { return endPiece; }
 
+    public void onThrowYutButtonClicked(Runnable callback) {
+        throwButton.addActionListener(e -> callback.run());
+    }
+
+    public void onManualThrowButtonClicked(YutResult result, Runnable callback) {
+        JButton button = switch (result) {
+            case BackDo -> throwBackdo;
+            case DO -> throwDo;
+            case GAE -> throwGae;
+            case GUL -> throwGeol;
+            case YUT -> throwYut;
+            case MO -> throwMo;
+        };
+        button.addActionListener(e -> callback.run());
+    }
+
     public void updateResult(List<YutResult> results) {
         resultPanel.removeAll();
 

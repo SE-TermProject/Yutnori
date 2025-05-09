@@ -39,16 +39,11 @@ public class YutController {
     }
 
     private void setupThrowButtons() {
-        if (!game.getYutResults().isEmpty() && !game.getYutResults().get(0).isBonusTurn()) return;
-
-        // 랜덤 윷 던지기
-        board.getThrowButton().addActionListener(e -> {
+        board.onThrowYutButtonClicked(() -> {
             YutResult result = game.throwYut();
             board.updateResultList(game.getYutResults());
 
-            if (!result.isBonusTurn()) {
-                hasNonBonusYut = true;
-            }
+            if (!result.isBonusTurn()) hasNonBonusYut = true;
 
             if (game.getYutResults().get(0) == YutResult.BackDo
                     && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
@@ -59,23 +54,13 @@ public class YutController {
                 return;
             }
 
-            // 보너스 턴이면 버튼 유지
-            if (result.isBonusTurn()) {
-                board.getThrowButton().setEnabled(true);
-                enableManualThrowButtons(true);
-            } else {
-                board.getThrowButton().setEnabled(false);
-                enableManualThrowButtons(false);
-            }
+            board.getThrowButton().setEnabled(result.isBonusTurn());
+            enableManualThrowButtons(result.isBonusTurn());
         });
 
-        // 지정 윷 던지기 버튼
-        board.getThrowBackdo().addActionListener(e -> handleManualThrow(YutResult.BackDo));
-        board.getThrowDo().addActionListener(e -> handleManualThrow(YutResult.DO));
-        board.getThrowGae().addActionListener(e -> handleManualThrow(YutResult.GAE));
-        board.getThrowGeol().addActionListener(e -> handleManualThrow(YutResult.GUL));
-        board.getThrowYut().addActionListener(e -> handleManualThrow(YutResult.YUT));
-        board.getThrowMo().addActionListener(e -> handleManualThrow(YutResult.MO));
+        for (YutResult result : YutResult.values()) {
+            board.onManualThrowButtonClicked(result, () -> handleManualThrow(result));
+        }
     }
 
     private void setupInitialPieceButtons() {
