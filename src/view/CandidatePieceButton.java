@@ -16,7 +16,7 @@ public class CandidatePieceButton extends JButton {
         this.playerId = playerId;
         this.yutResult = yutResult;
 
-        setPreferredSize(new Dimension(20, 20));
+        setPreferredSize(new Dimension(30, 30));
         setEnabled(false);  // 기본 비활성화
         setFocusable(false);
         setMargin(new Insets(0, 0, 0, 0));
@@ -56,6 +56,6 @@ public class CandidatePieceButton extends JButton {
         int height = getPreferredSize().height;
         int adjustedX = center.x - width / 2;
         int adjustedY = center.y - height / 2;
-        setLocation(adjustedX, adjustedY);
+        setBounds(adjustedX, adjustedY, width, height);
     }
 }
