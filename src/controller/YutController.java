@@ -133,6 +133,7 @@ public class YutController {
                                         game.getYutResults().remove(useYut);
 
                                         if (game.checkWin()) {
+                                            btn.getPiece().removeGroupedPiece();
                                             System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
                                             String winnerName = "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex());
                                             int choice = board.showGameOverDialog(winnerName);
@@ -155,6 +156,7 @@ public class YutController {
                                         } else {
                                             board.updateResultList(game.getYutResults());
                                         }
+                                        btn.getPiece().removeGroupedPiece();
                                     });
                                 }
                                 // 버튼 선택 후 실제 이동
