@@ -93,7 +93,7 @@ public class Piece {
                     prePositions.pop(); // 스택에서 pop
                 }
             }
-            else if (from[1] % 5 == 0 && from[1] > 0 && from[1] / 5 <= numSides - 2)
+            else if (from[1] % 5 == 0 && from[1] > 0 && from[1] / 5 == numSides - 1)
                 prePositions.pop(); // 스택에서 pop
         }
 

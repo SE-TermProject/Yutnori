@@ -212,10 +212,17 @@ public class Board {
     }
 
     /* 한 칸씩 이동하기 위한 이동 경로 계산 */
-    public List<Point> calculatePath(int[] from, int[] to) {
+    public List<Point> calculatePath(int[] from, int[] to, YutResult yutResult) {
         List<int[]> path = new ArrayList<>();
 
-        // 빽도가 아닌 도,개,걸,윷,모의 경우
+        // 1. 빽도인 경우
+        if (yutResult == yutResult.BackDo) {
+            path.add(from);
+            path.add(to);
+            return pathIndexToPoint(path);
+        }
+
+        // 2. 빽도가 아닌 도,개,걸,윷,모의 경우
         if (from[0] == to[0]) {
             for (int i = from[1]; i <= to[1]; i++) {
                 path.add(new int[]{from[0], i});
