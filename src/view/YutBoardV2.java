@@ -7,6 +7,7 @@ import model.YutResult;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
@@ -379,5 +380,16 @@ public class YutBoardV2 extends JPanel {
 
     public void showMessageDialog(String message, String title) {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void showGetoutButton(YutResult useYut, Runnable onClick) {
+        JButton btn = getEndPiece();
+        btn.setEnabled(true);
+        // 기존 리스너 제거
+        for (ActionListener el : btn.getActionListeners()) {
+            btn.removeActionListener(el);
+        }
+        // 새 리스너 등록
+        btn.addActionListener(e -> onClick.run());
     }
 }

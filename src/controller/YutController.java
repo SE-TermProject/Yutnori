@@ -136,49 +136,39 @@ public class YutController {
                                 board.setPossiblePieceButtons(previewButtons);
 
                                 // 내보내기가 가능할 때, 버튼 켜기
-                                if(possibleGetout(piece)) {
-                                    JButton Getout = board.getEndPiece();
+                                if (possibleGetout(piece)) {
                                     YutResult useYut = getYutResult(piece);
 
-                                    for (ActionListener al : Getout.getActionListeners()) {
-                                        Getout.removeActionListener(al);
-                                    }
+                                    board.showGetoutButton(useYut, () -> {
+                                        System.out.println(useYut + " 으로 나가기 가능"+ "\n");
 
-                                    System.out.println(useYut + " 으로 나가기 가능"+ "\n");
-                                    Getout.setEnabled(true);
-                                    Getout.addActionListener(new ActionListener() {
-                                        @Override
-                                        public void actionPerformed(ActionEvent e) {
-                                            Getout.setEnabled(false);
-                                            handleGetoutButtonClick(btn);
-                                            board.deletePieceButton(previewButtons);
-                                            btn.getPiece().setFinished(true);
-                                            game.getYutResults().remove(useYut);
+                                        handleGetoutButtonClick(btn);
+                                        board.deletePieceButton(previewButtons);
+                                        btn.getPiece().setFinished(true);
+                                        game.getYutResults().remove(useYut);
 
-                                            if (game.checkWin()) {
-                                                System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
-                                                String winnerName = "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex());
-                                                int choice = board.showGameOverDialog(winnerName);
-                                                SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
+                                        if (game.checkWin()) {
+                                            System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
+                                            String winnerName = "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex());
+                                            int choice = board.showGameOverDialog(winnerName);
+                                            SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
 
-                                                if (choice == JOptionPane.YES_OPTION) {
-                                                    appManager.restartGame();  // 다시 시작
-                                                } else {
-                                                    appManager.exitGame(); // 완전 종료
-                                                }
+                                            if (choice == JOptionPane.YES_OPTION) {
+                                                appManager.restartGame();  // 다시 시작
+                                            } else {
+                                                appManager.exitGame(); // 완전 종료
                                             }
+                                        }
 
-                                            if(game.getYutResults().isEmpty()) {
-                                                game.nextTurn();
-                                                board.updateTurnLabel(game.getCurrentPlayer().getId());
-                                                hasNonBonusYut = false;
-                                                enableManualThrowButtons(true);
-                                                board.getThrowButton().setEnabled(true);
-                                                board.updateResultList(game.getYutResults());
-                                            }
-                                            else{
-                                                board.updateResultList(game.getYutResults());
-                                            }
+                                        if (game.getYutResults().isEmpty()) {
+                                            game.nextTurn();
+                                            board.updateTurnLabel(game.getCurrentPlayer().getId());
+                                            hasNonBonusYut = false;
+                                            enableManualThrowButtons(true);
+                                            board.getThrowButton().setEnabled(true);
+                                            board.updateResultList(game.getYutResults());
+                                        } else {
+                                            board.updateResultList(game.getYutResults());
                                         }
                                     });
                                 }
