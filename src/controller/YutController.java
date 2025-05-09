@@ -271,6 +271,12 @@ public class YutController {
                                     if (otherPiece.getOwner().getId() == currentPlayer.getId()) {
                                         System.out.println("자기 팀의 말을 업습니다.");
                                         selectedPiece.getPiece().addGroupedPiece(otherPiece);
+
+                                        // 그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
+                                        PieceButton pieceButton = board.getPieceButton(selectedPiece.getPiece());
+                                        if (pieceButton != null) {
+                                            pieceButton.repaint();  // PieceButton을 다시 그려서 그룹 크기를 업데이트
+                                        }
                                     } else {
                                         System.out.println("상대 팀의 말을 잡습니다.");
 
