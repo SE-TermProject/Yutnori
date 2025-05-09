@@ -162,6 +162,7 @@ public class YutController {
                                             game.getYutResults().remove(useYut);
 
                                             if (game.checkWin()) {
+                                                btn.getPiece().removeGroupedPiece();
                                                 System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
                                                 int choice = JOptionPane.showOptionDialog(
                                                         board,
