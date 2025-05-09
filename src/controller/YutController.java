@@ -210,7 +210,7 @@ public class YutController {
         return possiblePosButtons;
     }
 
-    private void movePiece(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons) {
+    public void movePiece(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons) {
         int[] from;
         if (selectedPiece.getPiece().getPosition().length == 0) {
             // 아직 말이 출발하지 않은 상태일 경우
