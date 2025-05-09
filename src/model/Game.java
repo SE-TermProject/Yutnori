@@ -88,7 +88,7 @@ public class Game {
 
     /* 승리 조건 확인 */
     public boolean checkWin() {
-        return false;
+        return getCurrentPlayer().getPieces().stream().allMatch(Piece::isFinished);
     }
 
     /* 윷 결과 반환 */
