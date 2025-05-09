@@ -216,6 +216,12 @@ public class YutController {
                     game.consumeResult();
                     board.updateResultList(game.getYutResults());
 
+                    if (game.checkWin()) {
+                        JOptionPane.showMessageDialog(board, "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!");
+                        System.exit(0);  // 게임 종료
+                        return;
+                    }
+
                     if (!game.hasRemainingMoves()) {
                         if (!game.getYutResults().isEmpty() &&
                                 game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
