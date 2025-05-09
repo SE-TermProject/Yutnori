@@ -177,7 +177,6 @@ public class YutController {
                 index = i / 2;
             }
             CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), game.getYutResults().get(index));
-            btn.setBounds(point.x, point.y, 20, 20);
             btn.setPixelPosition(point);
             btn.setEnabled(true);
             possiblePosButtons.add(btn);
@@ -196,6 +195,9 @@ public class YutController {
         System.out.println("말의 출발 지점: [" + from[0] + ", " + from[1] + "]");
 
         for (CandidatePieceButton btn : possiblePosButtons) {
+            board.add(btn);
+            board.setComponentZOrder(btn, 0);
+
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
