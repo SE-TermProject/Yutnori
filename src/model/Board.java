@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.List;
 
 public class Board {
-    private int numSides;
+    private final int numSides;
     private final Map<Point, int[][]> coordinateToIndexMap = new HashMap<>();
 
     public Board(int numSides) {
