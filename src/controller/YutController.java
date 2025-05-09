@@ -191,12 +191,11 @@ public class YutController {
                                                 enableManualThrowButtons(true);
                                                 board.getThrowButton().setEnabled(true);
                                                 board.updateResultList(game.getYutResults());
-                                                btn.getPiece().removeGroupedPiece();
                                             }
                                             else{
                                                 board.updateResultList(game.getYutResults());
-                                                btn.getPiece().removeGroupedPiece();
                                             }
+                                            btn.getPiece().removeGroupedPiece();
                                         }
                                     });
                                 }
