@@ -42,7 +42,7 @@ public class YutController {
             YutResult result = game.throwYut();
             board.updateResultList(game.getYutResults());
 
-            if (game.getYutResults().size() == 1 && game.getYutResults().get(0) == YutResult.BackDo
+            if (game.getYutResults().get(0) == YutResult.BackDo
                     && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
                 int[] pos = p.getPosition();
                 return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
@@ -107,7 +107,7 @@ public class YutController {
                             System.out.println("이 pieces는 이미 종료되었습니다.");
                         }
                         else {
-                            if (game.getYutResults().size() == 1 && game.getYutResults().get(0) == YutResult.BackDo
+                            if (game.getYutResults().get(0) == YutResult.BackDo
                                     && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
                                 int[] pos = p.getPosition();
                                 return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
@@ -141,7 +141,7 @@ public class YutController {
         game.setManualYutResult(result);
         board.updateResultList(game.getYutResults());
 
-        if (game.getYutResults().size() == 1 && game.getYutResults().get(0) == YutResult.BackDo
+        if (game.getYutResults().get(0) == YutResult.BackDo
                 && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
             int[] pos = p.getPosition();
             return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
@@ -213,7 +213,6 @@ public class YutController {
                     System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");
                     game.consumeResult();
                     board.updateResultList(game.getYutResults());
-
 
                     if (!game.hasRemainingMoves()) {
                         if (!game.getYutResults().isEmpty() &&
