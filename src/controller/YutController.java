@@ -339,11 +339,10 @@ public class YutController {
                             pieceButton.repaint();  // PieceButton을 다시 그려서 그룹 크기를 업데이트
                         }
                     } else {
-                        System.out.println("1. 상대 팀의 말을 잡습니다.");
+                        System.out.println("상대 팀의 말을 잡습니다.");
 
                         if (otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
                             List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
-                            System.out.println("그룹 : " + group);
                             for (Piece grouped : group) {
                                 System.out.println("그룹화 풀기");
                                 grouped.removeGroupedPiece();
@@ -355,7 +354,6 @@ public class YutController {
                             PieceButton pieceButton = board.getPieceButton(otherPiece);
                             otherPiece.resetPosition();
                             board.updatePiecePosition(pieceButton);
-                            System.out.println("디버그");
                             game.getBoard().catchPiece(otherPiece);
                         }
                         catchPieces = true;
@@ -376,9 +374,6 @@ public class YutController {
             enableManualThrowButtons(true);           // 수동 윷 버튼들 활성화
         } else {
             System.out.println(selectedBtn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
-            game.consumeResult(selectedBtn.getYutResult());
-            board.updateResultList(game.getYutResults());
-
 
             if (game.checkWin()) {
                 JOptionPane.showMessageDialog(board, "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex()) + " 승리!");
