@@ -139,8 +139,6 @@ public class YutController {
                                 if(possibleGetout(piece)) {
                                     JButton Getout = board.getEndPiece();
                                     YutResult useYut = getYutResult(piece);
-
-                                    System.out.println(useYut + " 으로 나가기 가능"+ "\n");
                                     Getout.setEnabled(true);
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
