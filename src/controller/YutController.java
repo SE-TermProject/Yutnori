@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -185,7 +186,41 @@ public class YutController {
                     /* 말 이동 로직 */
                     List<Point> piecePath = game.getBoard().calculatePath(from, to);
                     board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
-                    board.animatePieceMovement(selectedPiece, piecePath);  // 말 실제 이동
+                    board.animatePieceMovement(selectedPiece, piecePath, () -> {
+                        int[] currentPosition = selectedPiece.getPiece().getPosition();
+                        Player currentPlayer = game.getCurrentPlayer();
+                        boolean catchPieces = false;
+
+                        for(Player player : game.getPlayers()) {
+                            for (Piece otherPiece : player.getPieces()) {
+                                if(otherPiece != selectedPiece.getPiece() && Arrays.equals(otherPiece.getPosition(), currentPosition)) {
+                                    if(player == currentPlayer) {
+                                        System.out.println("자기 팀의 말을 업습니다.");
+                                        selectedPiece.getPiece().addGroupedPiece(otherPiece);
+                                    } else {
+                                        System.out.println("상대 팀의 말을 잡습니다.");
+
+                                        if(otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
+                                            List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
+                                            for(Piece grouped : group) {
+                                                otherPiece.removeGroupedPiece(grouped);
+                                                grouped.setPosition(new int[]{0, 0});
+                                            }
+                                        }
+
+                                        game.getBoard().catchPiece(otherPiece);
+                                        catchPieces = true;
+                                    }
+                                }
+                            }
+                        }
+                        if(catchPieces) {
+                            // 윷 한 번 더 던지기
+                            YutResult result = game.throwYut();
+                            game.getYutResults().add(result);
+                            System.out.println("말을 잡아 윷을 한 번 더 던집니다! 결과: " + result);
+                        }
+                    });  // 말 실제 이동
                     selectedPiece.getPiece().setPosition(destinationBtn.getPosition());
 
                     System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");

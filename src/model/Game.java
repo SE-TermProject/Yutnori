@@ -80,39 +80,7 @@ public class Game {
     public void movePiece(Piece piece) {
         // 말 이동 로직
 
-        int[] currentPosition = piece.getPosition();
-        Player currentPlayer = getCurrentPlayer();
-        boolean catchPiece = false;
-
-        for(Player player : players) {
-            for (Piece otherPiece : player.getPieces()) {
-                if(otherPiece != piece && Arrays.equals(otherPiece.getPosition(), currentPosition)) {
-                    if(player == currentPlayer) {
-                        System.out.println("자기 팀의 말을 업습니다.");
-                        piece.addGroupedPiece(otherPiece);
-                    } else {
-                        System.out.println("상태 팀의 말을 잡습니다.");
-
-                        if(otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
-                            List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
-                            for(Piece grouped : group) {
-                                otherPiece.removeGroupedPiece(grouped);
-                                grouped.setPosition(new int[]{0, 0});
-                            }
-                        }
-
-                        board.catchPiece(otherPiece);
-                        catchPiece = true;
-                    }
-                }
-            }
-        }
-        if(catchPiece) {
-            // 윷 한 번 더 던지기
-            YutResult result = throwYut();
-            yutResults.add(result);
-            System.out.println("말을 잡아 윷을 한 번 더 던집니다! 결과: " + result);
-        }
+        
     }
 
     /* 턴 넘기기 */
