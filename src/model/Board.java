@@ -364,4 +364,10 @@ public class Board {
         piece.resetPosition();
         System.out.println("catch: 윷을 한 번 더 던지세요.");
     }
+
+    public void catchPiece(List<Piece> groupedPiece) {
+        for (Piece piece : groupedPiece) {
+            piece.resetPosition();
+        }
+    }
 }
