@@ -42,7 +42,7 @@ public class PieceButton extends JButton {
         g.setColor(currentColor);
         g.fillOval(0, 0, getWidth(), getHeight());
 
-        int groupSize = piece.getPieceGroup().size() + 1;
+        int groupSize = piece.getPieceGroup().size();
         if(groupSize > 1) {
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD, 14));
