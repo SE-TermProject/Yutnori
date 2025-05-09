@@ -139,6 +139,12 @@ public class YutController {
                                 if(possibleGetout(piece)) {
                                     JButton Getout = board.getEndPiece();
                                     YutResult useYut = getYutResult(piece);
+
+                                    for (ActionListener al : Getout.getActionListeners()) {
+                                        Getout.removeActionListener(al);
+                                    }
+
+                                    System.out.println(useYut + " 으로 나가기 가능"+ "\n");
                                     Getout.setEnabled(true);
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
@@ -277,7 +283,8 @@ public class YutController {
                     }
 
                     CandidatePieceButton destinationBtn = (CandidatePieceButton) e.getSource();
-                    int[] to = destinationBtn.getPosition();  // 도착 지점의 index
+                    int[] to = destinationBtn.getPosition(game.getBoard().getNumSides()); // 도착 지점의 index
+                    destinationBtn.setPosition(to);
 
                     /* 말 이동 로직 */
                     List<Point> piecePath = game.getBoard().calculatePath(from, to, btn.getYutResult());
