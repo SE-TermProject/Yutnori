@@ -47,11 +47,10 @@ public class Game {
     }
 
     /* 윷 던지기 */
-    // returnType "YutResult"로 변경 필요!!!
     public YutResult throwYut() {
-        Yut yut = new Yut();
         YutResult result = YutResult.valueOf(yut.getRandomResult());
-        yutResults.add(result);
+        yutResults.add(result);  // 누적 리스트에 저장
+//        System.out.println("던진 결과: " + result);
         return result;
     }
 
@@ -60,6 +59,22 @@ public class Game {
         yutResults.add(result);
     }
 
+    /* 윷 결과 하나 소비 */
+    public void consumeResult() {
+        if (!yutResults.isEmpty()) {
+            yutResults.remove(0);
+        }
+
+        System.out.println("현재 플레이어: " + currentPlayerIndex);
+        System.out.println("남은 윷 결과: ");
+        for (YutResult yutResult : yutResults) {
+            System.out.println(yutResult);
+        }
+    }
+
+    public boolean hasRemainingMoves() {
+        return !yutResults.isEmpty();
+    }
 
     /* 말 이동 (선택된 말과 윷 결과 기반으로 이동 처리) */
     public void movePiece(Piece piece) {
