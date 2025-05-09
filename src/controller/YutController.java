@@ -106,6 +106,7 @@ public class YutController {
                 btn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        board.getEndPiece().setEnabled(false);
                         /* 말 선택 */
                         System.out.print("Piece clicked - " );
                         if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
@@ -141,7 +142,11 @@ public class YutController {
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
+                                            //btn.getPiece().setPosition({0,0});
                                             handleGetoutButtonClick(btn);
+                                            board.deletePieceButton(previewButtons);
+                                            btn.getPiece().setFinished(true);
+                                            game.nextTurn();
                                         }
                                     });
 
@@ -226,6 +231,11 @@ public class YutController {
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    if(possibleGetout(selectedPiece.getPiece())){
+                        selectedPiece.getPiece().setFinished(true);
+                    }
+                    board.getEndPiece().setEnabled(false);
+
                     if (game.getYutResults().isEmpty()) return;
 
                     for (CandidatePieceButton b : possiblePosButtons) {
@@ -331,8 +341,7 @@ public class YutController {
             enableManualThrowButtons(true);           // 수동 윷 버튼들 활성화
         } else {
             System.out.println(selectedBtn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
-            game.consumeResult(selectedBtn.getYutResult());
-            board.updateResultList(game.getYutResults());
+
 
 
             if (game.checkWin()) {

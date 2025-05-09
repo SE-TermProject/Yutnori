@@ -103,13 +103,13 @@ public class Piece {
             // 테두리에 말이 존재할 때
             if(position[0] == 0){
                 if(position[1] + step > 5 * numSide){
-                    isFinished = true;
+                    return true;
                 }
             }
             // 안쪽, 도착지점과 연결된 경로에 있을 때
             else {
                 if((position[1] == 5 * position[0] + 3 || position[0] == q && position[1] > position[0] * 5 + 3) && position[1] + step > 5 * position[0] + 6){
-                    isFinished = true;
+                    return  true;
                 }
             }
         }
