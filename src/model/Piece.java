@@ -41,6 +41,10 @@ public class Piece {
         int now_row = position[0];
         int now_col = position[1];
 
+        if(now_row == 0){
+
+        }
+
         // 4각형
         if(numSide == 4){
             if(now_row == 0 && now_col > 20) { isFinished = true; }
@@ -64,7 +68,14 @@ public class Piece {
 
     public boolean isFinished(int numSide, int step) {
 
-        // 테스트 출력문
+        // 빽도일 때
+        if(step < 0) {
+            return false;
+        }
+        else{
+
+        }
+        // 테스트 출력
         System.out.println("isFinished " + numSide + " " + step + "\n");
         return true;
     }
