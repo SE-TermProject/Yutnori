@@ -427,6 +427,9 @@ public class YutBoardV2 extends JPanel {
             btn.removeActionListener(el);
         }
         // 새 리스너 등록
-        btn.addActionListener(e -> onClick.run());
+        btn.addActionListener(e -> {
+            btn.setEnabled(false);
+            onClick.run();
+        });
     }
 }
