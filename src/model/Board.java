@@ -302,6 +302,10 @@ public class Board {
             int pointY = from[1] + 1;
             boolean passedCenter = false;
             while (true) {
+                // 현재 위치가 중간칸들을 빠져나가는 곳이라면
+                // numSides가 4라면 (1, 11) -> (0, 15)
+                // numSides가 5라면 (1, 11) -> (0, 20)
+                // numSides가 6이라면 (2, 16) -> (0, 25)
                 if (pointX == numSides / 3 && pointY == (numSides / 2) * 5 + 1) {
                     pointX = 0;
                     pointY = 5 * (numSides - 1);
@@ -309,10 +313,13 @@ public class Board {
 
                 path.add(new int[]{pointX, pointY});
 
+                // 현재 지점이 도착 지점이라면 while문 종료
                 if (pointX == to[0] && pointY == to[1]) {
                     break;
                 }
 
+                // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
+                // numSides가 5라면 (1, 8)로, 6이라면 (2, 13)으로 변경
                 if (isCenterPoint(pointX, pointY) && !passedCenter) {
                     pointX = numSides / 3;
                     pointY = 5 * (numSides / 2) - 2;
@@ -320,24 +327,6 @@ public class Board {
                 }
 
                 pointY++;
-//                // 중심점 탈출
-//                if (isCenterPoint(pointX, pointY)) {
-//                    pointX = numSides / 2;
-//                    pointY = 5 * (numSides / 2) - 2;
-//                    continue;
-//                }
-//
-//                // 외곽으로 나가는 포인트 처리
-//                if (pointX == numSides / 3 && pointY == (numSides / 2) * 5 + 1) {
-//                    pointX = 0;
-//                    pointY = 5 * (numSides - 1);
-//                }
-//
-//                path.add(new int[]{pointX, pointY});
-//
-//                if (pointX == to[0] && pointY == to[1]) break;
-//
-//                pointY++;
             }
         }
 
