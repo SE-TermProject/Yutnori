@@ -81,6 +81,15 @@ public class YutBoardV2 extends JPanel {
         add(resultPanel);
     }
 
+    public void setupFrame() {
+        // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
+        JFrame gameFrame = new JFrame("YutNori");
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setSize(1000, 700);
+        gameFrame.add(this);
+        gameFrame.setVisible(true);
+    }
+
     // 결과 리스트 업데이트 메서드
     public void updateResultList(List<YutResult> results) {
         resultPanel.removeAll();

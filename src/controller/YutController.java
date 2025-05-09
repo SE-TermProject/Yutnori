@@ -33,7 +33,7 @@ public class YutController {
 
         setupThrowButtons();
         setupInitialPieceButtons();
-        setupFrame();
+        board.setupFrame();
     }
 
     private void setupThrowButtons() {
@@ -79,15 +79,6 @@ public class YutController {
     private void setupInitialPieceButtons() {
         List<PieceButton> pieceButtons = generateInitialPieceButtons();
         board.setPieceButtons(pieceButtons);
-    }
-
-    private void setupFrame() {
-        // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
-        JFrame gameFrame = new JFrame("YutNori");
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setSize(1000, 700);
-        gameFrame.add(board);
-        gameFrame.setVisible(true);
     }
 
     private List<PieceButton> generateInitialPieceButtons() {
