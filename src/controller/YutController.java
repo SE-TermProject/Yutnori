@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -339,7 +338,6 @@ public class YutController {
     }
 
     private void handleAfterMove(CandidatePieceButton selectedBtn, PieceButton selectedPiece) {
-        int[] currentPosition = selectedPiece.getPiece().getPosition();
         Player currentPlayer = game.getCurrentPlayer();
         boolean catchPieces = false;
 
@@ -360,7 +358,7 @@ public class YutController {
 
         for (Player player : game.getPlayers()) {
             for (Piece otherPiece : player.getPieces()) {
-                if (otherPiece != selectedPiece.getPiece() && Arrays.equals(otherPiece.getPosition(), currentPosition)) {
+                if (isGroupedOrCatched(otherPiece, selectedPiece)) {
                     if (otherPiece.getOwner().getId() == currentPlayer.getId()) {
                         System.out.println("자기 팀의 말을 업습니다.");
                         groupedPiece.add(otherPiece);
@@ -406,8 +404,6 @@ public class YutController {
         } else {
             System.out.println(selectedBtn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
 
-
-
             if (game.checkWin()) {
                 JOptionPane.showMessageDialog(board, "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex()) + " 승리!");
                 System.exit(0);  // 게임 종료
@@ -430,6 +426,50 @@ public class YutController {
                 enableManualThrowButtons(false);
             }
         }
+    }
+
+    private boolean isGroupedOrCatched(Piece otherPiece, PieceButton selectedPiece) {
+        int numSides = game.getBoard().getNumSides();
+        int[] currentPosition = selectedPiece.getPiece().getPosition();
+        int[] otherPosition = otherPiece.getPosition();
+
+        // 비어있는 위치는 비교하지 않음
+        if (currentPosition.length < 2 || otherPosition.length < 2) return false;
+
+        Point current = new Point(currentPosition[0], currentPosition[1]);
+        Point other = new Point(otherPosition[0], otherPosition[1]);
+
+        Set<Point> centerPoint = Set.of(  // 중심점 인덱스
+                new Point(1, 8),
+                new Point(2, 13),
+                new Point(3, 18)
+        );
+        Set<Point> destinationPoint = switch (numSides) { // 도착지점 인덱스
+            case 4 -> Set.of(new Point(0, 0), new Point(0, 20), new Point(2, 16));
+            case 5 -> Set.of(new Point(0, 0), new Point(0, 25), new Point(2, 16));
+            case 6 -> Set.of(new Point(0, 0), new Point(0, 30), new Point(3, 21));
+            default -> Set.of();
+        };
+        Set<Point> finalCornerPoint = Set.of(  // 마지막 점
+                new Point(0, 5 * (numSides - 1)),
+                new Point(numSides / 3, (numSides / 2) * 5 + 1)
+        );
+
+        // 1. 두 개가 동일한 piece가 아니어야 함
+        if (otherPiece == selectedPiece.getPiece()) return false;
+
+        // 2. 둘의 위치가 동일하다면 true
+        if (current.equals(other)) return true;
+
+        // 3. 둘의 위치가 다를 경우
+        // 3-1. currentPosition이 중심점이라면
+        if (centerPoint.contains(current) && centerPoint.contains(other)) return true;
+        // 3-2. currentPosition이 도착지점이라면
+        if (destinationPoint.contains(current) && destinationPoint.contains(other)) return true;
+        // 3-3. currentPosition이 마지막 코너의 점이라면
+        if (finalCornerPoint.contains(current) && finalCornerPoint.contains(other)) return true;
+
+        return false;
     }
 
     private boolean possibleGetout(Piece selectedPiece) {
