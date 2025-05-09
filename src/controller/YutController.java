@@ -379,6 +379,7 @@ public class YutController {
                             board.updatePiecePosition(pieceButton);
                             game.getBoard().catchPiece(otherPiece);
                         }
+                        JOptionPane.showMessageDialog(null, "타 플레이어의 말을 잡았네요! 윷을 한 번 더 던지세요!", "타 플레이어의 말 잡기!", JOptionPane.WARNING_MESSAGE);
                         catchPieces = true;
                     }
                 }
