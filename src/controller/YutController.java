@@ -183,9 +183,11 @@ public class YutController {
                                                 enableManualThrowButtons(true);
                                                 board.getThrowButton().setEnabled(true);
                                                 board.updateResultList(game.getYutResults());
+                                                btn.getPiece().removeGroupedPiece();
                                             }
                                             else{
                                                 board.updateResultList(game.getYutResults());
+                                                btn.getPiece().removeGroupedPiece();
                                             }
                                         }
                                     });
@@ -515,10 +517,15 @@ public class YutController {
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {
-        List<Piece> groupedPieces = new ArrayList<>();
-        groupedPieces = btn.getPiece().getPieceGroup();
-        for (Piece groupedPiece : groupedPieces) {
-            PieceButton _btn = pieceToButtonMap.get(groupedPiece);
+        List<Piece> groupedPieces = btn.getPiece().getPieceGroup();
+        if(groupedPieces.size() == 0) {
+            btn.getPiece().setFinished(true);
+            btn.setBounds(btn.getPos()[0], btn.getPos()[1], 20, 20);
+            btn.GetoutColor();
+            return;
+        }
+        for (int i = 0; i <  groupedPieces.size(); i++) {
+            PieceButton _btn = pieceToButtonMap.get(groupedPieces.get(i));
             _btn.getPiece().setFinished(true);
             _btn.setBounds(_btn.getPos()[0], _btn.getPos()[1], 20, 20);
             _btn.GetoutColor();
