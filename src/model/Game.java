@@ -10,7 +10,7 @@ public class Game {
     private final Yut yut = new Yut();
 
     public Game(int numSides, int playerCount, int pieceCount) {
-        this.board = new Board(numSides);
+        this.board = new Board(numSides, new ArrayList<>());
         this.players = new ArrayList<>();
         this.yutResults = new ArrayList<>();
         this.currentPlayerIndex = 0;
@@ -70,13 +70,12 @@ public class Game {
         }
     }
 
-    public boolean hasRemainingMoves() {
-        return !yutResults.isEmpty();
+    public void sortResults() {
+        Collections.sort(yutResults);
     }
 
-    /* 말 이동 (선택된 말과 윷 결과 기반으로 이동 처리) */
-    public void movePiece() {
-
+    public boolean hasRemainingMoves() {
+        return !yutResults.isEmpty();
     }
 
     /* 턴 넘기기 */

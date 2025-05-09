@@ -1,10 +1,13 @@
 package view;
 
+import controller.YutController;
 import model.Board;
+import model.Piece;
 import model.YutResult;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -83,7 +86,7 @@ public class YutBoardV2 extends JPanel {
         resultPanel.removeAll();
 
         for (YutResult result : results) {
-            JLabel label = new JLabel(result.toString());
+            JLabel label = new JLabel(result.getKoreanName());
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             resultPanel.add(label);
         }
@@ -140,22 +143,46 @@ public class YutBoardV2 extends JPanel {
     }
 
     public void setPossiblePieceButtons(List<CandidatePieceButton> possiblePieceButtons) {
+        deletePieceButton(candidatePieceButtons);
         for (CandidatePieceButton pieceButton : possiblePieceButtons) {
             this.add(pieceButton);
+            this.setComponentZOrder(pieceButton, 0);  // 항상 최상단
         }
         this.candidatePieceButtons.clear();
         this.candidatePieceButtons.addAll(possiblePieceButtons);
-        repaint();
+
+        this.revalidate();
+        this.repaint();
     }
 
     public void deletePieceButton(List<CandidatePieceButton> possiblePieceButtons) {
-        for (CandidatePieceButton btn : possiblePieceButtons) {
+        for (CandidatePieceButton btn : new ArrayList<>(possiblePieceButtons)) {
             this.remove(btn);                          // 화면에서 제거
             this.candidatePieceButtons.remove(btn);             // 실제 말 리스트에서도 제거 시도
         }
 
         revalidate();  // 레이아웃 갱신
         repaint();     // 화면 다시 그리기
+    }
+
+    public void updatePiecePosition(PieceButton btn) {
+        System.out.println("호출");
+        int startX, startY;
+        if(btn != null){
+            startX = btn.getPos()[0];
+            startY = btn.getPos()[1];
+            btn.setBounds(startX, startY, 20, 20);
+            repaint();
+        }
+    }
+
+    public PieceButton getPieceButton(Piece piece) {
+        for (PieceButton button : this.pieceButtons) {
+            if (Arrays.equals(button.getPiece().getPosition(), piece.getPosition())) {
+                return button;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -245,9 +272,10 @@ public class YutBoardV2 extends JPanel {
     }
 
     /* 말이 한 칸씩 이동 */
-    public void animatePieceMovement(PieceButton pieceButton, List<Point> path) {
+    public void animatePieceMovement(PieceButton pieceButton, List<Point> path, Runnable onComplete) {
         new Thread(() -> {
-            for (Point point : path) {
+            for (int i = 0; i < path.size(); i++) {
+                Point point = path.get(i);
                 SwingUtilities.invokeLater(() -> {
                     pieceButton.setPixelPosition(point);
                     repaint();
@@ -257,6 +285,36 @@ public class YutBoardV2 extends JPanel {
                     Thread.sleep(300);  // 이동 간 딜레이
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                }
+
+                if (onComplete != null && i == path.size() - 1) {
+                    SwingUtilities.invokeLater(onComplete);  // 애니메이션 끝난 후 실행
+                }
+            }
+        }).start();
+    }
+
+    /* 그룹화된 말들 한번에 이동 */
+    public void animateGroupedMovement(List<PieceButton> groupButtons, List<Point> path, Runnable onComplete) {
+        new Thread(() -> {
+            for (int i = 0; i < path.size(); i++) {
+                Point point = path.get(i);
+
+                SwingUtilities.invokeLater(() -> {
+                    for (PieceButton btn : groupButtons) {
+                        btn.setPixelPosition(point);
+                    }
+                    repaint();
+                });
+
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                if (onComplete != null && i == path.size() - 1) {
+                    SwingUtilities.invokeLater(onComplete);
                 }
             }
         }).start();

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -10,6 +12,9 @@ public class Piece {
     private boolean isFinished;
     private Stack<int[]> prePositions; // 이전에 이동했던 위치 저장
 
+    private List<Piece> pieceGroup = new ArrayList<Piece>();
+    private Player owner;
+
     public Piece() {
         this.position = new int[0]; // 초기값
         this.isGrouped = false;
@@ -18,6 +23,19 @@ public class Piece {
     }
 
     // Getters and Setters
+
+    public void resetPosition() {
+        this.position = new int[0];
+        this.isGrouped = false;
+        this.isFinished = false;
+        this.prePositions = new Stack<>();
+        this.pieceGroup.clear();
+    }
+
+    public Player getOwner() { return owner; }
+
+    public void setOwner(Player owner) { this.owner = owner; }
+
     public int[] getPosition() {
         return position;
     }
@@ -31,7 +49,21 @@ public class Piece {
     }
 
     public void setGrouped(boolean grouped) {
-        isGrouped = grouped;
+        this.isGrouped = grouped;
+    }
+
+    public List<Piece> getPieceGroup() {
+        return pieceGroup;
+    }
+
+    public void setPieceGroup(List<Piece> pieceGroup) {
+        this.pieceGroup = pieceGroup;
+    }
+
+    // 그룹에서 말 제거
+    public void removeGroupedPiece() {
+        pieceGroup.clear();
+        setGrouped(false);
     }
 
     //position[0] = row, [1] = col
@@ -41,19 +73,20 @@ public class Piece {
 
         if(position[0] == 0){
             if(position[1] > 5 * numSide){
-                isFinished = true;
+                return true;
             }
         }
 
         else{
-            if(position[1] > 5 * ((numSide / 2) + 1) + 1){
-                isFinished = true;
+            if(position[1] > position[0] * 5 + 6){
+                return true;
             }
         }
         return isFinished;
     }
 
     public boolean isFinished(int numSide, int step) {
+        int q = numSide / 2;
 
         if(position.length == 0) { return isFinished; }
         // 빽도일 때
@@ -64,13 +97,13 @@ public class Piece {
             // 테두리에 말이 존재할 때
             if(position[0] == 0){
                 if(position[1] + step > 5 * numSide){
-                    isFinished = true;
+                    return true;
                 }
             }
             // 안쪽, 도착지점과 연결된 경로에 있을 때
-            else if(position[0] == numSide / 2){
-                if(position[1] + step > 5 * ((numSide / 2) + 1) + 1){
-                    isFinished = true;
+            else {
+                if((position[1] == 5 * position[0] + 3 || position[0] == q && position[1] > position[0] * 5 + 3) && position[1] + step > 5 * position[0] + 6){
+                    return  true;
                 }
             }
         }
@@ -93,7 +126,7 @@ public class Piece {
                     prePositions.pop(); // 스택에서 pop
                 }
             }
-            else if (from[1] % 5 == 0 && from[1] > 0 && from[1] / 5 <= numSides - 2)
+            else if (from[1] % 5 == 0 && from[1] > 0 && from[1] / 5 == numSides - 1)
                 prePositions.pop(); // 스택에서 pop
         }
 
