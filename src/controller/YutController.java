@@ -140,6 +140,10 @@ public class YutController {
                                     JButton Getout = board.getEndPiece();
                                     YutResult useYut = getYutResult(piece);
 
+                                    for (ActionListener al : Getout.getActionListeners()) {
+                                        Getout.removeActionListener(al);
+                                    }
+
                                     System.out.println(useYut + " 으로 나가기 가능"+ "\n");
                                     Getout.setEnabled(true);
                                     Getout.addActionListener(new ActionListener() {
