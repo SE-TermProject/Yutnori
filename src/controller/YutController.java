@@ -103,6 +103,9 @@ public class YutController {
                         if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
                             System.out.println("윷을 먼저 던져야 합니다.");
                         }
+                        else if (isLastResultBonusTurn()) {
+                            System.out.println("마지막 결과가 보너스 턴(YUT 또는 MO)이므로, 말을 이동할 수 없습니다.");
+                        }
                         else if (piece.isFinished()) { // 이미 finish된 말이라면
                             System.out.println("이 pieces는 이미 종료되었습니다.");
                         }
@@ -255,5 +258,11 @@ public class YutController {
         board.updateTurnLabel(game.getCurrentPlayer().getId());
         board.getThrowButton().setEnabled(true);
         enableManualThrowButtons(true);
+    }
+
+    private boolean isLastResultBonusTurn() {
+        List<YutResult> results = game.getYutResults();
+        if (results.isEmpty()) return false;
+        return results.get(results.size() - 1).isBonusTurn();
     }
 }
