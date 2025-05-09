@@ -86,7 +86,7 @@ public class YutBoardV2 extends JPanel {
         resultPanel.removeAll();
 
         for (YutResult result : results) {
-            JLabel label = new JLabel(result.toString());
+            JLabel label = new JLabel(result.getKoreanName());
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             resultPanel.add(label);
         }

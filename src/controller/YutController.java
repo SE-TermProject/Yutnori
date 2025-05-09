@@ -5,6 +5,7 @@ import model.Piece;
 import model.Player;
 import model.YutResult;
 import view.CandidatePieceButton;
+import view.GameSetupView;
 import view.PieceButton;
 import view.YutBoardV2;
 
@@ -293,14 +294,36 @@ public class YutController {
         if (selectedPiece.getPiece().isGrouped()) {
             List<PieceButton> groupButtons = new ArrayList<>();
             groupButtons.add(selectedPiece);
+          
+            if (game.checkWin()) {
+                int choice = JOptionPane.showOptionDialog(
+                        board,
+                        "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!\n게임을 다시 시작하시겠습니까?",
+                        "게임 종료",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        new Object[] {"재시작", "종료"},
+                        "재시작"
+                );
 
+                SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
+
+                if (choice == JOptionPane.YES_OPTION) {
+                    new GameSetupView(); // 재시작
+                } else {
+                    System.exit(0); // 완전 종료
+                }
+                return;
+            }
+          
             for (Piece grouped : selectedPiece.getPiece().getPieceGroup()) {
                 PieceButton groupedBtn = pieceToButtonMap.get(grouped);
                 if (groupedBtn != null) {
                     groupButtons.add(groupedBtn);
                 }
             }
-
+          
             board.animateGroupedMovement(groupButtons, piecePath, onComplete);
         } else {
             board.animatePieceMovement(selectedPiece, piecePath, onComplete);
