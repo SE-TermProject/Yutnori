@@ -97,16 +97,16 @@ public class YutController {
                                 // 내보내기가 가능할 때, 버튼 생성
                                 if(possibleGetout(piece)) {
                                     JButton Getout = board.getEndPiece();
-                                    Getout.setVisible(true);
+                                    Getout.setEnabled(true);
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
                                             handleGetoutButtonClick(btn, previewButtons);
-                                            Getout.setVisible(false);
+                                            Getout.setEnabled(false);
+
                                         }
                                     });
                                 }
-
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
                             }
@@ -237,6 +237,12 @@ public class YutController {
         }
         for (CandidatePieceButton button : possiblePosButtons) {
             board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
+        }
+        if(game.getYutResults().isEmpty()) {
+            game.nextTurn();
+            board.updateTurnLabel(game.getCurrentPlayer().getId());
+            board.getThrowButton().setEnabled(true);
+            enableManualThrowButtons(true);
         }
     }
 
