@@ -47,11 +47,10 @@ public class Game {
     }
 
     /* 윷 던지기 */
-    // returnType "YutResult"로 변경 필요!!!
     public YutResult throwYut() {
-        Yut yut = new Yut();
         YutResult result = YutResult.valueOf(yut.getRandomResult());
-        yutResults.add(result);
+        yutResults.add(result);  // 누적 리스트에 저장
+//        System.out.println("던진 결과: " + result);
         return result;
     }
 
@@ -60,6 +59,20 @@ public class Game {
         yutResults.add(result);
     }
 
+    /* 윷 결과 하나 소비 */
+    public void consumeResult(YutResult usedResult) {
+        yutResults.remove(usedResult);
+
+        System.out.println("현재 플레이어: " + currentPlayerIndex);
+        System.out.println("남은 윷 결과: ");
+        for (YutResult yutResult : yutResults) {
+            System.out.println(yutResult);
+        }
+    }
+
+    public boolean hasRemainingMoves() {
+        return !yutResults.isEmpty();
+    }
 
     /* 말 이동 (선택된 말과 윷 결과 기반으로 이동 처리) */
     public void movePiece() {
@@ -73,7 +86,7 @@ public class Game {
 
     /* 승리 조건 확인 */
     public boolean checkWin() {
-        return false;
+        return getCurrentPlayer().getPieces().stream().allMatch(Piece::isFinished);
     }
 
     /* 윷 결과 반환 */
@@ -88,7 +101,7 @@ public class Game {
         Player currentPlayer = getCurrentPlayer(); // 현재 차례인 플레이어
         List<Piece> currentPlayerPieces = currentPlayer.getPieces(); // 현재 차레인 플레이어의 모든 말
         for (Piece piece : currentPlayerPieces) {
-            if (!piece.isFinished()) { // 아직 완료되지 않은 말들 -> 이동할 수 있는 말
+            if (!piece.isFinished(board.getNumSides())) { // 아직 완료되지 않은 말들 -> 이동할 수 있는 말
                 HashMap<YutResult, List<int[]>> yutResultPossiblePos = new HashMap<>();
 
                 int[] position = Arrays.copyOf(piece.getPosition(), piece.getPosition().length);

@@ -258,8 +258,16 @@ public class Board {
                         curY++;
                     }
                 }
+            } else if (isCenterPoint(from[0], from[1])) {
+                // 2. 출발 지점이 중심점이라면
+                curX = numSides / 2;
+                curY = curX * 5 + 3;
+
+                for (int i = curY; i <= to[1]; i++) {
+                    path.add(new int[]{curX, i});
+                }
             } else {
-                // 2. 출발 지점이 분기점이 아니라면
+                // 3. 출발 지점이 분기점과 중심점이 아니라면
                 while (true) {
                     path.add(new int[]{curX, curY});
 

@@ -8,10 +8,13 @@ import java.awt.*;
 public class PieceButton extends JButton {
     private final Piece piece;
     private final int playerId;  // 플레이어 식별용
+    private Color currentColor;
+    private int[] Pos; // 초기 위치
 
     public PieceButton(Piece piece, int playerId) {
         this.piece = piece;
         this.playerId = playerId;
+        this.currentColor = getColorByPlayer(playerId);
 
         setPreferredSize(new Dimension(20, 20));
         setEnabled(false);  // 기본 비활성화
@@ -36,7 +39,7 @@ public class PieceButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(getColorByPlayer(playerId));
+        g.setColor(currentColor);
         g.fillOval(0, 0, getWidth(), getHeight());
     }
 
@@ -59,4 +62,16 @@ public class PieceButton extends JButton {
         setLocation(adjustedX, adjustedY);
     }
 
+    public void GetoutColor() {
+        this.currentColor = Color.GRAY;
+        repaint();
+    }
+
+    public void setPos(int x, int y) {
+        this.Pos = new int[]{x, y};
+    }
+
+    public int[] getPos() {
+        return Pos;
+    }
 }
