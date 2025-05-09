@@ -349,13 +349,7 @@ public class Board {
     /* 상대 말 잡기 처리 */
     public void catchPiece(Piece piece) {
         // 해당 말의 위치를 시작 위치로 되돌리기
-        piece.setPosition(new int[]{0, 0});
-        if(piece.isGrouped() && !piece.getPieceGroup().isEmpty()) {
-            Piece group = piece.getPieceGroup().get(0);
-            group.removeGroupedPiece(piece);
-        } else {
-            piece.setGrouped(false);
-        }
+        piece.resetPosition();
         System.out.println("상대 팀의 말을 잡습니다. 윷을 한 번 더 던지세요.");
     }
 }
