@@ -441,6 +441,9 @@ public class YutController {
     }
 
     private boolean isGroupedOrCatched(Piece otherPiece, PieceButton selectedPiece) {
+        // 둘 중 하나 이상이 이미 끝난 말이라면 false
+        if (otherPiece.isFinished() || selectedPiece.getPiece().isFinished()) return false;
+
         int numSides = game.getBoard().getNumSides();
         int[] currentPosition = selectedPiece.getPiece().getPosition();
         int[] otherPosition = otherPiece.getPosition();
