@@ -1,9 +1,6 @@
 package controller;
 
-import model.Game;
-import model.Piece;
-import model.Player;
-import model.YutResult;
+import model.*;
 import view.CandidatePieceButton;
 import view.GameSetupView;
 import view.PieceButton;
@@ -141,6 +138,9 @@ public class YutController {
                                 // 내보내기가 가능할 때, 버튼 켜기
                                 if(possibleGetout(piece)) {
                                     JButton Getout = board.getEndPiece();
+                                    YutResult useYut = getYutResult(piece);
+
+                                    System.out.println(useYut + " 으로 나가기 가능"+ "\n");
                                     Getout.setEnabled(true);
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
@@ -149,10 +149,21 @@ public class YutController {
                                             handleGetoutButtonClick(btn);
                                             board.deletePieceButton(previewButtons);
                                             btn.getPiece().setFinished(true);
-                                            game.nextTurn();
+                                            game.getYutResults().remove(useYut);
+
+                                            if(game.getYutResults().isEmpty()) {
+                                                game.nextTurn();
+                                                board.updateTurnLabel(game.getCurrentPlayer().getId());
+                                                hasNonBonusYut = false;
+                                                enableManualThrowButtons(true);
+                                                board.getThrowButton().setEnabled(true);
+                                                board.updateResultList(game.getYutResults());
+                                            }
+                                            else{
+                                                board.updateResultList(game.getYutResults());
+                                            }
                                         }
                                     });
-
 
                                 }
                                 // 버튼 선택 후 실제 이동
@@ -486,6 +497,21 @@ public class YutController {
             }
         }
         return possibleOut;
+    }
+
+    private YutResult getYutResult(Piece selectedPiece) {
+        game.sortResults();
+        YutResult yutResult = null;
+        int numSides = game.getBoard().getNumSides();
+        int length = game.getYutResults().size();
+        for(int i = 0; i < length; i++){
+
+            if(selectedPiece.isFinished(numSides, game.getYutResults().get(i).getStep())){
+                yutResult = game.getYutResults().get(i);
+                break;
+            }
+        }
+        return yutResult;
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {
