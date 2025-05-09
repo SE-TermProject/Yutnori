@@ -215,9 +215,6 @@ public class YutController {
         System.out.println("말의 출발 지점: [" + from[0] + ", " + from[1] + "]");
 
         for (CandidatePieceButton btn : possiblePosButtons) {
-            board.add(btn);
-            board.setComponentZOrder(btn, 0);
-
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
