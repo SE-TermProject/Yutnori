@@ -220,11 +220,20 @@ public class YutController {
                 public void actionPerformed(ActionEvent e) {
                     if (game.getYutResults().isEmpty()) return;
 
+                    List<Point> piecePath = new ArrayList<>();  // 말의 이동 경로
                     CandidatePieceButton destinationBtn = (CandidatePieceButton) e.getSource();
                     int[] to = destinationBtn.getPosition();  // 도착 지점의 index
 
                     /* 말 이동 로직 */
-                    List<Point> piecePath = game.getBoard().calculatePath(from, to);
+                    // 1. 빽도인 경우 그냥 바로 이동
+                    if (btn.getYutResult() == YutResult.BackDo) {
+                        piecePath.add(game.getBoard().indexToPoint(from));
+                        piecePath.add(game.getBoard().indexToPoint(to));
+                    } else {
+                        /* 말 이동 로직 */
+                        piecePath = game.getBoard().calculatePath(from, to);
+                    }
+
                     board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
                     board.animatePieceMovement(selectedPiece, piecePath);  // 말 실제 이동
                     selectedPiece.getPiece().setPosition(destinationBtn.getPosition());

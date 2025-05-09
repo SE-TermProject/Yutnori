@@ -212,13 +212,6 @@ public class Board {
     public List<Point> calculatePath(int[] from, int[] to) {
         List<int[]> path = new ArrayList<>();
 
-        // 빽도인 경우
-        if (to[1] == from[1] - 1) {
-            path.add(from);
-            path.add(to);
-            return pathIndexToPoint(path);
-        }
-
         // 빽도가 아닌 도,개,걸,윷,모의 경우
         if (from[0] == to[0]) {
             for (int i = from[1]; i <= to[1]; i++) {
@@ -288,13 +281,17 @@ public class Board {
         } else { // from[0] > to[0]
             path.add(new int[]{from[0], from[1]});
 
-            int pointX = from[1] / 5;
+            int pointX = from[0];
             int pointY = from[1] + 1;
             while (true) {
-                // 현재 위치가 중간칸들을 빠져나가는 곳이라면
-                // numSides가 4라면 (1,11) -> (0, 15)
-                // numSides가 5라면 (1,11) -> (0, 20)
-                // numSides가 6이라면 (2,16) -> (0,25)
+                // 중심점 탈출
+                if (isCenterPoint(pointX, pointY)) {
+                    pointX = numSides / 2;
+                    pointY = 5 * (numSides / 2) - 2;
+                    continue;
+                }
+
+                // 외곽으로 나가는 포인트 처리
                 if (pointX == numSides / 3 && pointY == (numSides / 2) * 5 + 1) {
                     pointX = 0;
                     pointY = 5 * (numSides - 1);
@@ -302,17 +299,7 @@ public class Board {
 
                 path.add(new int[]{pointX, pointY});
 
-                // 현재 지점이 도착 지점이라면 while 문 종료
-                if (pointX == to[0] && pointY == to[1]) {
-                    break;
-                }
-
-                // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
-                // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
-                if (isCenterPoint(pointX, pointY)) {
-                    pointX = numSides / 2;
-                    pointY = 5 * (numSides / 2) - 2;
-                }
+                if (pointX == to[0] && pointY == to[1]) break;
 
                 pointY++;
             }
