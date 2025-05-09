@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -10,6 +12,9 @@ public class Piece {
     private boolean isFinished;
     private Stack<int[]> prePositions; // 이전에 이동했던 위치 저장
 
+    private List<Piece> pieceGroup = new ArrayList<Piece>();
+    private Player owner;
+
     public Piece() {
         this.position = new int[0]; // 초기값
         this.isGrouped = false;
@@ -18,6 +23,19 @@ public class Piece {
     }
 
     // Getters and Setters
+
+    public void resetPosition() {
+        this.position = new int[0];
+        this.isGrouped = false;
+        this.isFinished = false;
+        this.prePositions = new Stack<>();
+        this.pieceGroup.clear();
+    }
+
+    public Player getOwner() { return owner; }
+
+    public void setOwner(Player owner) { this.owner = owner; }
+
     public int[] getPosition() {
         return position;
     }
@@ -31,7 +49,27 @@ public class Piece {
     }
 
     public void setGrouped(boolean grouped) {
-        isGrouped = grouped;
+        this.isGrouped = grouped;
+    }
+
+    public List<Piece> getPieceGroup() {
+        return pieceGroup;
+    }
+
+    // 그룹에 말 추가
+    public void addGroupedPiece(Piece piece) {
+        if(piece != null && !pieceGroup.contains(piece)) {
+            pieceGroup.add(piece);
+            piece.setGrouped(true);
+        }
+    }
+
+    // 그룹에서 말 제거
+    public void removeGroupedPiece(Piece piece) {
+        if(pieceGroup.contains(piece)) {
+            pieceGroup.remove(piece);
+            piece.setGrouped(false);
+        }
     }
 
     //position[0] = row, [1] = col

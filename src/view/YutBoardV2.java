@@ -1,10 +1,13 @@
 package view;
 
+import controller.YutController;
 import model.Board;
+import model.Piece;
 import model.YutResult;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -162,6 +165,26 @@ public class YutBoardV2 extends JPanel {
         repaint();     // 화면 다시 그리기
     }
 
+    public void updatePiecePosition(PieceButton btn) {
+        int startX, startY;
+        if(btn != null){
+            startX = btn.getPos()[0];
+            startY = btn.getPos()[1];
+            btn.setBounds(startX, startY, 20, 20);
+            btn.GetoutColor();
+            repaint();
+        }
+    }
+
+    public PieceButton getPieceButton(Piece piece) {
+        for (PieceButton button : this.pieceButtons) {
+            if (Arrays.equals(button.getPiece().getPosition(), piece.getPosition())) {
+                return button;
+            }
+        }
+        return null;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -249,9 +272,10 @@ public class YutBoardV2 extends JPanel {
     }
 
     /* 말이 한 칸씩 이동 */
-    public void animatePieceMovement(PieceButton pieceButton, List<Point> path) {
+    public void animatePieceMovement(PieceButton pieceButton, List<Point> path, Runnable onComplete) {
         new Thread(() -> {
-            for (Point point : path) {
+            for (int i = 0; i < path.size(); i++) {
+                Point point = path.get(i);
                 SwingUtilities.invokeLater(() -> {
                     pieceButton.setPixelPosition(point);
                     repaint();
@@ -261,6 +285,10 @@ public class YutBoardV2 extends JPanel {
                     Thread.sleep(300);  // 이동 간 딜레이
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                }
+
+                if (onComplete != null && i == path.size() - 1) {
+                    SwingUtilities.invokeLater(onComplete);  // 애니메이션 끝난 후 실행
                 }
             }
         }).start();

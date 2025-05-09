@@ -352,7 +352,9 @@ public class Board {
     }
 
     /* 상대 말 잡기 처리 */
-    public void catchPiece() {
-
+    public void catchPiece(Piece piece) {
+        // 해당 말의 위치를 시작 위치로 되돌리기
+        piece.resetPosition();
+        System.out.println("윷을 한 번 더 던지세요.");
     }
 }

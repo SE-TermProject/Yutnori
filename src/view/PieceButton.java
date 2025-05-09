@@ -41,6 +41,24 @@ public class PieceButton extends JButton {
         super.paintComponent(g);
         g.setColor(currentColor);
         g.fillOval(0, 0, getWidth(), getHeight());
+
+        int groupSize = piece.getPieceGroup().size() + 1;
+        if(groupSize > 1) {
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Arial", Font.BOLD, 14));
+            String text = String.valueOf(groupSize);
+            FontMetrics fm = g.getFontMetrics();
+
+            // 텍스트의 크기 계산
+            int textWidth = fm.stringWidth(text);
+            int textHeight = fm.getAscent();
+
+            // 텍스트가 버튼의 중앙에 오도록 위치 계산
+            int x = (getWidth() - textWidth) / 2;
+            int y = (getHeight() + textHeight) / 2;  // y는 ascent를 고려해 세팅
+
+            g.drawString(text, x, y);
+        }
     }
 
     private Color getColorByPlayer(int playerId) {
@@ -60,6 +78,7 @@ public class PieceButton extends JButton {
         int adjustedX = center.x - width / 2;
         int adjustedY = center.y - height / 2;
         setLocation(adjustedX, adjustedY);
+        repaint();
     }
 
     public void GetoutColor() {
