@@ -21,6 +21,14 @@ public class Piece {
     }
 
     // Getters and Setters
+
+    public void resetPosition() {
+        this.position = new int[0];
+        this.isGrouped = false;
+        this.isFinished = false;
+        this.prePositions = new Stack<>();
+        this.pieceGroup.clear();
+    }
     public int[] getPosition() {
         return position;
     }
