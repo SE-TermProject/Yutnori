@@ -78,6 +78,7 @@ public class PieceButton extends JButton {
         int adjustedX = center.x - width / 2;
         int adjustedY = center.y - height / 2;
         setLocation(adjustedX, adjustedY);
+        repaint();
     }
 
     public void GetoutColor() {
