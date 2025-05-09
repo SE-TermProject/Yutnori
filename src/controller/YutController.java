@@ -159,7 +159,6 @@ public class YutController {
                                             Getout.setEnabled(false);
                                             handleGetoutButtonClick(btn);
                                             board.deletePieceButton(previewButtons);
-                                            btn.getPiece().setFinished(true);
                                             game.getYutResults().remove(useYut);
 
                                             if (game.checkWin()) {
@@ -191,9 +190,11 @@ public class YutController {
                                                 enableManualThrowButtons(true);
                                                 board.getThrowButton().setEnabled(true);
                                                 board.updateResultList(game.getYutResults());
+                                                btn.getPiece().removeGroupedPiece();
                                             }
                                             else{
                                                 board.updateResultList(game.getYutResults());
+                                                btn.getPiece().removeGroupedPiece();
                                             }
                                         }
                                     });
@@ -532,13 +533,18 @@ public class YutController {
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {
-        int startX, startY;
-
-        if(btn != null){
-            startX = btn.getPos()[0];
-            startY = btn.getPos()[1];
-            btn.setBounds(startX, startY, 20, 20);
+        List<Piece> groupedPieces = btn.getPiece().getPieceGroup();
+        if(groupedPieces.size() == 0) {
+            btn.getPiece().setFinished(true);
+            btn.setBounds(btn.getPos()[0], btn.getPos()[1], 20, 20);
             btn.GetoutColor();
+            return;
+        }
+        for (int i = 0; i <  groupedPieces.size(); i++) {
+            PieceButton _btn = pieceToButtonMap.get(groupedPieces.get(i));
+            _btn.getPiece().setFinished(true);
+            _btn.setBounds(_btn.getPos()[0], _btn.getPos()[1], 20, 20);
+            _btn.GetoutColor();
         }
     }
 
