@@ -73,8 +73,6 @@ public class Piece {
                 }
             }
         }
-        // 테스트 출력
-        System.out.println(isFinished  + "\n");
         return isFinished;
     }
 
