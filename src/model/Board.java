@@ -216,7 +216,7 @@ public class Board {
         List<int[]> path = new ArrayList<>();
 
         // 1. 빽도인 경우
-        if (yutResult == yutResult.BackDo) {
+        if (yutResult == YutResult.BackDo) {
             path.add(from);
             path.add(to);
             return pathIndexToPoint(path);
@@ -235,30 +235,35 @@ public class Board {
             // 1. 만약 출발 지점이 분기점이라면
             if (from[0] == 0 && from[1] % 5 == 0) {
                 // 1-1. 만약 도착 지점이 중심점 & 중심점 이전에 있다면 해당 칸까지의 이동거리 추가
-                if (to[1] - from[1] <= 3) {
-                    for (int i = curY; i <= to[1]; i++) {
-                        path.add(new int[]{curX, i});
-                    }
-                } else if (numSides == 4) {   // 1-2. 만약 도착 지점이 중심점을 넘어선다면
+                if (to[1] - from[1] <= 3 && to[1] - from[1] > 0) {
                     for (int i = curY; i <= to[1]; i++) {
                         path.add(new int[]{curX, i});
                     }
                 } else {
-                    while (true) {
-                        path.add(new int[]{curX, curY});
-
-                        // 현재 지점이 도착 지점이라면 while 문 종료
-                        if (curX == to[0] && curY == to[1]) {
-                            break;
+                    if (numSides == 4) {   // 1-2. 만약 도착 지점이 중심점을 넘어선다면
+                        for (int i = curY; i <= to[1]; i++) {
+                            path.add(new int[]{curX, i});
                         }
+                    } else {
+                        boolean passedCenter = false;
+                        while (true) {
+                            path.add(new int[]{curX, curY});
 
-                        // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
-                        // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
-                        if (isCenterPoint(curX, curY)) {
-                            curX = numSides / 2;
-                            curY = 5 * (numSides / 2) - 2;
+                            // 현재 지점이 도착 지점이라면 while 문 종료
+                            if (curX == to[0] && curY == to[1]) {
+                                break;
+                            }
+
+                            // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
+                            // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
+                            if (isCenterPoint(curX, curY) && !passedCenter) {
+                                curX = numSides / 3;
+                                curY = 5 * (numSides / 2) - 2;
+                                passedCenter = true;
+                            }
+
+                            curY++;
                         }
-                        curY++;
                     }
                 }
             } else if (isCenterPoint(from[0], from[1])) {
@@ -271,6 +276,7 @@ public class Board {
                 }
             } else {
                 // 3. 출발 지점이 분기점과 중심점이 아니라면
+                boolean passedCenter = false;
                 while (true) {
                     path.add(new int[]{curX, curY});
 
@@ -281,9 +287,10 @@ public class Board {
 
                     // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
                     // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
-                    if (isCenterPoint(curX, curY)) {
+                    if (isCenterPoint(curX, curY) && !passedCenter) {
                         curX = numSides / 2;
                         curY = 5 * (numSides / 2) - 2;
+                        passedCenter = true;
                     }
                     curY++;
                 }
