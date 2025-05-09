@@ -92,36 +92,40 @@ public class Game {
     /* 윷 결과 반환 */
     public List<YutResult> getYutResults() { return this.yutResults; }
 
-    public HashMap<Piece, List<int[]>> findCurrentPossiblePos() {
-        HashMap<Piece, List<int[]>> currentPossiblePos = new HashMap<>();
+    public HashMap<Piece, HashMap<YutResult, List<int[]>>> findCurrentPossiblePos() {
+        HashMap<Piece, HashMap<YutResult, List<int[]>>> currentPossiblePos = new HashMap<>();
         System.out.println("현재 이동 가능한 경로 ---- ");
 
-        List<YutResult> possibleYutResults = new ArrayList<>(yutResults);
-        possibleYutResults = new ArrayList<>(new LinkedHashSet<>(yutResults)); // 중복 제거
+        List<YutResult> possibleYutResults = new ArrayList<>(new LinkedHashSet<>(yutResults)); // 중복 제거
 
         Player currentPlayer = getCurrentPlayer(); // 현재 차례인 플레이어
         List<Piece> currentPlayerPieces = currentPlayer.getPieces(); // 현재 차레인 플레이어의 모든 말
         for (Piece piece : currentPlayerPieces) {
             if (!piece.isFinished(board.getNumSides())) { // 아직 완료되지 않은 말들 -> 이동할 수 있는 말
+                HashMap<YutResult, List<int[]>> yutResultPossiblePos = new HashMap<>();
 
-                List<int[]> possiblePos = new ArrayList<>();
                 int[] position = Arrays.copyOf(piece.getPosition(), piece.getPosition().length);
                 if (position.length == 0) { // 아직 출발하지 않은 배열이라면
                     position = new int[]{0, 0};
                 }
 
-                for (YutResult result: possibleYutResults) {
-                    possiblePos.addAll(board.findPossiblePos(piece.getPrePositions(), position[0], position[1], result.getStep()));
+                for (YutResult yutResult: possibleYutResults) {
+                    List<int[]> possiblePos = new ArrayList<>();
+                    possiblePos.addAll(board.findPossiblePos(piece.getPrePositions(), position[0], position[1], yutResult.getStep()));
+                    yutResultPossiblePos.put(yutResult, possiblePos);
                 }
 
                 // 출력하는 로그
-                if (piece.getPosition().length == 0) System.out.print("출발하지 않은 piece");
-                else System.out.print(Arrays.toString(piece.getPosition()));
-                System.out.print(" -> ");
-                for (int[] pos : possiblePos) System.out.print(Arrays.toString(pos));
-                System.out.println();
+                System.out.print("From: ");
+                if (piece.getPosition().length == 0) System.out.println("출발하지 않은 piece");
+                else System.out.println(Arrays.toString(piece.getPosition()));
+                for (YutResult yutResult: yutResultPossiblePos.keySet()) {
+                    System.out.print(yutResult + " -> ");
+                    for (int[] pos : yutResultPossiblePos.get(yutResult)) System.out.print(Arrays.toString(pos));
+                    System.out.println();
+                }
 
-                currentPossiblePos.put(piece, possiblePos);
+                currentPossiblePos.put(piece, yutResultPossiblePos);
             }
         }
 

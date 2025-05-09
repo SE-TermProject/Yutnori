@@ -188,19 +188,20 @@ public class YutController {
     /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */
     private List<CandidatePieceButton> generatePossiblePieceButtons(Piece selectedPiece) {
         List<CandidatePieceButton> possiblePosButtons = new ArrayList<>();
-        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
-        List<int[]> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
+        HashMap<Piece, HashMap<YutResult, List<int[]>>> currentPossiblePos = game.findCurrentPossiblePos();
+        HashMap<YutResult, List<int[]>> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
 
-        for (int i = 0; i < piecePossiblePos.size(); i++) {
-            int[] pos = piecePossiblePos.get(i);
-            Point point = game.getBoard().indexToPoint(pos);
+        for (YutResult yutResult : game.getYutResults()) {
+            for (int[] pos : piecePossiblePos.get(yutResult)) {
+                Point point = game.getBoard().indexToPoint(pos);
 
-            int[] prePos = selectedPiece.getPosition(); int index = i;
-            if (prePos.length == 0) prePos = new int[]{0, 0};
-            if (prePos[0] == 0 && prePos[1] % 5 == 0 && prePos[1] > 0 && prePos[1] / 5 <= game.getBoard().getNumSides() - 2) { // 가장자리 꼭짓점 위치라면
-                // 각 이동 가능한 칸의 수가 두개씩이므로 인덱스 수정
-                index = i / 2;
+                CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), yutResult);
+                btn.setBounds(point.x, point.y, 20, 20);
+                btn.setPixelPosition(point);
+                btn.setEnabled(true);
+                possiblePosButtons.add(btn);
             }
+          
             CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), game.getYutResults().get(index));
             btn.setPixelPosition(point);
             btn.setEnabled(true);
@@ -237,7 +238,10 @@ public class YutController {
                     board.animatePieceMovement(selectedPiece, piecePath);  // 말 실제 이동
                     selectedPiece.getPiece().setPosition(destinationBtn.getPosition());
 
-                    System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");
+                    int[] finalTo = selectedPiece.getPosition();
+                    selectedPiece.getPiece().recordPrePositions(game.getBoard().getNumSides(), new int[]{from[0], from[1]}, new int[]{finalTo[0], finalTo[1]}, destinationBtn.getYutResult()); // 이전에 이동했던 위치 저장
+                    System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + finalTo[0] + ", " + finalTo[1] + "]");
+
                     game.consumeResult(btn.getYutResult());
                     board.updateResultList(game.getYutResults());
 

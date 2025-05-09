@@ -10,5 +10,17 @@ public class Main {
 
         System.out.println("Hello world!");
 
+//        Board board = new Board(6);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        while (true) {
+//            int row = Integer.parseInt(br.readLine());
+//            int col = Integer.parseInt(br.readLine());
+//            int step = Integer.parseInt(br.readLine());
+//
+//            board.findPossiblePos(new Stack<int[]>(), row, col, step);
+//        }
+
+        Game game = new Game(5, 2, 4);
+        game.findCurrentPossiblePos();
     }
 }
