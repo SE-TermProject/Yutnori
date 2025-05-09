@@ -363,4 +363,21 @@ public class YutBoardV2 extends JPanel {
             }
         }).start();
     }
+
+    public int showGameOverDialog(String winnerName) {
+        return JOptionPane.showOptionDialog(
+                this,
+                winnerName + " 승리!\n게임을 다시 시작하시겠습니까?",
+                "게임 종료",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                new Object[]{"재시작", "종료"},
+                "재시작"
+        );
+    }
+
+    public void showMessageDialog(String message, String title) {
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
+    }
 }

@@ -155,17 +155,8 @@ public class YutController {
 
                                             if (game.checkWin()) {
                                                 System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
-                                                int choice = JOptionPane.showOptionDialog(
-                                                        board,
-                                                        "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!\n게임을 다시 시작하시겠습니까?",
-                                                        "게임 종료",
-                                                        JOptionPane.YES_NO_OPTION,
-                                                        JOptionPane.INFORMATION_MESSAGE,
-                                                        null,
-                                                        new Object[] {"재시작", "종료"},
-                                                        "재시작"
-                                                );
-
+                                                String winnerName = "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex());
+                                                int choice = board.showGameOverDialog(winnerName);
                                                 SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
 
                                                 if (choice == JOptionPane.YES_OPTION) {
@@ -406,7 +397,7 @@ public class YutController {
                             board.updatePiecePosition(pieceToButtonMap.get(otherPiece));
                             game.getBoard().catchPiece(otherPiece);
                         }
-                        JOptionPane.showMessageDialog(null, "타 플레이어의 말을 잡았네요! 윷을 한 번 더 던지세요!", "타 플레이어의 말 잡기!", JOptionPane.WARNING_MESSAGE);
+                        board.showMessageDialog("타 플레이어의 말을 잡았네요! 윷을 한 번 더 던지세요!", "타 플레이어의 말 잡기");
                         catchPieces = true;
                     }
                 }
@@ -544,7 +535,7 @@ public class YutController {
 
     /* 만약 현재 플레이어의 모든 말이 윷놀이 판으로 나가지 않았고, 그 상황에서 빽도만 나왔다면 예외 처리 */
     private void NackedBackDo() {
-        JOptionPane.showMessageDialog(null, "모든 말이 판에 올라가지 않았고, 빽도가 나와 낙 처리됩니다.", "낙 발생", JOptionPane.WARNING_MESSAGE);
+        board.showMessageDialog("모든 말이 판에 올라가지 않았고, 빽도가 나와 낙 처리됩니다.", "낙 발생!!");
 
         System.out.println("빽도 나옴 -> 낙 처리");
         game.consumeResult(YutResult.BackDo);
