@@ -12,8 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 public class YutController {
@@ -94,6 +93,7 @@ public class YutController {
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 btn.setBounds(currentX, startY, 20, 20);
+                btn.setPos(currentX, startY);
                 btn.setEnabled(true);
                 btn.addActionListener(new ActionListener() {
                     @Override
@@ -121,6 +121,19 @@ public class YutController {
                                 List<CandidatePieceButton> previewButtons = generatePossiblePieceButtons(piece);
                                 board.setPossiblePieceButtons(previewButtons);
 
+                                // 내보내기가 가능할 때, 버튼 켜기
+                                if(possibleGetout(piece)) {
+                                    JButton Getout = board.getEndPiece();
+                                    Getout.setEnabled(true);
+                                    Getout.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            handleGetoutButtonClick(btn, previewButtons);
+                                            Getout.setEnabled(false);
+                                        }
+                                    });
+                                }
+                              
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
                             }
@@ -236,6 +249,32 @@ public class YutController {
         }
     }
 
+    private boolean possibleGetout(Piece selectedPiece) {
+        int numSides = game.getBoard().getNumSides();
+        boolean possibleOut = false;
+        List<YutResult> yutResults = game.getYutResults();
+
+        for (YutResult result: yutResults) {
+            possibleOut = selectedPiece.isFinished(numSides, result.getStep());
+            // 내보낼 수 있는 경우가 존재하면 내보내기 버튼 생성
+            if(possibleOut){
+                break;
+            }
+        }
+        return possibleOut;
+    }
+
+    private void handleGetoutButtonClick(PieceButton btn, List<CandidatePieceButton> possiblePosButtons) {
+        int startX, startY;
+        if(btn != null){
+            startX = btn.getPos()[0];
+            startY = btn.getPos()[1];
+            btn.setBounds(startX, startY, 20, 20);
+            btn.GetoutColor();
+            movePiece(btn, possiblePosButtons);
+        }
+    }
+  
     private void enableManualThrowButtons(boolean enabled) {
         board.getThrowBackdo().setEnabled(enabled);
         board.getThrowDo().setEnabled(enabled);
