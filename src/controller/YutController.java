@@ -279,6 +279,16 @@ public class YutController {
                                             for (Piece grouped : group) {
                                                 otherPiece.removeGroupedPiece(grouped);
                                                 grouped.resetPosition();
+
+                                                PieceButton pieceButton = board.getPieceButton(grouped);
+                                                System.out.println("PieceButton????????????");
+                                                if (pieceButton != null) {
+                                                    System.out.println("PieceButton found, updating position.");
+                                                    board.updatePiecePosition(pieceButton);
+                                                } else {
+                                                    System.out.println("PieceButton is null.");
+                                                }
+                                                System.out.println("PieceButton!!!!!!!!!!!!");
                                             }
                                         }
 
