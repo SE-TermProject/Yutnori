@@ -308,7 +308,6 @@ public class YutController {
 
                     performMove(selectedPiece, possiblePosButtons, destinationBtn, from, piecePath, btn);
                     board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
-
                 }
             });
         }
