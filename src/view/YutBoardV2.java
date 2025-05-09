@@ -166,12 +166,12 @@ public class YutBoardV2 extends JPanel {
     }
 
     public void updatePiecePosition(PieceButton btn) {
+        System.out.println("호출");
         int startX, startY;
         if(btn != null){
             startX = btn.getPos()[0];
             startY = btn.getPos()[1];
             btn.setBounds(startX, startY, 20, 20);
-            btn.GetoutColor();
             repaint();
         }
     }
