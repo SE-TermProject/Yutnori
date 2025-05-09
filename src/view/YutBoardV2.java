@@ -31,35 +31,35 @@ public class YutBoardV2 extends JPanel {
         setLayout(null);
 
         throwButton = new JButton("랜덤 윷 던지기");
-        throwButton.setBounds(605, 420, 300, 45);
+        throwButton.setBounds(605, 370, 300, 45);
         add(throwButton);
 
-        int y = 470;
-        int w = 60;
+        int y = 420;
+        int w = 50;
         int h = 35;
 
         throwBackdo = new JButton("빽도");
-        throwBackdo.setBounds(600, y, w, h);
+        throwBackdo.setBounds(605, y, w, h);
         add(throwBackdo);
 
         throwDo = new JButton("도");
-        throwDo.setBounds(650, y, w, h);
+        throwDo.setBounds(655, y, w, h);
         add(throwDo);
 
         throwGae = new JButton("개");
-        throwGae.setBounds(700, y, w, h);
+        throwGae.setBounds(705, y, w, h);
         add(throwGae);
 
         throwGeol = new JButton("걸");
-        throwGeol.setBounds(750, y, w, h);
+        throwGeol.setBounds(755, y, w, h);
         add(throwGeol);
 
         throwYut = new JButton("윷");
-        throwYut.setBounds(800, y, w, h);
+        throwYut.setBounds(805, y, w, h);
         add(throwYut);
 
         throwMo = new JButton("모");
-        throwMo.setBounds(850, y, w, h);
+        throwMo.setBounds(855, y, w, h);
         add(throwMo);
 
         endPiece = new JButton("내보내기");
@@ -68,16 +68,16 @@ public class YutBoardV2 extends JPanel {
         add(endPiece);
 
         turnLabel = new JLabel("A님의 차례입니다.");
-        turnLabel.setBounds(600, 500, 200, 30);
+        turnLabel.setBounds(610, 470, 200, 30);
         add(turnLabel);
 
-        resultLabel = new JLabel("윷 결과");
-        resultLabel.setBounds(600, 530, 180, 30);
+        resultLabel = new JLabel("윷 결과 🐎");
+        resultLabel.setBounds(610, 500, 180, 30);
         add(resultLabel);
 
         resultPanel = new JPanel();
         resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        resultPanel.setBounds(590, 560, 300, 100);
+        resultPanel.setBounds(605, 530, 300, 100);
         add(resultPanel);
     }
 
