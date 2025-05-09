@@ -61,7 +61,7 @@ public class YutBoardV2 extends JPanel {
 
         endPiece = new JButton("내보내기");
         endPiece.setBounds(480, 550, 90, 40);
-        endPiece.setVisible(false);
+        endPiece.setEnabled(false);
         add(endPiece);
 
         turnLabel = new JLabel("A님의 차례입니다.");
