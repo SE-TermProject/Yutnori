@@ -121,6 +121,8 @@ public class Piece {
     public void recordPrePositions(int numSides, int[] from, int[] to, YutResult yutResult) {
         /* 빽도로 이동하는 경우 */
         if (yutResult.equals(YutResult.BackDo)) {
+            if (prePositions.empty()) return;
+
             if (from[0] != 0) {
                 if ((from[0] * 5 + 1 == from[1]) || (from[0] * 5 + 3 == from[1])) {
                     prePositions.pop(); // 스택에서 pop
