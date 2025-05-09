@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class YutController {
     private final Game game;
     private final YutBoardV2 board;
     private boolean hasNonBonusYut = false; // 일반 윷이 한 번이라도 나왔는지 추적
+    private final Map<Piece, PieceButton> pieceToButtonMap = new HashMap<>();
 
     public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
         this.game = new Game(sides, playerCount, pieceCount);
@@ -100,6 +102,7 @@ public class YutController {
             int currentX = startX;
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
+                pieceToButtonMap.put(piece, btn);
                 btn.setBounds(currentX, startY, 20, 20);
                 btn.setPos(currentX, startY);
                 btn.setEnabled(true);
@@ -251,16 +254,57 @@ public class YutController {
 
     private void performMove(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons, CandidatePieceButton destinationBtn, int[] from, List<Point> piecePath, CandidatePieceButton btn) {
         board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
-        board.animatePieceMovement(selectedPiece, piecePath, () -> {
+
+        // 이동 후 실행할 공통 로직 정의
+        Runnable onComplete = () -> {
             selectedPiece.getPiece().setPosition(destinationBtn.getPosition());
-            System.out.println("현재 플레이어 : " + game.getCurrentPlayerIndex());
-
             int[] finalTo = selectedPiece.getPosition();
-            selectedPiece.getPiece().recordPrePositions(game.getBoard().getNumSides(), new int[]{from[0], from[1]}, new int[]{finalTo[0], finalTo[1]}, destinationBtn.getYutResult()); // 이전에 이동했던 위치 저장
-            System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + finalTo[0] + ", " + finalTo[1] + "]");
 
+            // 이동한 말이 그룹이면 전체 위치 기록
+            if (selectedPiece.getPiece().isGrouped()) {
+                System.out.println("그룹화된 말들 인덱스 변경!");
+                List<Piece> group = selectedPiece.getPiece().getPieceGroup();
+
+                System.out.println(group);
+                for (Piece piece : group) {
+                    piece.setPosition(finalTo);
+                    piece.recordPrePositions(
+                            game.getBoard().getNumSides(),
+                            new int[]{from[0], from[1]},
+                            new int[]{finalTo[0], finalTo[1]},
+                            destinationBtn.getYutResult()
+                    );
+                    System.out.println("그룹화된 말 -> " + piece.getPosition()[0] + " " + piece.getPosition()[1]);
+                }
+            } else {
+                System.out.println("말 한개의 인덱스 변경!");
+                selectedPiece.getPiece().recordPrePositions(
+                        game.getBoard().getNumSides(),
+                        new int[]{from[0], from[1]},
+                        new int[]{finalTo[0], finalTo[1]},
+                        destinationBtn.getYutResult()
+                );
+            }
+
+            System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + finalTo[0] + ", " + finalTo[1] + "]");
             handleAfterMove(btn, selectedPiece);
-        });
+        };
+
+        if (selectedPiece.getPiece().isGrouped()) {
+            List<PieceButton> groupButtons = new ArrayList<>();
+            groupButtons.add(selectedPiece);
+
+            for (Piece grouped : selectedPiece.getPiece().getPieceGroup()) {
+                PieceButton groupedBtn = pieceToButtonMap.get(grouped);
+                if (groupedBtn != null) {
+                    groupButtons.add(groupedBtn);
+                }
+            }
+
+            board.animateGroupedMovement(groupButtons, piecePath, onComplete);
+        } else {
+            board.animatePieceMovement(selectedPiece, piecePath, onComplete);
+        }
     }
 
     private void handleAfterMove(CandidatePieceButton selectedBtn, PieceButton selectedPiece) {
@@ -280,18 +324,20 @@ public class YutController {
             }
         }
 
+        List<Piece> groupedPiece = new ArrayList<>();
+        groupedPiece.add(selectedPiece.getPiece());
+
         for (Player player : game.getPlayers()) {
             for (Piece otherPiece : player.getPieces()) {
                 if (otherPiece != selectedPiece.getPiece() && Arrays.equals(otherPiece.getPosition(), currentPosition)) {
                     if (otherPiece.getOwner().getId() == currentPlayer.getId()) {
                         System.out.println("자기 팀의 말을 업습니다.");
-                        selectedPiece.getPiece().addGroupedPiece(otherPiece);
-
-                        // 그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
-                        PieceButton pieceButton = board.getPieceButton(selectedPiece.getPiece());
-                        if (pieceButton != null) {
-                            pieceButton.repaint();  // PieceButton을 다시 그려서 그룹 크기를 업데이트
-                        }
+                        groupedPiece.add(otherPiece);
+//                         //그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
+//                        PieceButton pieceButton = board.getPieceButton(selectedPiece.getPiece());
+//                        if (pieceButton != null) {
+//                            pieceButton.repaint();  // PieceButton을 다시 그려서 그룹 크기를 업데이트
+//                        }
                     } else {
                         System.out.println("1. 상대 팀의 말을 잡습니다.");
 
@@ -322,6 +368,12 @@ public class YutController {
                         game.getBoard().catchPiece(otherPiece);
                         catchPieces = true;
                     }
+                }
+            }
+            if (groupedPiece.size() >= 2) {  // 업힌 말이 있다면
+                for (Piece piece : groupedPiece) {
+                    piece.setPieceGroup(groupedPiece);
+                    piece.setGrouped(true);
                 }
             }
         }

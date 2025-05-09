@@ -288,7 +288,7 @@ public class Board {
                     // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
                     // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
                     if (isCenterPoint(curX, curY) && !passedCenter) {
-                        curX = numSides / 2;
+                        curX = numSides / 3;
                         curY = 5 * (numSides / 2) - 2;
                         passedCenter = true;
                     }
