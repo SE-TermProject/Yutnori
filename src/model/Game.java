@@ -79,6 +79,23 @@ public class Game {
     /* 윷 결과 반환 */
     public List<YutResult> getYutResults() { return this.yutResults; }
 
+    /* 윷 결과 반환 -> index 사용 */
+    public YutResult getYutResult(int index, boolean isEdge) {
+        if (isEdge == true) {
+            int i = 0;
+            for (int yutIndex = 0; yutIndex < yutResults.size(); yutIndex++) {
+                if (index == i || index == i + 1) {
+                    return yutResults.get(yutIndex);
+                }
+                else if (yutResults.get(yutIndex).equals(YutResult.BackDo)) // 빽도인 경우
+                    i += 1;
+                else i += 2;
+            }
+        }
+
+        return yutResults.get(index);
+    }
+
     public HashMap<Piece, List<int[]>> findCurrentPossiblePos() {
         HashMap<Piece, List<int[]>> currentPossiblePos = new HashMap<>();
         System.out.println("현재 이동 가능한 경로 ---- ");
