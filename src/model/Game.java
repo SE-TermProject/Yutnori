@@ -74,13 +74,6 @@ public class Game {
         return !yutResults.isEmpty();
     }
 
-    /* 말 이동 (선택된 말과 윷 결과 기반으로 이동 처리) */
-    public void movePiece(Piece piece) {
-        // 말 이동 로직
-
-        
-    }
-
     /* 턴 넘기기 */
     public void nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
