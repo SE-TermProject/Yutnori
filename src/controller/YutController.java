@@ -110,6 +110,7 @@ public class YutController {
                 btn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        board.getEndPiece().setEnabled(false);
                         /* 말 선택 */
                         System.out.print("Piece clicked - " );
                         if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
@@ -145,12 +146,16 @@ public class YutController {
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
-                                            handleGetoutButtonClick(btn, previewButtons);
                                             Getout.setEnabled(false);
+                                            handleGetoutButtonClick(btn);
+                                            board.deletePieceButton(previewButtons);
+                                            btn.getPiece().setFinished(true);
+                                            game.nextTurn();
                                         }
                                     });
-                                }
 
+
+                                }
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
                             }
@@ -231,6 +236,9 @@ public class YutController {
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+
+                    board.getEndPiece().setEnabled(false);
+
                     if (game.getYutResults().isEmpty()) return;
 
                     for (CandidatePieceButton b : possiblePosButtons) {
@@ -294,7 +302,7 @@ public class YutController {
         if (selectedPiece.getPiece().isGrouped()) {
             List<PieceButton> groupButtons = new ArrayList<>();
             groupButtons.add(selectedPiece);
-          
+
             if (game.checkWin()) {
                 int choice = JOptionPane.showOptionDialog(
                         board,
@@ -316,14 +324,14 @@ public class YutController {
                 }
                 return;
             }
-          
+
             for (Piece grouped : selectedPiece.getPiece().getPieceGroup()) {
                 PieceButton groupedBtn = pieceToButtonMap.get(grouped);
                 if (groupedBtn != null) {
                     groupButtons.add(groupedBtn);
                 }
             }
-          
+
             board.animateGroupedMovement(groupButtons, piecePath, onComplete);
         } else {
             board.animatePieceMovement(selectedPiece, piecePath, onComplete);
@@ -398,6 +406,8 @@ public class YutController {
         } else {
             System.out.println(selectedBtn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
 
+
+
             if (game.checkWin()) {
                 JOptionPane.showMessageDialog(board, "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex()) + " 승리!");
                 System.exit(0);  // 게임 종료
@@ -437,14 +447,14 @@ public class YutController {
         return possibleOut;
     }
 
-    private void handleGetoutButtonClick(PieceButton btn, List<CandidatePieceButton> possiblePosButtons) {
+    private void handleGetoutButtonClick(PieceButton btn) {
         int startX, startY;
+
         if(btn != null){
             startX = btn.getPos()[0];
             startY = btn.getPos()[1];
             btn.setBounds(startX, startY, 20, 20);
             btn.GetoutColor();
-            movePiece(btn, possiblePosButtons);
         }
     }
 
