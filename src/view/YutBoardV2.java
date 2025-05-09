@@ -7,9 +7,11 @@ import model.YutResult;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class YutBoardV2 extends JPanel {
 
@@ -81,6 +83,15 @@ public class YutBoardV2 extends JPanel {
         add(resultPanel);
     }
 
+    public void setupFrame() {
+        // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
+        JFrame gameFrame = new JFrame("YutNori");
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setSize(1000, 700);
+        gameFrame.add(this);
+        gameFrame.setVisible(true);
+    }
+
     // 결과 리스트 업데이트 메서드
     public void updateResultList(List<YutResult> results) {
         resultPanel.removeAll();
@@ -103,6 +114,31 @@ public class YutBoardV2 extends JPanel {
     public JButton getThrowYut() { return throwYut; }
     public JButton getThrowMo() { return throwMo; }
     public JButton getEndPiece() { return endPiece; }
+
+    public void onThrowYutButtonClicked(Runnable callback) {
+        throwButton.addActionListener(e -> callback.run());
+    }
+
+    public void onManualThrowButtonClicked(YutResult result, Runnable callback) {
+        JButton button = switch (result) {
+            case BackDo -> throwBackdo;
+            case DO -> throwDo;
+            case GAE -> throwGae;
+            case GUL -> throwGeol;
+            case YUT -> throwYut;
+            case MO -> throwMo;
+        };
+        button.addActionListener(e -> callback.run());
+    }
+
+    public void addPlayerLabel(int playerId, int x, int y) {
+        char playerChar = (char) ('A' + playerId);
+        JLabel label = new JLabel(String.valueOf(playerChar));
+        label.setFont(new Font("SansSerif", Font.BOLD, 14));
+        label.setBounds(x, y, 15, 20);
+        add(label);
+        setComponentZOrder(label, 0);
+    }
 
     public void updateResult(List<YutResult> results) {
         resultPanel.removeAll();
@@ -140,6 +176,16 @@ public class YutBoardV2 extends JPanel {
         this.pieceButtons.addAll(pieceButtons);
         repaint();
 
+    }
+
+    public void setThrowButtonsEnabled(boolean enabled) {
+        throwButton.setEnabled(enabled);
+        throwBackdo.setEnabled(enabled);
+        throwDo.setEnabled(enabled);
+        throwGae.setEnabled(enabled);
+        throwGeol.setEnabled(enabled);
+        throwYut.setEnabled(enabled);
+        throwMo.setEnabled(enabled);
     }
 
     public void setPossiblePieceButtons(List<CandidatePieceButton> possiblePieceButtons) {
@@ -353,5 +399,53 @@ public class YutBoardV2 extends JPanel {
                 }
             }
         }).start();
+    }
+
+    public int showGameOverDialog(String winnerName) {
+        return JOptionPane.showOptionDialog(
+                this,
+                winnerName + " 승리!\n게임을 다시 시작하시겠습니까?",
+                "게임 종료",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                new Object[]{"재시작", "종료"},
+                "재시작"
+        );
+    }
+
+    public void showMessageDialog(String message, String title) {
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void showCandidateButtons(List<CandidatePieceButton> buttons, Consumer<CandidatePieceButton> onClick) {
+        for (CandidatePieceButton button : buttons) {
+            this.add(button);
+            this.setComponentZOrder(button, 0);
+            button.addActionListener(e -> onClick.accept(button));
+        }
+
+        revalidate();
+        repaint();
+    }
+
+    public void showGetoutButton(YutResult useYut, Runnable onClick) {
+        JButton btn = getEndPiece();
+        btn.setEnabled(true);
+        // 기존 리스너 제거
+        for (ActionListener el : btn.getActionListeners()) {
+            btn.removeActionListener(el);
+        }
+        // 새 리스너 등록
+        btn.addActionListener(e -> {
+            btn.setEnabled(false);
+            onClick.run();
+        });
+    }
+
+    public void showPieceAsFinished(PieceButton btn) {
+        int[] pos = btn.getPos();
+        btn.setBounds(pos[0], pos[1], 20, 20);
+        btn.GetoutColor();
     }
 }
