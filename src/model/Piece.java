@@ -106,8 +106,8 @@ public class Piece {
                 }
             }
             // 안쪽, 도착지점과 연결된 경로에 있을 때
-            else if(position[0] == numSide / 2){
-                if(position[1] + step > 5 * ((numSide / 2) + 1) + 1){
+            else {
+                if(position[1] + step > 5 * position[0] + 6){
                     isFinished = true;
                 }
             }
@@ -131,7 +131,7 @@ public class Piece {
                     prePositions.pop(); // 스택에서 pop
                 }
             }
-            else if (from[1] % 5 == 0 && from[1] > 0 && from[1] / 5 <= numSides - 2)
+            else if (from[1] % 5 == 0 && from[1] > 0 && from[1] / 5 == numSides - 1)
                 prePositions.pop(); // 스택에서 pop
         }
 

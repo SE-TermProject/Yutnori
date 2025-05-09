@@ -143,16 +143,20 @@ public class YutBoardV2 extends JPanel {
     }
 
     public void setPossiblePieceButtons(List<CandidatePieceButton> possiblePieceButtons) {
+        deletePieceButton(candidatePieceButtons);
         for (CandidatePieceButton pieceButton : possiblePieceButtons) {
             this.add(pieceButton);
+            this.setComponentZOrder(pieceButton, 0);  // 항상 최상단
         }
         this.candidatePieceButtons.clear();
         this.candidatePieceButtons.addAll(possiblePieceButtons);
-        repaint();
+
+        this.revalidate();
+        this.repaint();
     }
 
     public void deletePieceButton(List<CandidatePieceButton> possiblePieceButtons) {
-        for (CandidatePieceButton btn : possiblePieceButtons) {
+        for (CandidatePieceButton btn : new ArrayList<>(possiblePieceButtons)) {
             this.remove(btn);                          // 화면에서 제거
             this.candidatePieceButtons.remove(btn);             // 실제 말 리스트에서도 제거 시도
         }
