@@ -7,6 +7,7 @@ import model.YutResult;
 import view.CandidatePieceButton;
 import view.PieceButton;
 import view.YutBoardV2;
+import view.GameSetupView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -246,8 +247,24 @@ public class YutController {
                     board.updateResultList(game.getYutResults());
 
                     if (game.checkWin()) {
-                        JOptionPane.showMessageDialog(board, "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!");
-                        System.exit(0);  // 게임 종료
+                        int choice = JOptionPane.showOptionDialog(
+                                board,
+                                "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!\n게임을 다시 시작하시겠습니까?",
+                                "게임 종료",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.INFORMATION_MESSAGE,
+                                null,
+                                new Object[] {"재시작", "종료"},
+                                "재시작"
+                        );
+
+                        SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
+
+                        if (choice == JOptionPane.YES_OPTION) {
+                            new GameSetupView(); // 재시작
+                        } else {
+                            System.exit(0); // 완전 종료
+                        }
                         return;
                     }
 
