@@ -358,6 +358,6 @@ public class Board {
     public void catchPiece(Piece piece) {
         // 해당 말의 위치를 시작 위치로 되돌리기
         piece.resetPosition();
-        System.out.println("상대 팀의 말을 잡습니다. 윷을 한 번 더 던지세요.");
+        System.out.println("윷을 한 번 더 던지세요.");
     }
 }
