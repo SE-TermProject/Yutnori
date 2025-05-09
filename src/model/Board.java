@@ -15,22 +15,27 @@ public class Board {
         initializeCoordinateMap();
     }
 
+    /* getter */
     public int getPlayerCount() {
         return players.size();
     }
 
+    /* getter */
     public List<Player> getPlayers() {
         return players;
     }
 
+    /* getter */
     public int getNumSides() {
         return numSides;
     }
 
+    /* getter */
     public int[][] getIndicesAt(Point point) {
         return coordinateToIndexMap.get(point);
     }
 
+    /* 각 칸 좌표 초기 설정 */
     public void initializeCoordinateMap() {
         int[][] data;
         if (numSides == 4) {
@@ -96,7 +101,7 @@ public class Board {
         }
     }
 
-    /* index -> point */
+    /* index -> point 변환 */
     public Point indexToPoint(int[] index) {
         for (Map.Entry<Point, int[][]> entry : coordinateToIndexMap.entrySet()) {
             for (int[] idx : entry.getValue()) {
@@ -106,11 +111,6 @@ public class Board {
             }
         }
         return null;
-    }
-
-    /* 위치가 비어있는지 확인 */
-    public boolean isOccupied() {
-        return false;
     }
 
     /* 이동 가능한 위치 계산 */
@@ -214,11 +214,6 @@ public class Board {
         System.out.println();
 
         return possiblePos;
-    }
-
-    /* 실제 말 이동 처리 */
-    public void movePieceTo() {
-
     }
 
     /* 한 칸씩 이동하기 위한 이동 경로 계산 */
@@ -343,6 +338,12 @@ public class Board {
         return pathIndexToPoint(path);
     }
 
+    /* 실제 말 이동 처리 */
+    public void movePieceTo() {
+
+    }
+
+    /* 중심점인지 확인 */
     private boolean isCenterPoint(int x, int y) {
         int[][] centerPoints = {  // 중심점 인덱스
                 {1, 8}, {2, 13}, {3, 18}, {4,23}
@@ -356,6 +357,7 @@ public class Board {
         return false;
     }
 
+    /* path index list -> point list 변환 */
     private List<Point> pathIndexToPoint(List<int[]> pathIdx) {
         List<Point> result = new ArrayList<>();
 
@@ -376,13 +378,14 @@ public class Board {
         return result;
     }
 
-    /* 상대 말 잡기 처리 */
+    /* 잡힌 말(단일 piece)을 시작 위치로 되돌림 */
     public void catchPiece(Piece piece) {
         // 해당 말의 위치를 시작 위치로 되돌리기
         piece.resetPosition();
         System.out.println("catch: 윷을 한 번 더 던지세요.");
     }
 
+    /* 잡힌 말이 그룹이라면 모든 말들을 되돌림 */
     public void catchPiece(List<Piece> groupedPiece) {
         for (Piece piece : groupedPiece) {
             piece.resetPosition();
