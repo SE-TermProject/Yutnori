@@ -295,24 +295,29 @@ public class YutController {
                     } else {
                         System.out.println("1. 상대 팀의 말을 잡습니다.");
 
-                        //if (otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
-                        List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
-                        System.out.println(group);
-                        for (Piece grouped : group) {
-                            otherPiece.removeGroupedPiece(grouped);
-                            grouped.resetPosition();
+                        if (otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
+                            List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
+                            System.out.println(group);
+                            for (Piece grouped : group) {
+                                otherPiece.removeGroupedPiece(grouped);
+                                grouped.resetPosition();
 
-                            PieceButton pieceButton = board.getPieceButton(grouped);
-                            System.out.println("PieceButton????????????");
-                            if (pieceButton != null) {
-                                System.out.println("PieceButton found, updating position.");
-                                board.updatePiecePosition(pieceButton);
-                            } else {
-                                System.out.println("PieceButton is null.");
+                                PieceButton pieceButton = board.getPieceButton(grouped);
+                                System.out.println("PieceButton????????????");
+                                if (pieceButton != null) {
+                                    System.out.println("PieceButton found, updating position.");
+                                    board.updatePiecePosition(pieceButton);
+                                } else {
+                                    System.out.println("PieceButton is null.");
+                                }
+                                System.out.println("PieceButton!!!!!!!!!!!!");
                             }
-                            System.out.println("PieceButton!!!!!!!!!!!!");
+                        } else {
+                            PieceButton pieceButton = board.getPieceButton(otherPiece);
+                            otherPiece.resetPosition();
+                            board.updatePiecePosition(pieceButton);
+                            System.out.println("디버그");
                         }
-                        //}
 
                         game.getBoard().catchPiece(otherPiece);
                         catchPieces = true;

@@ -172,7 +172,6 @@ public class YutBoardV2 extends JPanel {
             startX = btn.getPos()[0];
             startY = btn.getPos()[1];
             btn.setBounds(startX, startY, 20, 20);
-            btn.GetoutColor();
             repaint();
         }
     }
