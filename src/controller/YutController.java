@@ -146,6 +146,7 @@ public class YutController {
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
+                                            Getout.setEnabled(false);
                                             handleGetoutButtonClick(btn);
                                             board.deletePieceButton(previewButtons);
                                             btn.getPiece().setFinished(true);
@@ -235,9 +236,7 @@ public class YutController {
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(possibleGetout(selectedPiece.getPiece())){
-                        selectedPiece.getPiece().setFinished(true);
-                    }
+
                     board.getEndPiece().setEnabled(false);
 
                     if (game.getYutResults().isEmpty()) return;

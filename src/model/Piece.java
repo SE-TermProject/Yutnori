@@ -73,13 +73,13 @@ public class Piece {
 
         if(position[0] == 0){
             if(position[1] > 5 * numSide){
-                isFinished = true;
+                return true;
             }
         }
 
         else{
             if(position[1] > position[0] * 5 + 6){
-                isFinished = true;
+                return true;
             }
         }
         return isFinished;
