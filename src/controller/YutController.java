@@ -394,7 +394,8 @@ public class YutController {
             // 윷 한 번 더 던지기
             System.out.println("말을 잡아 윷을 한 번 더 던질 수 있습니다!");
             board.getThrowButton().setEnabled(true);  // 윷 던지기 버튼 활성화
-            enableManualThrowButtons(true);           // 수동 윷 버튼들 활성화
+            enableManualThrowButtons(true);   // 수동 윷 버튼들 활성화
+            hasNonBonusYut = false;
         } else {
             System.out.println(selectedBtn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
 
