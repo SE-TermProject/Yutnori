@@ -46,7 +46,7 @@ public class Piece {
         }
 
         else{
-            if(position[1] > 5 * ((numSide / 2) + 1) + 1){
+            if(position[1] > position[0] * 5 + 6){
                 isFinished = true;
             }
         }
@@ -69,7 +69,7 @@ public class Piece {
             }
             // 안쪽, 도착지점과 연결된 경로에 있을 때
             else {
-                if(position[1] + step > 5 * position[0] + 6){
+                if(position[1] == 5 * position[0] + 3 && position[1] + step > 5 * position[0] + 6){
                     isFinished = true;
                 }
             }
