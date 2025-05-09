@@ -142,7 +142,6 @@ public class YutController {
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
-                                            //btn.getPiece().setPosition({0,0});
                                             handleGetoutButtonClick(btn);
                                             board.deletePieceButton(previewButtons);
                                             btn.getPiece().setFinished(true);
