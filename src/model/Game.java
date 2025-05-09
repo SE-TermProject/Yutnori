@@ -70,6 +70,10 @@ public class Game {
         }
     }
 
+    public void sortResults() {
+        Collections.sort(yutResults);
+    }
+
     public boolean hasRemainingMoves() {
         return !yutResults.isEmpty();
     }
