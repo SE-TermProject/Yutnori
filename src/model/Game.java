@@ -60,9 +60,9 @@ public class Game {
     }
 
     /* 윷 결과 하나 소비 */
-    public void consumeResult() {
+    public void consumeResult(YutResult usedResult) {
         if (!yutResults.isEmpty()) {
-            yutResults.remove(0);
+            yutResults.remove(usedResult);
         }
 
         System.out.println("현재 플레이어: " + currentPlayerIndex);

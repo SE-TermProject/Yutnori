@@ -79,7 +79,7 @@ public class YutController {
         // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
         JFrame gameFrame = new JFrame("YutNori");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setSize(700, 700);
+        gameFrame.setSize(1000, 700);
         gameFrame.add(board);
         gameFrame.setVisible(true);
     }
@@ -211,7 +211,7 @@ public class YutController {
                     selectedPiece.getPiece().setPosition(destinationBtn.getPosition());
 
                     System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");
-                    game.consumeResult();
+                    game.consumeResult(btn.getYutResult());
                     board.updateResultList(game.getYutResults());
 
                     if (!game.hasRemainingMoves()) {
@@ -248,7 +248,7 @@ public class YutController {
         JOptionPane.showMessageDialog(null, "모든 말이 판에 올라가지 않았고, 빽도가 나와 낙 처리됩니다.", "낙 발생", JOptionPane.WARNING_MESSAGE);
 
         System.out.println("빽도 나옴 -> 낙 처리");
-        game.consumeResult();
+        game.consumeResult(YutResult.BackDo);
         board.updateResultList(game.getYutResults());
 
         game.nextTurn();
