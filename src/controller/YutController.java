@@ -92,17 +92,24 @@ public class YutController {
 
     private List<PieceButton> generateInitialPieceButtons() {
         List<PieceButton> pieceButtons = new ArrayList<>();
-        int startX = 600, startY = 200;
-        int playerGapY = 60, pieceGapX = 30;
+        int startX = 630, startY = 200;
+        int playerGapY = 40, pieceGapX = 30;
 
         for (Player player : game.getPlayers()) {
             int currentX = startX;
+            PieceButton leftmostBtn = null;
+
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 pieceToButtonMap.put(piece, btn);
                 btn.setBounds(currentX, startY, 20, 20);
                 btn.setPos(currentX, startY);
                 btn.setEnabled(true);
+
+                if (leftmostBtn == null) {
+                    leftmostBtn = btn;
+                }
+
                 btn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -200,6 +207,15 @@ public class YutController {
                 });
                 pieceButtons.add(btn);
                 currentX += pieceGapX;
+            }
+
+            if (leftmostBtn != null) {
+                char playerChar = (char) ('A' + player.getId());
+                JLabel label = new JLabel(String.valueOf(playerChar));
+                label.setBounds(leftmostBtn.getX() - 20, leftmostBtn.getY(), 15, 20);
+                label.setFont(new Font("SansSerif", Font.BOLD, 14));
+                board.add(label);
+                board.setComponentZOrder(label, 0);
             }
             startY += playerGapY;
         }

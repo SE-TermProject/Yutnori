@@ -31,35 +31,35 @@ public class YutBoardV2 extends JPanel {
         setLayout(null);
 
         throwButton = new JButton("랜덤 윷 던지기");
-        throwButton.setBounds(605, 420, 300, 45);
+        throwButton.setBounds(605, 370, 300, 45);
         add(throwButton);
 
-        int y = 470;
-        int w = 60;
+        int y = 420;
+        int w = 50;
         int h = 35;
 
         throwBackdo = new JButton("빽도");
-        throwBackdo.setBounds(600, y, w, h);
+        throwBackdo.setBounds(605, y, w, h);
         add(throwBackdo);
 
         throwDo = new JButton("도");
-        throwDo.setBounds(650, y, w, h);
+        throwDo.setBounds(655, y, w, h);
         add(throwDo);
 
         throwGae = new JButton("개");
-        throwGae.setBounds(700, y, w, h);
+        throwGae.setBounds(705, y, w, h);
         add(throwGae);
 
         throwGeol = new JButton("걸");
-        throwGeol.setBounds(750, y, w, h);
+        throwGeol.setBounds(755, y, w, h);
         add(throwGeol);
 
         throwYut = new JButton("윷");
-        throwYut.setBounds(800, y, w, h);
+        throwYut.setBounds(805, y, w, h);
         add(throwYut);
 
         throwMo = new JButton("모");
-        throwMo.setBounds(850, y, w, h);
+        throwMo.setBounds(855, y, w, h);
         add(throwMo);
 
         endPiece = new JButton("내보내기");
@@ -68,16 +68,16 @@ public class YutBoardV2 extends JPanel {
         add(endPiece);
 
         turnLabel = new JLabel("A님의 차례입니다.");
-        turnLabel.setBounds(600, 500, 200, 30);
+        turnLabel.setBounds(610, 470, 200, 30);
         add(turnLabel);
 
-        resultLabel = new JLabel("윷 결과");
-        resultLabel.setBounds(600, 530, 180, 30);
+        resultLabel = new JLabel("윷 결과 🐎");
+        resultLabel.setBounds(610, 500, 180, 30);
         add(resultLabel);
 
         resultPanel = new JPanel();
         resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        resultPanel.setBounds(590, 560, 300, 100);
+        resultPanel.setBounds(605, 530, 300, 100);
         add(resultPanel);
     }
 
@@ -189,7 +189,6 @@ public class YutBoardV2 extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBoard(g);
-
     }
 
     private void drawBoard(Graphics g) {
@@ -234,7 +233,17 @@ public class YutBoardV2 extends JPanel {
                 start = p;
             }
         }
-        g2.drawString("출발", start.x - 15, start.y + 5);
+
+        String label = "출발";
+        Font font = new Font("SansSerif", Font.BOLD, 16);
+        g2.setFont(font);
+
+        FontMetrics fm = g2.getFontMetrics(font);
+        int textWidth = fm.stringWidth(label);
+        int textHeight = fm.getHeight();
+
+        g2.setColor(Color.BLACK);
+        g2.drawString(label, start.x - textWidth / 2, start.y + textHeight / 2 - 6);
     }
 
     private void drawBetween(Graphics2D g2, Point from, Point to, int divisions, int size, boolean includeEnds) {
@@ -255,20 +264,46 @@ public class YutBoardV2 extends JPanel {
 //       g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
 //    }
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
-        g2.drawOval(x - size / 2, y - size / 2, size, size);
-
         if (board == null) return;
 
         Point point = new Point(x, y);
         int[][] indices = board.getIndicesAt(point);
 
-        if (indices != null) {
-            int offsetY = 0;
-            for (int[] idx : indices) {
-                g2.drawString("[" + idx[0] + ", " + idx[1] + "]", x + size / 2, y + size / 2 + offsetY);
-                offsetY += 12; // 여러 개 있을 경우 줄바꿈
+        boolean isSpecial = isSpecialIndex(indices);
+
+        // 중심점/꼭짓점이면 사이즈 키우기
+        int drawSize = size;
+        if (isSpecial) {
+            drawSize = size + 10; // 강조용 크기 증가
+        }
+
+        if (isSpecial) {
+            g2.setColor(new Color(230, 200, 250));
+            g2.fillOval(x - drawSize / 2, y - drawSize / 2, drawSize, drawSize);
+        } else {
+            g2.setColor(Color.BLACK);
+        }
+
+        g2.drawOval(x - drawSize / 2, y - drawSize / 2, drawSize, drawSize);
+
+//        if (indices != null) {
+//            int offsetY = 0;
+//            for (int[] idx : indices) {
+//                g2.drawString("[" + idx[0] + ", " + idx[1] + "]", x + size / 2, y + size / 2 + offsetY);
+//                offsetY += 12; // 여러 개 있을 경우 줄바꿈
+//            }
+//        }
+    }
+
+    private boolean isSpecialIndex(int[][] indices) {
+        if (indices == null) return false;
+        for (int[] idx : indices) {
+            if ((idx[0] == 1 && idx[1] == 8) || (idx[0] == 2 && idx[1] == 13) ||
+                    (idx[0] == 3 && idx[1] == 18) || (idx[0] == 0 && idx[1] % 5 == 0)) {
+                return true;
             }
         }
+        return false;
     }
 
     /* 말이 한 칸씩 이동 */
