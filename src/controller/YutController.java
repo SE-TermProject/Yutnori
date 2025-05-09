@@ -118,13 +118,15 @@ public class YutController {
             int[] pos = piecePossiblePos.get(i);
             Point point = game.getBoard().indexToPoint(pos);
 
-            int[] prePos = selectedPiece.getPosition(); int index = i;
+            int[] prePos = selectedPiece.getPosition();
             if (prePos.length == 0) prePos = new int[]{0, 0};
+            boolean isEdge = false;
             if (prePos[0] == 0 && prePos[1] % 5 == 0 && prePos[1] > 0 && prePos[1] / 5 <= game.getBoard().getNumSides() - 2) { // 가장자리 꼭짓점 위치라면
-                // 각 이동 가능한 칸의 수가 두개씩이므로 인덱스 수정
-                index = i / 2;
+                // 각 이동 가능한 칸의 수가 두개씩
+                isEdge = true;
             }
-            CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), game.getYutResults().get(index));
+            System.out.println("--------" + isEdge);
+            CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), game.getYutResult(i, isEdge));
             btn.setBounds(point.x, point.y, 20, 20);
             btn.setPixelPosition(point);
             btn.setEnabled(true);
