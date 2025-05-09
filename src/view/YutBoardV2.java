@@ -31,11 +31,11 @@ public class YutBoardV2 extends JPanel {
         setLayout(null);
 
         throwButton = new JButton("랜덤 윷 던지기");
-        throwButton.setBounds(605, 370, 300, 45);
+        throwButton.setBounds(605, 370, 360, 45);
         add(throwButton);
 
         int y = 420;
-        int w = 50;
+        int w = 60;
         int h = 35;
 
         throwBackdo = new JButton("빽도");
@@ -43,23 +43,23 @@ public class YutBoardV2 extends JPanel {
         add(throwBackdo);
 
         throwDo = new JButton("도");
-        throwDo.setBounds(655, y, w, h);
+        throwDo.setBounds(665, y, w, h);
         add(throwDo);
 
         throwGae = new JButton("개");
-        throwGae.setBounds(705, y, w, h);
+        throwGae.setBounds(725, y, w, h);
         add(throwGae);
 
         throwGeol = new JButton("걸");
-        throwGeol.setBounds(755, y, w, h);
+        throwGeol.setBounds(785, y, w, h);
         add(throwGeol);
 
         throwYut = new JButton("윷");
-        throwYut.setBounds(805, y, w, h);
+        throwYut.setBounds(845, y, w, h);
         add(throwYut);
 
         throwMo = new JButton("모");
-        throwMo.setBounds(855, y, w, h);
+        throwMo.setBounds(905, y, w, h);
         add(throwMo);
 
         endPiece = new JButton("내보내기");
