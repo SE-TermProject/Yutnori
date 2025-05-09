@@ -195,13 +195,7 @@ public class YutController {
         }
 
         // 보너스 턴일 경우 버튼 다시 활성화
-        if (result.isBonusTurn()) {
-            board.getThrowButton().setEnabled(true);
-            enableManualThrowButtons(true);
-        } else {
-            board.getThrowButton().setEnabled(false);
-            enableManualThrowButtons(false);
-        }
+        board.setThrowButtonsEnabled(result.isBonusTurn());
     }
 
     /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */

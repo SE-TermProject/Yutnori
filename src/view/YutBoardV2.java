@@ -178,6 +178,16 @@ public class YutBoardV2 extends JPanel {
 
     }
 
+    public void setThrowButtonsEnabled(boolean enabled) {
+        throwButton.setEnabled(enabled);
+        throwBackdo.setEnabled(enabled);
+        throwDo.setEnabled(enabled);
+        throwGae.setEnabled(enabled);
+        throwGeol.setEnabled(enabled);
+        throwYut.setEnabled(enabled);
+        throwMo.setEnabled(enabled);
+    }
+
     public void setPossiblePieceButtons(List<CandidatePieceButton> possiblePieceButtons) {
         deletePieceButton(candidatePieceButtons);
         for (CandidatePieceButton pieceButton : possiblePieceButtons) {
