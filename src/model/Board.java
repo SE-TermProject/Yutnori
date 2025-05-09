@@ -300,15 +300,8 @@ public class Board {
 
             int pointX = from[0];
             int pointY = from[1] + 1;
+            boolean passedCenter = false;
             while (true) {
-                // 중심점 탈출
-                if (isCenterPoint(pointX, pointY)) {
-                    pointX = numSides / 2;
-                    pointY = 5 * (numSides / 2) - 2;
-                    continue;
-                }
-
-                // 외곽으로 나가는 포인트 처리
                 if (pointX == numSides / 3 && pointY == (numSides / 2) * 5 + 1) {
                     pointX = 0;
                     pointY = 5 * (numSides - 1);
@@ -316,9 +309,35 @@ public class Board {
 
                 path.add(new int[]{pointX, pointY});
 
-                if (pointX == to[0] && pointY == to[1]) break;
+                if (pointX == to[0] && pointY == to[1]) {
+                    break;
+                }
+
+                if (isCenterPoint(pointX, pointY) && !passedCenter) {
+                    pointX = numSides / 3;
+                    pointY = 5 * (numSides / 2) - 2;
+                    passedCenter = true;
+                }
 
                 pointY++;
+//                // 중심점 탈출
+//                if (isCenterPoint(pointX, pointY)) {
+//                    pointX = numSides / 2;
+//                    pointY = 5 * (numSides / 2) - 2;
+//                    continue;
+//                }
+//
+//                // 외곽으로 나가는 포인트 처리
+//                if (pointX == numSides / 3 && pointY == (numSides / 2) * 5 + 1) {
+//                    pointX = 0;
+//                    pointY = 5 * (numSides - 1);
+//                }
+//
+//                path.add(new int[]{pointX, pointY});
+//
+//                if (pointX == to[0] && pointY == to[1]) break;
+//
+//                pointY++;
             }
         }
 
