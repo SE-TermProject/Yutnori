@@ -172,6 +172,15 @@ public class YutBoardV2 extends JPanel {
         }
     }
 
+    public PieceButton getPieceButton(Piece piece) {
+        for (PieceButton button : this.pieceButtons) {
+            if (Arrays.equals(button.getPiece().getPosition(), piece.getPosition())) {
+                return button;
+            }
+        }
+        return null;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
