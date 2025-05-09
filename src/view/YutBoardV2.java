@@ -238,7 +238,8 @@ public class YutBoardV2 extends JPanel {
     /* 말이 한 칸씩 이동 */
     public void animatePieceMovement(PieceButton pieceButton, List<Point> path, Runnable onComplete) {
         new Thread(() -> {
-            for (Point point : path) {
+            for (int i = 0; i < path.size(); i++) {
+                Point point = path.get(i);
                 SwingUtilities.invokeLater(() -> {
                     pieceButton.setPixelPosition(point);
                     repaint();
@@ -250,7 +251,7 @@ public class YutBoardV2 extends JPanel {
                     Thread.currentThread().interrupt();
                 }
 
-                if (onComplete != null) {
+                if (onComplete != null && i == path.size() - 1) {
                     SwingUtilities.invokeLater(onComplete);  // 애니메이션 끝난 후 실행
                 }
             }
