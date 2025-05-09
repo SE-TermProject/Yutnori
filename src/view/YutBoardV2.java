@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class YutBoardV2 extends JPanel {
 
@@ -380,6 +381,17 @@ public class YutBoardV2 extends JPanel {
 
     public void showMessageDialog(String message, String title) {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void showCandidateButtons(List<CandidatePieceButton> buttons, Consumer<CandidatePieceButton> onClick) {
+        for (CandidatePieceButton button : buttons) {
+            this.add(button);
+            this.setComponentZOrder(button, 0);
+            button.addActionListener(e -> onClick.accept(button));
+        }
+
+        revalidate();
+        repaint();
     }
 
     public void showGetoutButton(YutResult useYut, Runnable onClick) {

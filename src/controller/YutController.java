@@ -254,37 +254,19 @@ public class YutController {
         }
         System.out.println("말의 출발 지점: [" + from[0] + ", " + from[1] + "]");
 
-        for (CandidatePieceButton btn : possiblePosButtons) {
-            board.add(btn);
-            board.setComponentZOrder(btn, 0);
+        board.showCandidateButtons(possiblePosButtons, destinationBtn -> {
+            board.getEndPiece().setEnabled(false);
+            if (game.getYutResults().isEmpty()) return;
 
-            btn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+            board.deletePieceButton(possiblePosButtons);  // 버튼 제거
 
-                    board.getEndPiece().setEnabled(false);
+            int[] to = destinationBtn.getPosition(game.getBoard().getNumSides()); // 도착 지점의 index
+            destinationBtn.setPosition(to);
+            /* 말 이동 로직 */
+            List<Point> piecePath = game.getBoard().calculatePath(from, to, destinationBtn.getYutResult());
 
-                    if (game.getYutResults().isEmpty()) return;
-
-                    for (CandidatePieceButton b : possiblePosButtons) {
-                        for (ActionListener al : b.getActionListeners()) {
-                            b.removeActionListener(al);
-                        }
-                    }
-
-                    CandidatePieceButton destinationBtn = (CandidatePieceButton) e.getSource();
-                    int[] to = destinationBtn.getPosition(game.getBoard().getNumSides()); // 도착 지점의 index
-                    destinationBtn.setPosition(to);
-
-                    /* 말 이동 로직 */
-                    List<Point> piecePath = game.getBoard().calculatePath(from, to, btn.getYutResult());
-
-                    performMove(selectedPiece, possiblePosButtons, destinationBtn, from, piecePath, btn);
-                    board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
-
-                }
-            });
-        }
+            performMove(selectedPiece, possiblePosButtons, destinationBtn, from, piecePath, destinationBtn);
+        });
     }
 
     private void performMove(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons, CandidatePieceButton destinationBtn, int[] from, List<Point> piecePath, CandidatePieceButton btn) {
