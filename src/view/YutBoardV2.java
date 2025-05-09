@@ -432,4 +432,10 @@ public class YutBoardV2 extends JPanel {
             onClick.run();
         });
     }
+
+    public void showPieceAsFinished(PieceButton btn) {
+        int[] pos = btn.getPos();
+        btn.setBounds(pos[0], pos[1], 20, 20);
+        btn.GetoutColor();
+    }
 }

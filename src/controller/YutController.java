@@ -468,13 +468,8 @@ public class YutController {
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {
-        int startX, startY;
-
-        if(btn != null){
-            startX = btn.getPos()[0];
-            startY = btn.getPos()[1];
-            btn.setBounds(startX, startY, 20, 20);
-            btn.GetoutColor();
+        if (btn != null){
+            board.showPieceAsFinished(btn);
         }
     }
 
