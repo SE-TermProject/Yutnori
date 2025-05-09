@@ -1,8 +1,8 @@
 package controller;
 
+import app.AppManager;
 import model.*;
 import view.CandidatePieceButton;
-import view.GameSetupView;
 import view.PieceButton;
 import view.YutBoardV2;
 
@@ -17,12 +17,14 @@ import java.util.*;
 import java.util.List;
 
 public class YutController {
+    private final AppManager appManager;
     private final Game game;
     private final YutBoardV2 board;
     private boolean hasNonBonusYut = false; // 일반 윷이 한 번이라도 나왔는지 추적
     private final Map<Piece, PieceButton> pieceToButtonMap = new HashMap<>();
 
-    public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
+    public YutController(AppManager appManager, int sides, int playerCount, int pieceCount, YutBoardV2 board) {
+        this.appManager = appManager;
         this.game = new Game(sides, playerCount, pieceCount);
         this.board = board;
     }
@@ -160,9 +162,9 @@ public class YutController {
                                                 SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
 
                                                 if (choice == JOptionPane.YES_OPTION) {
-                                                    new GameSetupView(); // 재시작
+                                                    appManager.restartGame();  // 다시 시작
                                                 } else {
-                                                    System.exit(0); // 완전 종료
+                                                    appManager.exitGame(); // 완전 종료
                                                 }
                                             }
 
