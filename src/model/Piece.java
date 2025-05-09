@@ -92,6 +92,7 @@ public class Piece {
     }
 
     public boolean isFinished(int numSide, int step) {
+        int q = numSide / 2;
 
         if(position.length == 0) { return isFinished; }
         // 빽도일 때
@@ -107,7 +108,7 @@ public class Piece {
             }
             // 안쪽, 도착지점과 연결된 경로에 있을 때
             else {
-                if(position[1] >= 5 * position[0] + 3 && position[1] + step > 5 * position[0] + 6){
+                if((position[1] == 5 * position[0] + 3 || position[0] == q && position[1] > position[0] * 5 + 3) && position[1] + step > 5 * position[0] + 6){
                     isFinished = true;
                 }
             }
