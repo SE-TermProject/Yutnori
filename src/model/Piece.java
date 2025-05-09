@@ -64,6 +64,10 @@ public class Piece {
         }
     }
 
+    public void setPieceGroup(List<Piece> pieceGroup) {
+        this.pieceGroup = pieceGroup;
+    }
+
     // 그룹에서 말 제거
     public void removeGroupedPiece(Piece piece) {
         if(pieceGroup.contains(piece)) {
