@@ -111,26 +111,19 @@ public class YutController {
     /* 해당 말이 이동할 수 있는 모든 위치에 놓일 버튼 */
     private List<CandidatePieceButton> generatePossiblePieceButtons(Piece selectedPiece) {
         List<CandidatePieceButton> possiblePosButtons = new ArrayList<>();
-        HashMap<Piece, List<int[]>> currentPossiblePos = game.findCurrentPossiblePos();
-        List<int[]> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
+        HashMap<Piece, HashMap<YutResult, List<int[]>>> currentPossiblePos = game.findCurrentPossiblePos();
+        HashMap<YutResult, List<int[]>> piecePossiblePos = currentPossiblePos.get(selectedPiece); // 선택된 말이 이동할 수 있는 모든 경로의 position
 
-        for (int i = 0; i < piecePossiblePos.size(); i++) {
-            int[] pos = piecePossiblePos.get(i);
-            Point point = game.getBoard().indexToPoint(pos);
+        for (YutResult yutResult : game.getYutResults()) {
+            for (int[] pos : piecePossiblePos.get(yutResult)) {
+                Point point = game.getBoard().indexToPoint(pos);
 
-            int[] prePos = selectedPiece.getPosition();
-            if (prePos.length == 0) prePos = new int[]{0, 0};
-            boolean isEdge = false;
-            if (prePos[0] == 0 && prePos[1] % 5 == 0 && prePos[1] > 0 && prePos[1] / 5 <= game.getBoard().getNumSides() - 2) { // 가장자리 꼭짓점 위치라면
-                // 각 이동 가능한 칸의 수가 두개씩
-                isEdge = true;
+                CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), yutResult);
+                btn.setBounds(point.x, point.y, 20, 20);
+                btn.setPixelPosition(point);
+                btn.setEnabled(true);
+                possiblePosButtons.add(btn);
             }
-            System.out.println("--------" + isEdge);
-            CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), game.getYutResult(i, isEdge));
-            btn.setBounds(point.x, point.y, 20, 20);
-            btn.setPixelPosition(point);
-            btn.setEnabled(true);
-            possiblePosButtons.add(btn);
         }
         return possiblePosButtons;
     }
