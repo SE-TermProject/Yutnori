@@ -85,8 +85,9 @@ public class YutController {
         // Frame 생성 및 view 연결 & 실제 게임 화면으로 이동
         JFrame gameFrame = new JFrame("YutNori");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setSize(1000, 700);
-        gameFrame.add(board);
+        gameFrame.setSize(1100, 700);
+        gameFrame.setLocationRelativeTo(null);
+        gameFrame.add(this.board);
         gameFrame.setVisible(true);
     }
 
