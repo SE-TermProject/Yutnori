@@ -37,7 +37,6 @@ public class YutController {
     private void setupThrowButtons() {
         // 랜덤 윷 던지기
         board.getThrowButton().addActionListener(e -> {
-            if (!game.getYutResults().isEmpty()) return;
 
             YutResult result = game.throwYut();
             board.updateResultList(game.getYutResults());
