@@ -57,7 +57,7 @@ public class YutBoardV2 extends JPanel {
         add(throwMo);
 
         endPiece = new JButton("내보내기");
-        endPiece.setBounds(480, 550, 80, 40);
+        endPiece.setBounds(480, 550, 90, 40);
         endPiece.setVisible(false);
         add(endPiece);
     }
