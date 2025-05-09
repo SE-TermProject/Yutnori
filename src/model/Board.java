@@ -115,7 +115,8 @@ public class Board {
             if (row == 0) { // 가장 바깥쪽에 있는 말인 경우
                 if (col == 0) { // 출발점인 경우
                     // finish
-                    return possiblePos; // 비어있는 배열을 반환
+                    System.out.println("-> 도착 가능합니다.");
+                    return new ArrayList<>(); // 비어있는 배열을 반환
                 }
                 else if (col == (numSides - 1) * 5) {
                     int[] recentPos = prePositions.peek();
@@ -143,7 +144,8 @@ public class Board {
             nextPos[0] = row; nextPos[1] = col + step; // 바깥쪽으로 이동 가능 경로
             if (nextPos[1] > numSides * 5 || nextPos[1] < 0) { // 시작점을 지나 도착 가능한 경우
                 // finish
-                return possiblePos; // 비어있는 배열을 반환
+                System.out.println("-> 도착 가능합니다.");
+                return new ArrayList<>(); // 비어있는 배열을 반환
             }
             else {
                 possiblePos.add(new int[]{nextPos[0], nextPos[1]});
@@ -175,7 +177,7 @@ public class Board {
                 nextPos[0] = quotient; nextPos[1] = (5 * quotient + 3) + step;
             }
 
-            else if (numSides > 4 && nextPos[1] > 5 * nextPos[0] + 3) { // 중심점을 지나 이동한 경우, 사각형을 제외하고는 다른 규칙을 적용해야 함
+            else if (numSides > 4 && col < 5 * row + 3 && nextPos[1] > 5 * nextPos[0] + 3) { // 중심점을 지나 이동한 경우, 사각형을 제외하고는 다른 규칙을 적용해야 함
                 int e = nextPos[0] - (numSides - 4);
                 nextPos[0] = nextPos[0] - e;
                 nextPos[1] = nextPos[1] - 5 * e;
@@ -190,7 +192,8 @@ public class Board {
 
             if (nextPos[0] == quotient && nextPos[1] > 5 * (quotient + 1) + 1) { // 시작점을 지나 도착 가능한 경우
                 // finish
-                return possiblePos; // 비어있는 배열을 반환
+                System.out.println("-> 도착 가능합니다.");
+                return new ArrayList<>(); // 비어있는 배열을 반환
             }
             possiblePos.add(new int[]{nextPos[0], nextPos[1]});
         }
