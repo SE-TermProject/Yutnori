@@ -151,6 +151,28 @@ public class YutController {
                                             btn.getPiece().setFinished(true);
                                             game.getYutResults().remove(useYut);
 
+                                            if (game.checkWin()) {
+                                                System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
+                                                int choice = JOptionPane.showOptionDialog(
+                                                        board,
+                                                        "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!\n게임을 다시 시작하시겠습니까?",
+                                                        "게임 종료",
+                                                        JOptionPane.YES_NO_OPTION,
+                                                        JOptionPane.INFORMATION_MESSAGE,
+                                                        null,
+                                                        new Object[] {"재시작", "종료"},
+                                                        "재시작"
+                                                );
+
+                                                SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
+
+                                                if (choice == JOptionPane.YES_OPTION) {
+                                                    new GameSetupView(); // 재시작
+                                                } else {
+                                                    System.exit(0); // 완전 종료
+                                                }
+                                            }
+
                                             if(game.getYutResults().isEmpty()) {
                                                 game.nextTurn();
                                                 board.updateTurnLabel(game.getCurrentPlayer().getId());
@@ -164,7 +186,6 @@ public class YutController {
                                             }
                                         }
                                     });
-
                                 }
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
@@ -313,28 +334,6 @@ public class YutController {
             List<PieceButton> groupButtons = new ArrayList<>();
             groupButtons.add(selectedPiece);
 
-            if (game.checkWin()) {
-                int choice = JOptionPane.showOptionDialog(
-                        board,
-                        "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!\n게임을 다시 시작하시겠습니까?",
-                        "게임 종료",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null,
-                        new Object[] {"재시작", "종료"},
-                        "재시작"
-                );
-
-                SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
-
-                if (choice == JOptionPane.YES_OPTION) {
-                    new GameSetupView(); // 재시작
-                } else {
-                    System.exit(0); // 완전 종료
-                }
-                return;
-            }
-
             for (Piece grouped : selectedPiece.getPiece().getPieceGroup()) {
                 PieceButton groupedBtn = pieceToButtonMap.get(grouped);
                 if (groupedBtn != null) {
@@ -373,7 +372,7 @@ public class YutController {
                     if (otherPiece.getOwner().getId() == currentPlayer.getId()) {
                         System.out.println("자기 팀의 말을 업습니다.");
                         groupedPiece.add(otherPiece);
-                         //그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
+                        //그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
                         PieceButton pieceButton = board.getPieceButton(selectedPiece.getPiece());
                         if (pieceButton != null) {
                             pieceButton.repaint();  // PieceButton을 다시 그려서 그룹 크기를 업데이트
@@ -415,12 +414,6 @@ public class YutController {
             hasNonBonusYut = false;
         } else {
             System.out.println(selectedBtn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
-
-            if (game.checkWin()) {
-                JOptionPane.showMessageDialog(board, "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex()) + " 승리!");
-                System.exit(0);  // 게임 종료
-                return;
-            }
 
             if (!game.hasRemainingMoves()) {
                 if (!game.getYutResults().isEmpty() && game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
