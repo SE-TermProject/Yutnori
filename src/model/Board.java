@@ -7,10 +7,20 @@ import java.util.List;
 public class Board {
     private final int numSides;
     private final Map<Point, int[][]> coordinateToIndexMap = new HashMap<>();
+    private final List<Player> players;
 
-    public Board(int numSides) {
+    public Board(int numSides, List<Player> players) {
         this.numSides = numSides;
+        this.players = new ArrayList<>(players);
         initializeCoordinateMap();
+    }
+
+    public int getPlayerCount() {
+        return players.size();
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public int getNumSides() {
@@ -75,8 +85,8 @@ public class Board {
         for (int[] entry : data) {
             Point point = new Point(entry[0], entry[1]);
             tempMap
-                .computeIfAbsent(point, k -> new ArrayList<>())
-                .add(new int[]{entry[2], entry[3]});
+                    .computeIfAbsent(point, k -> new ArrayList<>())
+                    .add(new int[]{entry[2], entry[3]});
         }
 
         for (Map.Entry<Point, List<int[]>> e : tempMap.entrySet()) {

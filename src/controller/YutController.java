@@ -5,9 +5,9 @@ import model.Piece;
 import model.Player;
 import model.YutResult;
 import view.CandidatePieceButton;
+import view.GameSetupView;
 import view.PieceButton;
 import view.YutBoardV2;
-import view.GameSetupView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -141,7 +141,7 @@ public class YutController {
                                         }
                                     });
                                 }
-                              
+
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
                             }
@@ -261,7 +261,6 @@ public class YutController {
                         return;
                     }
 
-
                     if (!game.hasRemainingMoves()) {
                         if (!game.getYutResults().isEmpty() && game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
                             board.getThrowButton().setEnabled(true);
@@ -307,7 +306,7 @@ public class YutController {
             movePiece(btn, possiblePosButtons);
         }
     }
-  
+
     private void enableManualThrowButtons(boolean enabled) {
         board.getThrowBackdo().setEnabled(enabled);
         board.getThrowDo().setEnabled(enabled);

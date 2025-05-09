@@ -10,7 +10,7 @@ public class Game {
     private final Yut yut = new Yut();
 
     public Game(int numSides, int playerCount, int pieceCount) {
-        this.board = new Board(numSides);
+        this.board = new Board(numSides, new ArrayList<>());
         this.players = new ArrayList<>();
         this.yutResults = new ArrayList<>();
         this.currentPlayerIndex = 0;
