@@ -5,12 +5,22 @@ import java.util.*;
 import java.util.List;
 
 public class Board {
-    private int numSides;
+    private final int numSides;
     private final Map<Point, int[][]> coordinateToIndexMap = new HashMap<>();
+    private final List<Player> players;
 
-    public Board(int numSides) {
+    public Board(int numSides, List<Player> players) {
         this.numSides = numSides;
+        this.players = new ArrayList<>(players);
         initializeCoordinateMap();
+    }
+
+    public int getPlayerCount() {
+        return players.size();
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public int getNumSides() {
@@ -75,8 +85,8 @@ public class Board {
         for (int[] entry : data) {
             Point point = new Point(entry[0], entry[1]);
             tempMap
-                .computeIfAbsent(point, k -> new ArrayList<>())
-                .add(new int[]{entry[2], entry[3]});
+                    .computeIfAbsent(point, k -> new ArrayList<>())
+                    .add(new int[]{entry[2], entry[3]});
         }
 
         for (Map.Entry<Point, List<int[]>> e : tempMap.entrySet()) {
@@ -288,7 +298,7 @@ public class Board {
                     // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
                     // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
                     if (isCenterPoint(curX, curY) && !passedCenter) {
-                        curX = numSides / 2;
+                        curX = numSides / 3;
                         curY = 5 * (numSides / 2) - 2;
                         passedCenter = true;
                     }
@@ -300,15 +310,12 @@ public class Board {
 
             int pointX = from[0];
             int pointY = from[1] + 1;
+            boolean passedCenter = false;
             while (true) {
-                // 중심점 탈출
-                if (isCenterPoint(pointX, pointY)) {
-                    pointX = numSides / 2;
-                    pointY = 5 * (numSides / 2) - 2;
-                    continue;
-                }
-
-                // 외곽으로 나가는 포인트 처리
+                // 현재 위치가 중간칸들을 빠져나가는 곳이라면
+                // numSides가 4라면 (1, 11) -> (0, 15)
+                // numSides가 5라면 (1, 11) -> (0, 20)
+                // numSides가 6이라면 (2, 16) -> (0, 25)
                 if (pointX == numSides / 3 && pointY == (numSides / 2) * 5 + 1) {
                     pointX = 0;
                     pointY = 5 * (numSides - 1);
@@ -316,7 +323,18 @@ public class Board {
 
                 path.add(new int[]{pointX, pointY});
 
-                if (pointX == to[0] && pointY == to[1]) break;
+                // 현재 지점이 도착 지점이라면 while문 종료
+                if (pointX == to[0] && pointY == to[1]) {
+                    break;
+                }
+
+                // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
+                // numSides가 5라면 (1, 8)로, 6이라면 (2, 13)으로 변경
+                if (isCenterPoint(pointX, pointY) && !passedCenter) {
+                    pointX = numSides / 3;
+                    pointY = 5 * (numSides / 2) - 2;
+                    passedCenter = true;
+                }
 
                 pointY++;
             }
@@ -363,5 +381,11 @@ public class Board {
         // 해당 말의 위치를 시작 위치로 되돌리기
         piece.resetPosition();
         System.out.println("catch: 윷을 한 번 더 던지세요.");
+    }
+
+    public void catchPiece(List<Piece> groupedPiece) {
+        for (Piece piece : groupedPiece) {
+            piece.resetPosition();
+        }
     }
 }

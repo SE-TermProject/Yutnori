@@ -86,7 +86,7 @@ public class YutBoardV2 extends JPanel {
         resultPanel.removeAll();
 
         for (YutResult result : results) {
-            JLabel label = new JLabel(result.toString());
+            JLabel label = new JLabel(result.getKoreanName());
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             resultPanel.add(label);
         }
@@ -289,6 +289,32 @@ public class YutBoardV2 extends JPanel {
 
                 if (onComplete != null && i == path.size() - 1) {
                     SwingUtilities.invokeLater(onComplete);  // 애니메이션 끝난 후 실행
+                }
+            }
+        }).start();
+    }
+
+    /* 그룹화된 말들 한번에 이동 */
+    public void animateGroupedMovement(List<PieceButton> groupButtons, List<Point> path, Runnable onComplete) {
+        new Thread(() -> {
+            for (int i = 0; i < path.size(); i++) {
+                Point point = path.get(i);
+
+                SwingUtilities.invokeLater(() -> {
+                    for (PieceButton btn : groupButtons) {
+                        btn.setPixelPosition(point);
+                    }
+                    repaint();
+                });
+
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                if (onComplete != null && i == path.size() - 1) {
+                    SwingUtilities.invokeLater(onComplete);
                 }
             }
         }).start();
