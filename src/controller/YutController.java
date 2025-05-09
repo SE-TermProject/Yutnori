@@ -343,29 +343,21 @@ public class YutController {
 
                         if (otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
                             List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
-                            System.out.println(group);
+                            System.out.println("그룹 : " + group);
                             for (Piece grouped : group) {
-                                otherPiece.removeGroupedPiece(grouped);
+                                System.out.println("그룹화 풀기");
+                                grouped.removeGroupedPiece();
                                 grouped.resetPosition();
-
-                                PieceButton pieceButton = board.getPieceButton(grouped);
-                                System.out.println("PieceButton????????????");
-                                if (pieceButton != null) {
-                                    System.out.println("PieceButton found, updating position.");
-                                    board.updatePiecePosition(pieceButton);
-                                } else {
-                                    System.out.println("PieceButton is null.");
-                                }
-                                System.out.println("PieceButton!!!!!!!!!!!!");
+                                board.updatePiecePosition(pieceToButtonMap.get(grouped));
                             }
+                            game.getBoard().catchPiece(group);
                         } else {
                             PieceButton pieceButton = board.getPieceButton(otherPiece);
                             otherPiece.resetPosition();
                             board.updatePiecePosition(pieceButton);
                             System.out.println("디버그");
+                            game.getBoard().catchPiece(otherPiece);
                         }
-
-                        game.getBoard().catchPiece(otherPiece);
                         catchPieces = true;
                     }
                 }
