@@ -151,7 +151,9 @@ public class YutController {
                     board.animatePieceMovement(selectedPiece, piecePath);  // 말 실제 이동
                     selectedPiece.getPiece().setPosition(destinationBtn.getPosition());
 
-                    System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPosition()[0] + ", " + selectedPiece.getPosition()[1] + "]");
+                    int[] finalTo = selectedPiece.getPosition();
+                    selectedPiece.getPiece().recordPrePositions(game.getBoard().getNumSides(), new int[]{from[0], from[1]}, new int[]{finalTo[0], finalTo[1]}, destinationBtn.getYutResult()); // 이전에 이동했던 위치 저장
+                    System.out.println(btn.getYutResult() + "으로 이동 후 말의 위치: [" + finalTo[0] + ", " + finalTo[1] + "]");
                     board.deletePieceButton(possiblePosButtons);
                 }
             });
