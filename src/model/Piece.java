@@ -42,28 +42,17 @@ public class Piece {
         int now_col = position[1];
 
         if(now_row == 0){
-
+            if(now_col > 5 * numSide){
+                isFinished = true;
+            }
         }
 
-        // 4각형
-        if(numSide == 4){
-            if(now_row == 0 && now_col > 20) { isFinished = true; }
-            if(now_row != 0 && now_col > 16) { isFinished = true; }
-            return isFinished;
+        else{
+            if(now_col > 5 * ((numSide / 2) + 1) + 1){
+                isFinished = true;
+            }
         }
-        // 5각형
-        else if(numSide ==5) {
-            if(now_row == 0 && now_col > 25) { isFinished = true; }
-            if(now_row != 0 && now_col > 16) { isFinished = true; }
-            return isFinished;
-        }
-
-        // 6각형
-        else  {
-            if(now_row == 0 && now_col > 30) { isFinished = true; }
-            if(now_row != 0 && now_col > 21) { isFinished = true; }
-            return isFinished;
-        }
+        return isFinished;
     }
 
     public boolean isFinished(int numSide, int step) {
