@@ -131,6 +131,15 @@ public class YutBoardV2 extends JPanel {
         button.addActionListener(e -> callback.run());
     }
 
+    public void addPlayerLabel(int playerId, int x, int y) {
+        char playerChar = (char) ('A' + playerId);
+        JLabel label = new JLabel(String.valueOf(playerChar));
+        label.setFont(new Font("SansSerif", Font.BOLD, 14));
+        label.setBounds(x, y, 15, 20);
+        add(label);
+        setComponentZOrder(label, 0);
+    }
+
     public void updateResult(List<YutResult> results) {
         resultPanel.removeAll();
 

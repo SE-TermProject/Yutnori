@@ -169,12 +169,7 @@ public class YutController {
             }
 
             if (leftmostBtn != null) {
-                char playerChar = (char) ('A' + player.getId());
-                JLabel label = new JLabel(String.valueOf(playerChar));
-                label.setBounds(leftmostBtn.getX() - 20, leftmostBtn.getY(), 15, 20);
-                label.setFont(new Font("SansSerif", Font.BOLD, 14));
-                board.add(label);
-                board.setComponentZOrder(label, 0);
+                board.addPlayerLabel(player.getId(), leftmostBtn.getX() - 20, leftmostBtn.getY());
             }
             startY += playerGapY;
         }
