@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameSetupView extends JFrame {
+    private YutController yutController;
 
     public GameSetupView() {
         setTitle("게임 설정");
@@ -50,7 +51,8 @@ public class GameSetupView extends JFrame {
             // 설정 확인용 로그
             System.out.println("Sides: " + sides + ", Players: " + playerCount + ", Pieces: " + pieceCount);
             YutBoardV2 board = new YutBoardV2();
-            new YutController(sides, playerCount, pieceCount, board);
+            yutController = new YutController(sides, playerCount, pieceCount, board);
+            yutController.initializeGameUI();
             this.dispose(); // 설정창 닫기
         });
 
