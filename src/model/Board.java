@@ -345,11 +345,12 @@ public class Board {
 
     /* 중심점인지 확인 */
     private boolean isCenterPoint(int x, int y) {
-        int[][] centerPoints = {  // 중심점 인덱스
-                {1, 8}, {2, 13}, {3, 18}, {4,23}
-        };
+        List<int[]> centerPoints = new ArrayList<>(); // 중심점 인덱스
+        for(int i = 1; i <= numSides - 2; i++) {
+            centerPoints.add(new int[]{i, i * 5 + 3});
+        }
 
-        for (int[] cp : centerPoints) {
+        for (int[] cp : centerPoints) { // 해당 위치(x, y)가 중심점인지 확인
             if (cp[0] == x && cp[1] == y) {
                 return true;
             }
