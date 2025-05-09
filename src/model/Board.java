@@ -128,7 +128,7 @@ public class Board {
                     System.out.println("-> 도착 가능합니다.");
                     return new ArrayList<>(); // 비어있는 배열을 반환
                 }
-                else if (col == (numSides - 1) * 5) {
+                else if (col == (numSides - 1) * 5 && !prePositions.empty()) {
                     int[] recentPos = prePositions.peek();
                     possiblePos.add(new int[]{recentPos[0], recentPos[1]});
                 }

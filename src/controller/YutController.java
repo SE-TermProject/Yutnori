@@ -279,7 +279,8 @@ public class YutController {
                     }
 
                     CandidatePieceButton destinationBtn = (CandidatePieceButton) e.getSource();
-                    int[] to = destinationBtn.getPosition();  // 도착 지점의 index
+                    int[] to = destinationBtn.getPosition(game.getBoard().getNumSides()); // 도착 지점의 index
+                    destinationBtn.setPosition(to);
 
                     /* 말 이동 로직 */
                     List<Point> piecePath = game.getBoard().calculatePath(from, to, btn.getYutResult());
