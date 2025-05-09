@@ -56,24 +56,14 @@ public class Piece {
         return pieceGroup;
     }
 
-    // 그룹에 말 추가
-    public void addGroupedPiece(Piece piece) {
-        if(piece != null && !pieceGroup.contains(piece)) {
-            pieceGroup.add(piece);
-            piece.setGrouped(true);
-        }
-    }
-
     public void setPieceGroup(List<Piece> pieceGroup) {
         this.pieceGroup = pieceGroup;
     }
 
     // 그룹에서 말 제거
-    public void removeGroupedPiece(Piece piece) {
-        if(pieceGroup.contains(piece)) {
-            pieceGroup.remove(piece);
-            piece.setGrouped(false);
-        }
+    public void removeGroupedPiece() {
+        pieceGroup.clear();
+        setGrouped(false);
     }
 
     //position[0] = row, [1] = col
