@@ -19,6 +19,7 @@ import java.util.List;
 public class YutController {
     private final Game game;
     private final YutBoardV2 board;
+    private boolean hasNonBonusYut = false; // 일반 윷이 한 번이라도 나왔는지 추적
 
     public YutController(int sides, int playerCount, int pieceCount, YutBoardV2 board) {
         this.game = new Game(sides, playerCount, pieceCount);
@@ -41,6 +42,10 @@ public class YutController {
 
             YutResult result = game.throwYut();
             board.updateResultList(game.getYutResults());
+
+            if (!result.isBonusTurn()) {
+                hasNonBonusYut = true;
+            }
 
             if (game.getYutResults().get(0) == YutResult.BackDo
                     && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
@@ -103,11 +108,11 @@ public class YutController {
                         if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
                             System.out.println("윷을 먼저 던져야 합니다.");
                         }
-                        else if (isLastResultBonusTurn()) {
-                            System.out.println("마지막 결과가 보너스 턴(YUT 또는 MO)이므로, 말을 이동할 수 없습니다.");
-                        }
                         else if (piece.isFinished()) { // 이미 finish된 말이라면
                             System.out.println("이 pieces는 이미 종료되었습니다.");
+                        }
+                        else if (!canMoveNow()) {
+                            System.out.println("아직 이동할 수 없습니다. 보너스 턴이 끝날 때까지 기다려야 합니다.");
                         }
                         else {
                             if (game.getYutResults().get(0) == YutResult.BackDo
@@ -143,6 +148,10 @@ public class YutController {
     private void handleManualThrow(YutResult result) {
         game.setManualYutResult(result);
         board.updateResultList(game.getYutResults());
+
+        if (!result.isBonusTurn()) {
+            hasNonBonusYut = true;
+        }
 
         if (game.getYutResults().get(0) == YutResult.BackDo
                 && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
@@ -218,8 +227,7 @@ public class YutController {
                     board.updateResultList(game.getYutResults());
 
                     if (!game.hasRemainingMoves()) {
-                        if (!game.getYutResults().isEmpty() &&
-                                game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
+                        if (!game.getYutResults().isEmpty() && game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
                             board.getThrowButton().setEnabled(true);
                             enableManualThrowButtons(true);
                         } else {
@@ -227,6 +235,7 @@ public class YutController {
                             board.updateTurnLabel(game.getCurrentPlayer().getId());
                             board.getThrowButton().setEnabled(true);
                             enableManualThrowButtons(true);
+                            hasNonBonusYut = false; // 턴 종료 시 초기화
                         }
                     } else {
                         board.getThrowButton().setEnabled(false);
@@ -259,10 +268,11 @@ public class YutController {
         board.getThrowButton().setEnabled(true);
         enableManualThrowButtons(true);
     }
-
-    private boolean isLastResultBonusTurn() {
+    private boolean canMoveNow() {
         List<YutResult> results = game.getYutResults();
         if (results.isEmpty()) return false;
-        return results.get(results.size() - 1).isBonusTurn();
+
+        // 이번 턴에 일반 윷이 하나라도 나왔으면 이동 가능
+        return hasNonBonusYut;
     }
 }
