@@ -162,6 +162,7 @@ public class YutController {
                                             game.getYutResults().remove(useYut);
 
                                             if (game.checkWin()) {
+                                                btn.getPiece().removeGroupedPiece();
                                                 System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
                                                 int choice = JOptionPane.showOptionDialog(
                                                         board,
@@ -190,12 +191,11 @@ public class YutController {
                                                 enableManualThrowButtons(true);
                                                 board.getThrowButton().setEnabled(true);
                                                 board.updateResultList(game.getYutResults());
-                                                btn.getPiece().removeGroupedPiece();
                                             }
                                             else{
                                                 board.updateResultList(game.getYutResults());
-                                                btn.getPiece().removeGroupedPiece();
                                             }
+                                            btn.getPiece().removeGroupedPiece();
                                         }
                                     });
                                 }
@@ -308,7 +308,6 @@ public class YutController {
 
                     performMove(selectedPiece, possiblePosButtons, destinationBtn, from, piecePath, btn);
                     board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
-
                 }
             });
         }
