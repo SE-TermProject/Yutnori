@@ -152,7 +152,6 @@ public class YutController {
                                             Getout.setEnabled(false);
                                             handleGetoutButtonClick(btn);
                                             board.deletePieceButton(previewButtons);
-                                            btn.getPiece().setFinished(true);
                                             game.getYutResults().remove(useYut);
 
                                             if (game.checkWin()) {
@@ -516,13 +515,13 @@ public class YutController {
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {
-        int startX, startY;
-
-        if(btn != null){
-            startX = btn.getPos()[0];
-            startY = btn.getPos()[1];
-            btn.setBounds(startX, startY, 20, 20);
-            btn.GetoutColor();
+        List<Piece> groupedPieces = new ArrayList<>();
+        groupedPieces = btn.getPiece().getPieceGroup();
+        for (Piece groupedPiece : groupedPieces) {
+            PieceButton _btn = pieceToButtonMap.get(groupedPiece);
+            _btn.getPiece().setFinished(true);
+            _btn.setBounds(_btn.getPos()[0], _btn.getPos()[1], 20, 20);
+            _btn.GetoutColor();
         }
     }
 
