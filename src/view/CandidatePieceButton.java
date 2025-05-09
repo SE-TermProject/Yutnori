@@ -29,6 +29,18 @@ public class CandidatePieceButton extends JButton {
         return position;
     }
 
+    public int[] getPosition(int numSides) {
+        if (position[0] == 0 && position[1] == 0) { // 시작점으로 도착하면
+            return new int[]{0, numSides * 5};
+        }
+        return position;
+    }
+
+    public void setPosition(int[] position) {
+        this.position[0] = position[0];
+        this.position[1] = position[1];
+    }
+
     public YutResult getYutResult() {
         return yutResult;
     }

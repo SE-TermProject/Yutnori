@@ -128,7 +128,7 @@ public class YutController {
                         }
                         else {
                             if (game.getYutResults().get(0) == YutResult.BackDo
-                                    && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
+                                    && game.getCurrentPlayer().getPieces().stream().filter(p -> !p.isFinished()).allMatch(p -> {
                                 int[] pos = p.getPosition();
                                 return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
                             })) {
@@ -148,6 +148,10 @@ public class YutController {
                                     JButton Getout = board.getEndPiece();
                                     YutResult useYut = getYutResult(piece);
 
+                                    for (ActionListener al : Getout.getActionListeners()) {
+                                        Getout.removeActionListener(al);
+                                    }
+
                                     System.out.println(useYut + " 으로 나가기 가능"+ "\n");
                                     Getout.setEnabled(true);
                                     Getout.addActionListener(new ActionListener() {
@@ -156,8 +160,30 @@ public class YutController {
                                             Getout.setEnabled(false);
                                             handleGetoutButtonClick(btn);
                                             board.deletePieceButton(previewButtons);
-                                            btn.getPiece().setFinished(true);
                                             game.getYutResults().remove(useYut);
+
+                                            if (game.checkWin()) {
+                                                btn.getPiece().removeGroupedPiece();
+                                                System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
+                                                int choice = JOptionPane.showOptionDialog(
+                                                        board,
+                                                        "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!\n게임을 다시 시작하시겠습니까?",
+                                                        "게임 종료",
+                                                        JOptionPane.YES_NO_OPTION,
+                                                        JOptionPane.INFORMATION_MESSAGE,
+                                                        null,
+                                                        new Object[] {"재시작", "종료"},
+                                                        "재시작"
+                                                );
+
+                                                SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
+
+                                                if (choice == JOptionPane.YES_OPTION) {
+                                                    new GameSetupView(); // 재시작
+                                                } else {
+                                                    System.exit(0); // 완전 종료
+                                                }
+                                            }
 
                                             if(game.getYutResults().isEmpty()) {
                                                 game.nextTurn();
@@ -170,9 +196,9 @@ public class YutController {
                                             else{
                                                 board.updateResultList(game.getYutResults());
                                             }
+                                            btn.getPiece().removeGroupedPiece();
                                         }
                                     });
-
                                 }
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
@@ -208,7 +234,7 @@ public class YutController {
         }
 
         if (game.getYutResults().get(0) == YutResult.BackDo
-                && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
+                && game.getCurrentPlayer().getPieces().stream().filter(p -> !p.isFinished()).allMatch(p -> {
             int[] pos = p.getPosition();
             return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
         })) {
@@ -275,14 +301,14 @@ public class YutController {
                     }
 
                     CandidatePieceButton destinationBtn = (CandidatePieceButton) e.getSource();
-                    int[] to = destinationBtn.getPosition();  // 도착 지점의 index
+                    int[] to = destinationBtn.getPosition(game.getBoard().getNumSides()); // 도착 지점의 index
+                    destinationBtn.setPosition(to);
 
                     /* 말 이동 로직 */
                     List<Point> piecePath = game.getBoard().calculatePath(from, to, btn.getYutResult());
 
                     performMove(selectedPiece, possiblePosButtons, destinationBtn, from, piecePath, btn);
                     board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
-
                 }
             });
         }
@@ -330,28 +356,6 @@ public class YutController {
             List<PieceButton> groupButtons = new ArrayList<>();
             groupButtons.add(selectedPiece);
 
-            if (game.checkWin()) {
-                int choice = JOptionPane.showOptionDialog(
-                        board,
-                        "플레이어 " + (char)('A' + game.getCurrentPlayerIndex()) + " 승리!\n게임을 다시 시작하시겠습니까?",
-                        "게임 종료",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null,
-                        new Object[] {"재시작", "종료"},
-                        "재시작"
-                );
-
-                SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
-
-                if (choice == JOptionPane.YES_OPTION) {
-                    new GameSetupView(); // 재시작
-                } else {
-                    System.exit(0); // 완전 종료
-                }
-                return;
-            }
-
             for (Piece grouped : selectedPiece.getPiece().getPieceGroup()) {
                 PieceButton groupedBtn = pieceToButtonMap.get(grouped);
                 if (groupedBtn != null) {
@@ -390,7 +394,7 @@ public class YutController {
                     if (otherPiece.getOwner().getId() == currentPlayer.getId()) {
                         System.out.println("자기 팀의 말을 업습니다.");
                         groupedPiece.add(otherPiece);
-                         //그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
+                        //그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
                         PieceButton pieceButton = board.getPieceButton(selectedPiece.getPiece());
                         if (pieceButton != null) {
                             pieceButton.repaint();  // PieceButton을 다시 그려서 그룹 크기를 업데이트
@@ -433,12 +437,6 @@ public class YutController {
         } else {
             System.out.println(selectedBtn.getYutResult() + "으로 이동 후 말의 위치: [" + selectedPiece.getPiece().getPosition()[0] + ", " + selectedPiece.getPiece().getPosition()[1] + "]");
 
-            if (game.checkWin()) {
-                JOptionPane.showMessageDialog(board, "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex()) + " 승리!");
-                System.exit(0);  // 게임 종료
-                return;
-            }
-
             if (!game.hasRemainingMoves()) {
                 if (!game.getYutResults().isEmpty() && game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
                     board.getThrowButton().setEnabled(true);
@@ -458,6 +456,9 @@ public class YutController {
     }
 
     private boolean isGroupedOrCatched(Piece otherPiece, PieceButton selectedPiece) {
+        // 둘 중 하나 이상이 이미 끝난 말이라면 false
+        if (otherPiece.isFinished() || selectedPiece.getPiece().isFinished()) return false;
+
         int numSides = game.getBoard().getNumSides();
         int[] currentPosition = selectedPiece.getPiece().getPosition();
         int[] otherPosition = otherPiece.getPosition();
@@ -532,13 +533,18 @@ public class YutController {
     }
 
     private void handleGetoutButtonClick(PieceButton btn) {
-        int startX, startY;
-
-        if(btn != null){
-            startX = btn.getPos()[0];
-            startY = btn.getPos()[1];
-            btn.setBounds(startX, startY, 20, 20);
+        List<Piece> groupedPieces = btn.getPiece().getPieceGroup();
+        if(groupedPieces.size() == 0) {
+            btn.getPiece().setFinished(true);
+            btn.setBounds(btn.getPos()[0], btn.getPos()[1], 20, 20);
             btn.GetoutColor();
+            return;
+        }
+        for (int i = 0; i <  groupedPieces.size(); i++) {
+            PieceButton _btn = pieceToButtonMap.get(groupedPieces.get(i));
+            _btn.getPiece().setFinished(true);
+            _btn.setBounds(_btn.getPos()[0], _btn.getPos()[1], 20, 20);
+            _btn.GetoutColor();
         }
     }
 

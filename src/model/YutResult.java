@@ -14,15 +14,18 @@ public enum YutResult {
         this.step = step;
     }
 
+    /* getter */
     public int getStep() {
         return step;
     }
 
+    /* 윷이나 모가 나온다면 다시 던질 수 있음 */
     public boolean isBonusTurn() {
         // 윷이나 모는 한 번 더 던질 수 있는 조건
         return this == YUT || this == MO;
     }
 
+    /* 윷 결과 이름 한국어로 변경 */
     public String getKoreanName() {
         switch (this) {
             case BackDo: return "빽도";

@@ -24,19 +24,22 @@ public class Game {
         }
     }
 
+    /* getter */
     public Board getBoard() {
         return board;
     }
 
+    /* getter */
     public List<Player> getPlayers() {
         return players;
     }
 
+    /* getter */
     public int getCurrentPlayerIndex() {
         return currentPlayerIndex;
     }
 
-    /* 게임 시작 */
+    /* 게임 시작 로그 출력 */
     public void startGame() {
         System.out.println("게임 시작합니다.");
     }
@@ -46,7 +49,7 @@ public class Game {
         return players.get(currentPlayerIndex);
     }
 
-    /* 윷 던지기 */
+    /* 랜덤 윷 던지기 -> 윷을 던진 후 리스트에 저장하고 반환 */
     public YutResult throwYut() {
         YutResult result = YutResult.valueOf(yut.getRandomResult());
         yutResults.add(result);  // 누적 리스트에 저장
@@ -54,12 +57,13 @@ public class Game {
         return result;
     }
 
+    /* 지정 윷 던지기 -> 윷 결과를 고른 후 리스트에 저장하고 반환 */
     public void setManualYutResult(YutResult result) {
         yut.setManualResult(result);
         yutResults.add(result);
     }
 
-    /* 윷 결과 하나 소비 */
+    /* 사용한 윷 결과를 리스트에서 제거 */
     public void consumeResult(YutResult usedResult) {
         yutResults.remove(usedResult);
 
@@ -70,20 +74,22 @@ public class Game {
         }
     }
 
+    /* 윷 결과 정렬 */
     public void sortResults() {
         Collections.sort(yutResults);
     }
 
+    /* 아직 이동할 수 있는 윷 결과가 남아있는지 확인 */
     public boolean hasRemainingMoves() {
         return !yutResults.isEmpty();
     }
 
-    /* 턴 넘기기 */
+    /* 턴을 다음 플레이어로 넘기기 */
     public void nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
-    /* 승리 조건 확인 */
+    /* 승리 조건 -> 현재 플레이어가 모든 말을 도착시켰는지 확인 */
     public boolean checkWin() {
         return getCurrentPlayer().getPieces().stream().allMatch(Piece::isFinished);
     }
@@ -91,6 +97,7 @@ public class Game {
     /* 윷 결과 반환 */
     public List<YutResult> getYutResults() { return this.yutResults; }
 
+    /* 현재 차례인 플레이어의 각 말이 이동할 수 있는 모든 경로를 반환 */
     public HashMap<Piece, HashMap<YutResult, List<int[]>>> findCurrentPossiblePos() {
         HashMap<Piece, HashMap<YutResult, List<int[]>>> currentPossiblePos = new HashMap<>();
         System.out.println("현재 이동 가능한 경로 ---- ");

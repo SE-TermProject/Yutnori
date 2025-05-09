@@ -22,8 +22,7 @@ public class Piece {
         this.prePositions = new Stack<>();
     }
 
-    // Getters and Setters
-
+    /* piece 위치 초기화 */
     public void resetPosition() {
         this.position = new int[0];
         this.isGrouped = false;
@@ -32,41 +31,50 @@ public class Piece {
         this.pieceGroup.clear();
     }
 
+    /* getter */
     public Player getOwner() { return owner; }
 
+    /* setter */
     public void setOwner(Player owner) { this.owner = owner; }
 
+    /* getter */
     public int[] getPosition() {
         return position;
     }
 
+    /* setter */
     public void setPosition(int[] position) {
         this.position = position;
     }
 
+    /* getter */
     public boolean isGrouped() {
         return isGrouped;
     }
 
+    /* setter */
     public void setGrouped(boolean grouped) {
         this.isGrouped = grouped;
     }
 
+    /* getter */
     public List<Piece> getPieceGroup() {
         return pieceGroup;
     }
 
+    /* setter */
     public void setPieceGroup(List<Piece> pieceGroup) {
         this.pieceGroup = pieceGroup;
     }
 
-    // 그룹에서 말 제거
+    /* 그룹에서 해당 말 제거 */
     public void removeGroupedPiece() {
         pieceGroup.clear();
         setGrouped(false);
     }
 
-    //position[0] = row, [1] = col
+    /* 현재 위치 기준 도착 여부 판별 */
+    // position[0] = row, [1] = col
     public boolean isFinished(int numSide) {
 
         if(position.length == 0) return isFinished;
@@ -85,6 +93,7 @@ public class Piece {
         return isFinished;
     }
 
+    /* 현재 위치에서 step만큼 이동 시 도착 가능한지 확인 */
     public boolean isFinished(int numSide, int step) {
         int q = numSide / 2;
 
@@ -110,17 +119,23 @@ public class Piece {
         return isFinished;
     }
 
+    /* getter */
     public boolean isFinished() { return isFinished; }
 
+    /* setter */
     public void setFinished(boolean finished) {
         isFinished = finished;
     }
 
+    /* 이동 이력을 담은 스택 반환 */
     public Stack<int[]> getPrePositions() { return prePositions; }
 
+    /* 이동 이력을 기록 (중심점, 꼭짓점 등을 지나친 경우 기록) */
     public void recordPrePositions(int numSides, int[] from, int[] to, YutResult yutResult) {
         /* 빽도로 이동하는 경우 */
         if (yutResult.equals(YutResult.BackDo)) {
+            if (prePositions.empty()) return;
+
             if (from[0] != 0) {
                 if ((from[0] * 5 + 1 == from[1]) || (from[0] * 5 + 3 == from[1])) {
                     prePositions.pop(); // 스택에서 pop
@@ -172,9 +187,12 @@ public class Piece {
         System.out.println();
     }
 
+    /* 가장 최근 위치 반환 -> stack peek */
     public int[] peekPrePosition() { return prePositions.peek(); }
 
+    /* 이동 이력 추가 -> stack push */
     public void pushPrePosition(int[] prePosition) { this.prePositions.push(prePosition); }
 
+    /* 이동 이력 제거 -> stack pop */
     public int[] popPrePosition(int prePosition) { return this.prePositions.pop(); }
 }
