@@ -93,7 +93,7 @@ public class YutController {
                                     Getout.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
-                                            handleGetoutButtonClick(btn);
+                                            handleGetoutButtonClick(btn, previewButtons);
                                         }
                                     });
 
@@ -184,13 +184,16 @@ public class YutController {
         return possibleOut;
     }
 
-    private void handleGetoutButtonClick(PieceButton btn) {
+    private void handleGetoutButtonClick(PieceButton btn, List<CandidatePieceButton> possiblePosButtons) {
         int startX, startY;
         if(btn != null){
             startX = btn.getPos()[0];
             startY = btn.getPos()[1];
             btn.setBounds(startX, startY, 20, 20);
             btn.GetoutColor();
+        }
+        for (CandidatePieceButton button : possiblePosButtons) {
+            board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
         }
     }
 }
