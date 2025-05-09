@@ -44,8 +44,8 @@ public class CandidatePieceButton extends JButton {
         return switch (playerId) {
             case 0 -> new Color(255, 150, 150); // 연한 빨강
             case 1 -> new Color(150, 150, 255); // 연한 파랑
-            case 2 -> new Color(150, 255, 150); // 연한 초록
-            case 3 -> new Color(255, 255, 180); // 연한 노랑
+            case 2 -> new Color(180, 255, 200); // 연한 초록
+            case 3 -> new Color(255, 240, 180); // 연한 노랑
             default -> new Color(200, 200, 200); // 연한 회색
         };
     }

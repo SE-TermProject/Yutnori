@@ -65,8 +65,8 @@ public class PieceButton extends JButton {
         return switch (playerId) {
             case 0 -> Color.RED;
             case 1 -> Color.BLUE;
-            case 2 -> Color.GREEN;
-            case 3 -> Color.YELLOW;
+            case 2 -> new Color(0, 128, 0);
+            case 3 -> new Color(255, 165, 0);
             default -> Color.GRAY;
         };
     }
