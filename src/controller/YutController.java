@@ -73,6 +73,7 @@ public class YutController {
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 btn.setBounds(currentX, startY, 20, 20);
+                btn.setPos(currentX, startY);
                 btn.setEnabled(true);
                 btn.addActionListener(new ActionListener() {
                     @Override
@@ -104,7 +105,6 @@ public class YutController {
                                             Getout.setVisible(false);
                                         }
                                     });
-
                                 }
 
                                 // 버튼 선택 후 실제 이동
@@ -121,7 +121,6 @@ public class YutController {
         }
         return pieceButtons;
     }
-
 
     // 지정 윷 결과 처리 메서드
     private void handleManualThrow(YutResult result) {
@@ -193,7 +192,6 @@ public class YutController {
                     game.consumeResult();
                     board.updateResultList(game.getYutResults());
 
-
                     if (!game.hasRemainingMoves()) {
                         if (!game.getYutResults().isEmpty() &&
                                 game.getYutResults().get(game.getYutResults().size() - 1).isBonusTurn()) {
@@ -213,7 +211,6 @@ public class YutController {
             });
         }
     }
-
 
     private boolean possibleGetout(Piece selectedPiece) {
         int numSides = game.getBoard().getNumSides();
