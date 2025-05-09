@@ -133,16 +133,9 @@ public class YutController {
                                 if(possibleGetout(piece)) {
                                     JButton Getout = board.getEndPiece();
                                     Getout.setEnabled(true);
-                                    Getout.addActionListener(new ActionListener() {
-                                        @Override
-                                        public void actionPerformed(ActionEvent e) {
-                                            handleGetoutButtonClick(btn, previewButtons);
-                                            Getout.setEnabled(false);
-                                        }
-                                    });
+                                    takeGetout(piece, btn);
                                 }
 
-                              
                                 // 버튼 선택 후 실제 이동
                                 movePiece(btn, previewButtons);
                             }
@@ -281,14 +274,39 @@ public class YutController {
         return possibleOut;
     }
 
-    private void handleGetoutButtonClick(PieceButton btn, List<CandidatePieceButton> possiblePosButtons) {
+    private void takeGetout(Piece selectedPiece, PieceButton btn) {
+        JButton Getout = board.getEndPiece();
+        HashMap<Piece, HashMap<YutResult, List<int[]>>> currentPossiblePos = game.findCurrentPossiblePos();
+        HashMap<YutResult, List<int[]>> piecePossiblePos = currentPossiblePos.get(selectedPiece);
+
+        Getout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (YutResult yutResult : game.getYutResults()){
+
+                    game.consumeResult(yutResult);
+                    board.updateResultList(game.getYutResults());
+                    game.nextTurn();
+                    board.updateTurnLabel(game.getCurrentPlayer().getId());
+                    board.getThrowButton().setEnabled(true);
+                    enableManualThrowButtons(true);
+                    hasNonBonusYut = false;
+
+
+                }
+            }
+        });
+
+    }
+
+    private void handleGetoutButtonClick(PieceButton btn) {
         int startX, startY;
+
         if(btn != null){
             startX = btn.getPos()[0];
             startY = btn.getPos()[1];
             btn.setBounds(startX, startY, 20, 20);
             btn.GetoutColor();
-            movePiece(btn, possiblePosButtons);
         }
     }
   
