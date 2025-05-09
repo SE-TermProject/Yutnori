@@ -5,12 +5,22 @@ import java.util.*;
 import java.util.List;
 
 public class Board {
-    private int numSides;
+    private final int numSides;
     private final Map<Point, int[][]> coordinateToIndexMap = new HashMap<>();
+    private final List<Player> players;
 
-    public Board(int numSides) {
+    public Board(int numSides, List<Player> players) {
         this.numSides = numSides;
+        this.players = new ArrayList<>(players);
         initializeCoordinateMap();
+    }
+
+    public int getPlayerCount() {
+        return players.size();
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public int getNumSides() {

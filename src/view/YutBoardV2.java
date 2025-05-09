@@ -1,6 +1,7 @@
 package view;
 
 import model.Board;
+import model.Player;
 import model.YutResult;
 
 import javax.swing.*;
@@ -17,8 +18,6 @@ public class YutBoardV2 extends JPanel {
     private JLabel turnLabel;
     private JPanel resultPanel;
 
-//    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
-//    private final List<Player> players;
     private final List<PieceButton> pieceButtons = new ArrayList<>();
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
     private int numSides = 4;  // 기본값, 실제 값은 controller에서 설정
@@ -64,8 +63,8 @@ public class YutBoardV2 extends JPanel {
         endPiece.setEnabled(false);
         add(endPiece);
 
-        turnLabel = new JLabel("A님의 차례입니다.");
-        turnLabel.setBounds(600, 500, 200, 30);
+        turnLabel = new JLabel("A님의 차례입니다. 말을 눌러 이동하세요.");
+        turnLabel.setBounds(600, 500, 400, 30);
         add(turnLabel);
 
         resultLabel = new JLabel("윷 결과");
@@ -115,7 +114,7 @@ public class YutBoardV2 extends JPanel {
     }
 
     public void updateTurnLabel(int playerId) {
-        turnLabel.setText((char)('A' + playerId) + "님의 차례입니다.");
+        turnLabel.setText((char)('A' + playerId) + "님의 차례입니다. 말을 눌러 이동하세요.");
     }
 
 
@@ -127,7 +126,31 @@ public class YutBoardV2 extends JPanel {
 
     public void setBoard(Board board) {
         this.board = board;
+
+        JPanel playersPanel = new JPanel();
+        playersPanel.setLayout(new GridLayout(4, 1, 5, 5)); // 플레이어 4명 세로로 나열
+        playersPanel.setOpaque(false);
+        playersPanel.setBounds(600, 300, 100, 200);
+
+        int baseX = 570;  // 라벨 X 좌표
+        int baseY = 160;  // 라벨 Y 좌표
+        int spacing = 50; // 플레이어 간 간격
+
+        for (int i = 0; i < board.getPlayerCount(); i++) {
+            Player player = board.getPlayers().get(i);
+
+            // "A:", "B:" 등 라벨 생성
+            JLabel label = new JLabel((char)('A' + i) + ":");
+            label.setBounds(baseX, baseY + i * spacing, 20, 30);
+            this.add(label);
+
+            PlayerPiecesPanel panel = new PlayerPiecesPanel(player);
+            playersPanel.add(panel);
+        }
+
+        add(playersPanel);
     }
+
 
     public void setPieceButtons(List<PieceButton> pieceButtons) {
         for (PieceButton pieceButton : pieceButtons) {
