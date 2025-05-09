@@ -1,10 +1,13 @@
 package view;
 
+import controller.YutController;
 import model.Board;
+import model.Piece;
 import model.YutResult;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -156,6 +159,17 @@ public class YutBoardV2 extends JPanel {
 
         revalidate();  // 레이아웃 갱신
         repaint();     // 화면 다시 그리기
+    }
+
+    public void updatePiecePosition(PieceButton btn) {
+        int startX, startY;
+        if(btn != null){
+            startX = btn.getPos()[0];
+            startY = btn.getPos()[1];
+            btn.setBounds(startX, startY, 20, 20);
+            btn.GetoutColor();
+            repaint();
+        }
     }
 
     @Override
