@@ -181,7 +181,6 @@ public class YutController {
                 break;
             }
         }
-        System.out.println("possible "+possibleOut + "\n");
         return possibleOut;
     }
 

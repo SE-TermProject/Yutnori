@@ -38,17 +38,14 @@ public class Piece {
 
         if(position.length == 0) return isFinished;
 
-        int now_row = position[0];
-        int now_col = position[1];
-
-        if(now_row == 0){
-            if(now_col > 5 * numSide){
+        if(position[0] == 0){
+            if(position[1] > 5 * numSide){
                 isFinished = true;
             }
         }
 
         else{
-            if(now_col > 5 * ((numSide / 2) + 1) + 1){
+            if(position[1] > 5 * ((numSide / 2) + 1) + 1){
                 isFinished = true;
             }
         }
