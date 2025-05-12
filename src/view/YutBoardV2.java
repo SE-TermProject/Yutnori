@@ -1,10 +1,13 @@
 package view;
 
+import controller.YutController;
 import model.Board;
+import model.Piece;
 import model.YutResult;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,6 +16,7 @@ public class YutBoardV2 extends JPanel {
     private final JLabel resultLabel;
     private final JButton throwButton;
     private final JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
+    private final JButton endPiece;
     private JLabel turnLabel;
     private JPanel resultPanel;
 
@@ -27,48 +31,53 @@ public class YutBoardV2 extends JPanel {
         setLayout(null);
 
         throwButton = new JButton("랜덤 윷 던지기");
-        throwButton.setBounds(605, 420, 300, 45);
+        throwButton.setBounds(605, 370, 360, 45);
         add(throwButton);
 
-        int y = 470;
+        int y = 420;
         int w = 60;
         int h = 35;
 
         throwBackdo = new JButton("빽도");
-        throwBackdo.setBounds(600, y, w, h);
+        throwBackdo.setBounds(605, y, w, h);
         add(throwBackdo);
 
         throwDo = new JButton("도");
-        throwDo.setBounds(650, y, w, h);
+        throwDo.setBounds(665, y, w, h);
         add(throwDo);
 
         throwGae = new JButton("개");
-        throwGae.setBounds(700, y, w, h);
+        throwGae.setBounds(725, y, w, h);
         add(throwGae);
 
         throwGeol = new JButton("걸");
-        throwGeol.setBounds(750, y, w, h);
+        throwGeol.setBounds(785, y, w, h);
         add(throwGeol);
 
         throwYut = new JButton("윷");
-        throwYut.setBounds(800, y, w, h);
+        throwYut.setBounds(845, y, w, h);
         add(throwYut);
 
         throwMo = new JButton("모");
-        throwMo.setBounds(850, y, w, h);
+        throwMo.setBounds(905, y, w, h);
         add(throwMo);
 
+        endPiece = new JButton("내보내기");
+        endPiece.setBounds(480, 550, 90, 40);
+        endPiece.setEnabled(false);
+        add(endPiece);
+
         turnLabel = new JLabel("A님의 차례입니다.");
-        turnLabel.setBounds(600, 500, 200, 30);
+        turnLabel.setBounds(610, 470, 200, 30);
         add(turnLabel);
 
-        resultLabel = new JLabel("윷 결과");
-        resultLabel.setBounds(600, 530, 180, 30);
+        resultLabel = new JLabel("윷 결과 🐎");
+        resultLabel.setBounds(610, 500, 180, 30);
         add(resultLabel);
 
         resultPanel = new JPanel();
         resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        resultPanel.setBounds(590, 560, 300, 100);
+        resultPanel.setBounds(605, 530, 300, 100);
         add(resultPanel);
     }
 
@@ -77,7 +86,7 @@ public class YutBoardV2 extends JPanel {
         resultPanel.removeAll();
 
         for (YutResult result : results) {
-            JLabel label = new JLabel(result.toString());
+            JLabel label = new JLabel(result.getKoreanName());
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             resultPanel.add(label);
         }
@@ -93,6 +102,7 @@ public class YutBoardV2 extends JPanel {
     public JButton getThrowGeol() { return throwGeol; }
     public JButton getThrowYut() { return throwYut; }
     public JButton getThrowMo() { return throwMo; }
+    public JButton getEndPiece() { return endPiece; }
 
     public void updateResult(List<YutResult> results) {
         resultPanel.removeAll();
@@ -116,6 +126,8 @@ public class YutBoardV2 extends JPanel {
         this.numSides = numSides;
     }
 
+    public int getNumSides() { return numSides; }
+
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -131,16 +143,20 @@ public class YutBoardV2 extends JPanel {
     }
 
     public void setPossiblePieceButtons(List<CandidatePieceButton> possiblePieceButtons) {
+        deletePieceButton(candidatePieceButtons);
         for (CandidatePieceButton pieceButton : possiblePieceButtons) {
             this.add(pieceButton);
+            this.setComponentZOrder(pieceButton, 0);  // 항상 최상단
         }
         this.candidatePieceButtons.clear();
         this.candidatePieceButtons.addAll(possiblePieceButtons);
-        repaint();
+
+        this.revalidate();
+        this.repaint();
     }
 
     public void deletePieceButton(List<CandidatePieceButton> possiblePieceButtons) {
-        for (CandidatePieceButton btn : possiblePieceButtons) {
+        for (CandidatePieceButton btn : new ArrayList<>(possiblePieceButtons)) {
             this.remove(btn);                          // 화면에서 제거
             this.candidatePieceButtons.remove(btn);             // 실제 말 리스트에서도 제거 시도
         }
@@ -149,11 +165,30 @@ public class YutBoardV2 extends JPanel {
         repaint();     // 화면 다시 그리기
     }
 
+    public void updatePiecePosition(PieceButton btn) {
+        System.out.println("호출");
+        int startX, startY;
+        if(btn != null){
+            startX = btn.getPos()[0];
+            startY = btn.getPos()[1];
+            btn.setBounds(startX, startY, 20, 20);
+            repaint();
+        }
+    }
+
+    public PieceButton getPieceButton(Piece piece) {
+        for (PieceButton button : this.pieceButtons) {
+            if (Arrays.equals(button.getPiece().getPosition(), piece.getPosition())) {
+                return button;
+            }
+        }
+        return null;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBoard(g);
-
     }
 
     private void drawBoard(Graphics g) {
@@ -198,7 +233,17 @@ public class YutBoardV2 extends JPanel {
                 start = p;
             }
         }
-        g2.drawString("출발", start.x - 15, start.y + 5);
+
+        String label = "출발";
+        Font font = new Font("SansSerif", Font.BOLD, 16);
+        g2.setFont(font);
+
+        FontMetrics fm = g2.getFontMetrics(font);
+        int textWidth = fm.stringWidth(label);
+        int textHeight = fm.getHeight();
+
+        g2.setColor(Color.BLACK);
+        g2.drawString(label, start.x - textWidth / 2, start.y + textHeight / 2 - 6);
     }
 
     private void drawBetween(Graphics2D g2, Point from, Point to, int divisions, int size, boolean includeEnds) {
@@ -219,26 +264,53 @@ public class YutBoardV2 extends JPanel {
 //       g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
 //    }
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
-        g2.drawOval(x - size / 2, y - size / 2, size, size);
-
         if (board == null) return;
 
         Point point = new Point(x, y);
         int[][] indices = board.getIndicesAt(point);
 
-        if (indices != null) {
-            int offsetY = 0;
-            for (int[] idx : indices) {
-                g2.drawString("[" + idx[0] + ", " + idx[1] + "]", x + size / 2, y + size / 2 + offsetY);
-                offsetY += 12; // 여러 개 있을 경우 줄바꿈
+        boolean isSpecial = isSpecialIndex(indices);
+
+        // 중심점/꼭짓점이면 사이즈 키우기
+        int drawSize = size;
+        if (isSpecial) {
+            drawSize = size + 10; // 강조용 크기 증가
+        }
+
+        if (isSpecial) {
+            g2.setColor(new Color(230, 200, 250));
+            g2.fillOval(x - drawSize / 2, y - drawSize / 2, drawSize, drawSize);
+        } else {
+            g2.setColor(Color.BLACK);
+        }
+
+        g2.drawOval(x - drawSize / 2, y - drawSize / 2, drawSize, drawSize);
+
+//        if (indices != null) {
+//            int offsetY = 0;
+//            for (int[] idx : indices) {
+//                g2.drawString("[" + idx[0] + ", " + idx[1] + "]", x + size / 2, y + size / 2 + offsetY);
+//                offsetY += 12; // 여러 개 있을 경우 줄바꿈
+//            }
+//        }
+    }
+
+    private boolean isSpecialIndex(int[][] indices) {
+        if (indices == null) return false;
+        for (int[] idx : indices) {
+            if ((idx[0] == 1 && idx[1] == 8) || (idx[0] == 2 && idx[1] == 13) ||
+                    (idx[0] == 3 && idx[1] == 18) || (idx[0] == 0 && idx[1] % 5 == 0)) {
+                return true;
             }
         }
+        return false;
     }
 
     /* 말이 한 칸씩 이동 */
-    public void animatePieceMovement(PieceButton pieceButton, List<Point> path) {
+    public void animatePieceMovement(PieceButton pieceButton, List<Point> path, Runnable onComplete) {
         new Thread(() -> {
-            for (Point point : path) {
+            for (int i = 0; i < path.size(); i++) {
+                Point point = path.get(i);
                 SwingUtilities.invokeLater(() -> {
                     pieceButton.setPixelPosition(point);
                     repaint();
@@ -248,6 +320,36 @@ public class YutBoardV2 extends JPanel {
                     Thread.sleep(300);  // 이동 간 딜레이
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                }
+
+                if (onComplete != null && i == path.size() - 1) {
+                    SwingUtilities.invokeLater(onComplete);  // 애니메이션 끝난 후 실행
+                }
+            }
+        }).start();
+    }
+
+    /* 그룹화된 말들 한번에 이동 */
+    public void animateGroupedMovement(List<PieceButton> groupButtons, List<Point> path, Runnable onComplete) {
+        new Thread(() -> {
+            for (int i = 0; i < path.size(); i++) {
+                Point point = path.get(i);
+
+                SwingUtilities.invokeLater(() -> {
+                    for (PieceButton btn : groupButtons) {
+                        btn.setPixelPosition(point);
+                    }
+                    repaint();
+                });
+
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                if (onComplete != null && i == path.size() - 1) {
+                    SwingUtilities.invokeLater(onComplete);
                 }
             }
         }).start();

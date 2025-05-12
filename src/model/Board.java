@@ -5,12 +5,22 @@ import java.util.*;
 import java.util.List;
 
 public class Board {
-    private int numSides;
+    private final int numSides;
     private final Map<Point, int[][]> coordinateToIndexMap = new HashMap<>();
+    private final List<Player> players;
 
-    public Board(int numSides) {
+    public Board(int numSides, List<Player> players) {
         this.numSides = numSides;
+        this.players = new ArrayList<>(players);
         initializeCoordinateMap();
+    }
+
+    public int getPlayerCount() {
+        return players.size();
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public int getNumSides() {
@@ -75,8 +85,8 @@ public class Board {
         for (int[] entry : data) {
             Point point = new Point(entry[0], entry[1]);
             tempMap
-                .computeIfAbsent(point, k -> new ArrayList<>())
-                .add(new int[]{entry[2], entry[3]});
+                    .computeIfAbsent(point, k -> new ArrayList<>())
+                    .add(new int[]{entry[2], entry[3]});
         }
 
         for (Map.Entry<Point, List<int[]>> e : tempMap.entrySet()) {
@@ -115,9 +125,10 @@ public class Board {
             if (row == 0) { // 가장 바깥쪽에 있는 말인 경우
                 if (col == 0) { // 출발점인 경우
                     // finish
-                    return possiblePos; // 비어있는 배열을 반환
+                    System.out.println("-> 도착 가능합니다.");
+                    return new ArrayList<>(); // 비어있는 배열을 반환
                 }
-                else if (col == (numSides - 1) * 5) {
+                else if (col == (numSides - 1) * 5 && !prePositions.empty()) {
                     int[] recentPos = prePositions.peek();
                     possiblePos.add(new int[]{recentPos[0], recentPos[1]});
                 }
@@ -143,7 +154,8 @@ public class Board {
             nextPos[0] = row; nextPos[1] = col + step; // 바깥쪽으로 이동 가능 경로
             if (nextPos[1] > numSides * 5 || nextPos[1] < 0) { // 시작점을 지나 도착 가능한 경우
                 // finish
-                return possiblePos; // 비어있는 배열을 반환
+                System.out.println("-> 도착 가능합니다.");
+                return new ArrayList<>(); // 비어있는 배열을 반환
             }
             else {
                 possiblePos.add(new int[]{nextPos[0], nextPos[1]});
@@ -175,7 +187,7 @@ public class Board {
                 nextPos[0] = quotient; nextPos[1] = (5 * quotient + 3) + step;
             }
 
-            else if (numSides > 4 && nextPos[1] > 5 * nextPos[0] + 3) { // 중심점을 지나 이동한 경우, 사각형을 제외하고는 다른 규칙을 적용해야 함
+            else if (numSides > 4 && col < 5 * row + 3 && nextPos[1] > 5 * nextPos[0] + 3) { // 중심점을 지나 이동한 경우, 사각형을 제외하고는 다른 규칙을 적용해야 함
                 int e = nextPos[0] - (numSides - 4);
                 nextPos[0] = nextPos[0] - e;
                 nextPos[1] = nextPos[1] - 5 * e;
@@ -190,7 +202,8 @@ public class Board {
 
             if (nextPos[0] == quotient && nextPos[1] > 5 * (quotient + 1) + 1) { // 시작점을 지나 도착 가능한 경우
                 // finish
-                return possiblePos; // 비어있는 배열을 반환
+                System.out.println("-> 도착 가능합니다.");
+                return new ArrayList<>(); // 비어있는 배열을 반환
             }
             possiblePos.add(new int[]{nextPos[0], nextPos[1]});
         }
@@ -209,17 +222,17 @@ public class Board {
     }
 
     /* 한 칸씩 이동하기 위한 이동 경로 계산 */
-    public List<Point> calculatePath(int[] from, int[] to) {
+    public List<Point> calculatePath(int[] from, int[] to, YutResult yutResult) {
         List<int[]> path = new ArrayList<>();
 
-        // 빽도인 경우
-        if (to[1] == from[1] - 1) {
+        // 1. 빽도인 경우
+        if (yutResult == YutResult.BackDo) {
             path.add(from);
             path.add(to);
             return pathIndexToPoint(path);
         }
 
-        // 빽도가 아닌 도,개,걸,윷,모의 경우
+        // 2. 빽도가 아닌 도,개,걸,윷,모의 경우
         if (from[0] == to[0]) {
             for (int i = from[1]; i <= to[1]; i++) {
                 path.add(new int[]{from[0], i});
@@ -232,34 +245,48 @@ public class Board {
             // 1. 만약 출발 지점이 분기점이라면
             if (from[0] == 0 && from[1] % 5 == 0) {
                 // 1-1. 만약 도착 지점이 중심점 & 중심점 이전에 있다면 해당 칸까지의 이동거리 추가
-                if (to[1] - from[1] <= 3) {
-                    for (int i = curY; i <= to[1]; i++) {
-                        path.add(new int[]{curX, i});
-                    }
-                } else if (numSides == 4) {   // 1-2. 만약 도착 지점이 중심점을 넘어선다면
+                if (to[1] - from[1] <= 3 && to[1] - from[1] > 0) {
                     for (int i = curY; i <= to[1]; i++) {
                         path.add(new int[]{curX, i});
                     }
                 } else {
-                    while (true) {
-                        path.add(new int[]{curX, curY});
-
-                        // 현재 지점이 도착 지점이라면 while 문 종료
-                        if (curX == to[0] && curY == to[1]) {
-                            break;
+                    if (numSides == 4) {   // 1-2. 만약 도착 지점이 중심점을 넘어선다면
+                        for (int i = curY; i <= to[1]; i++) {
+                            path.add(new int[]{curX, i});
                         }
+                    } else {
+                        boolean passedCenter = false;
+                        while (true) {
+                            path.add(new int[]{curX, curY});
 
-                        // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
-                        // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
-                        if (isCenterPoint(curX, curY)) {
-                            curX = numSides / 2;
-                            curY = 5 * (numSides / 2) - 2;
+                            // 현재 지점이 도착 지점이라면 while 문 종료
+                            if (curX == to[0] && curY == to[1]) {
+                                break;
+                            }
+
+                            // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
+                            // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
+                            if (isCenterPoint(curX, curY) && !passedCenter) {
+                                curX = numSides / 3;
+                                curY = 5 * (numSides / 2) - 2;
+                                passedCenter = true;
+                            }
+
+                            curY++;
                         }
-                        curY++;
                     }
                 }
+            } else if (isCenterPoint(from[0], from[1])) {
+                // 2. 출발 지점이 중심점이라면
+                curX = numSides / 2;
+                curY = curX * 5 + 3;
+
+                for (int i = curY; i <= to[1]; i++) {
+                    path.add(new int[]{curX, i});
+                }
             } else {
-                // 2. 출발 지점이 분기점이 아니라면
+                // 3. 출발 지점이 분기점과 중심점이 아니라면
+                boolean passedCenter = false;
                 while (true) {
                     path.add(new int[]{curX, curY});
 
@@ -270,9 +297,10 @@ public class Board {
 
                     // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
                     // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
-                    if (isCenterPoint(curX, curY)) {
-                        curX = numSides / 2;
+                    if (isCenterPoint(curX, curY) && !passedCenter) {
+                        curX = numSides / 3;
                         curY = 5 * (numSides / 2) - 2;
+                        passedCenter = true;
                     }
                     curY++;
                 }
@@ -280,13 +308,14 @@ public class Board {
         } else { // from[0] > to[0]
             path.add(new int[]{from[0], from[1]});
 
-            int pointX = from[1] / 5;
+            int pointX = from[0];
             int pointY = from[1] + 1;
+            boolean passedCenter = false;
             while (true) {
                 // 현재 위치가 중간칸들을 빠져나가는 곳이라면
-                // numSides가 4라면 (1,11) -> (0, 15)
-                // numSides가 5라면 (1,11) -> (0, 20)
-                // numSides가 6이라면 (2,16) -> (0,25)
+                // numSides가 4라면 (1, 11) -> (0, 15)
+                // numSides가 5라면 (1, 11) -> (0, 20)
+                // numSides가 6이라면 (2, 16) -> (0, 25)
                 if (pointX == numSides / 3 && pointY == (numSides / 2) * 5 + 1) {
                     pointX = 0;
                     pointY = 5 * (numSides - 1);
@@ -294,16 +323,17 @@ public class Board {
 
                 path.add(new int[]{pointX, pointY});
 
-                // 현재 지점이 도착 지점이라면 while 문 종료
+                // 현재 지점이 도착 지점이라면 while문 종료
                 if (pointX == to[0] && pointY == to[1]) {
                     break;
                 }
 
                 // 현재 지점이 중심점이라면 -> 중심점을 지나가므로 경로를 변경시켜줌
-                // numSides가 5라면 (1,8)로, 6이라면 (2,13)으로 변경
-                if (isCenterPoint(pointX, pointY)) {
-                    pointX = numSides / 2;
+                // numSides가 5라면 (1, 8)로, 6이라면 (2, 13)으로 변경
+                if (isCenterPoint(pointX, pointY) && !passedCenter) {
+                    pointX = numSides / 3;
                     pointY = 5 * (numSides / 2) - 2;
+                    passedCenter = true;
                 }
 
                 pointY++;
@@ -349,13 +379,13 @@ public class Board {
     /* 상대 말 잡기 처리 */
     public void catchPiece(Piece piece) {
         // 해당 말의 위치를 시작 위치로 되돌리기
-        piece.setPosition(new int[]{0, 0});
-        if(piece.isGrouped() && !piece.getPieceGroup().isEmpty()) {
-            Piece group = piece.getPieceGroup().get(0);
-            group.removeGroupedPiece(piece);
-        } else {
-            piece.setGrouped(false);
+        piece.resetPosition();
+        System.out.println("catch: 윷을 한 번 더 던지세요.");
+    }
+
+    public void catchPiece(List<Piece> groupedPiece) {
+        for (Piece piece : groupedPiece) {
+            piece.resetPosition();
         }
-        System.out.println("상대 팀의 말을 잡습니다. 윷을 한 번 더 던지세요.");
     }
 }

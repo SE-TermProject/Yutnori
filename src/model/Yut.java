@@ -9,17 +9,17 @@ public class Yut {
 
     // 윷 던지기 (각 경우의 확률 설정)
     public String getRandomResult() {
-        int rand = random.nextInt(32); // 0부터 31까지의 랜덤 값 생성
+        int rand = random.nextInt(100); // 0부터 31까지의 랜덤 값 생성
 
-        if (rand < 2) {
+        if (rand < 6.25) {
             result = YutResult.BackDo;
-        } else if (rand < 3) {
+        } else if (rand < 25) {
             result = YutResult.DO;
-        } else if (rand < 4) {
+        } else if (rand < 62.5) {
             result = YutResult.GAE;
-        } else if (rand < 5) {
+        } else if (rand < 87.5) {
             result = YutResult.GUL;
-        } else if (rand < 20) {
+        } else if (rand < 93.75) {
             result = YutResult.YUT;
         } else {
             result = YutResult.MO;

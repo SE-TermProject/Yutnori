@@ -9,6 +9,10 @@ public class Player {
     public Player(int id, List<Piece> pieces) {
         this.id = id;
         this.pieces = pieces;
+
+        for (Piece piece : pieces) {
+            piece.setOwner(this);
+        }
     }
 
     public Piece selectPiece(int index) {

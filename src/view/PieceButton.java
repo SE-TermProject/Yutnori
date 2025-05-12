@@ -8,10 +8,13 @@ import java.awt.*;
 public class PieceButton extends JButton {
     private final Piece piece;
     private final int playerId;  // 플레이어 식별용
+    private Color currentColor;
+    private int[] Pos; // 초기 위치
 
     public PieceButton(Piece piece, int playerId) {
         this.piece = piece;
         this.playerId = playerId;
+        this.currentColor = getColorByPlayer(playerId);
 
         setPreferredSize(new Dimension(20, 20));
         setEnabled(false);  // 기본 비활성화
@@ -36,19 +39,25 @@ public class PieceButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(getColorByPlayer(playerId));
+        g.setColor(currentColor);
         g.fillOval(0, 0, getWidth(), getHeight());
 
-        int groupSize = piece.getPieceGroup().size() + 1;
+        int groupSize = piece.getPieceGroup().size();
         if(groupSize > 1) {
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.BOLD, 10));
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Arial", Font.BOLD, 14));
             String text = String.valueOf(groupSize);
             FontMetrics fm = g.getFontMetrics();
+
+            // 텍스트의 크기 계산
             int textWidth = fm.stringWidth(text);
             int textHeight = fm.getAscent();
 
-            g.drawString(text, (getWidth() - textWidth) / 2, (getHeight() - textHeight) / 2);
+            // 텍스트가 버튼의 중앙에 오도록 위치 계산
+            int x = (getWidth() - textWidth) / 2;
+            int y = (getHeight() + textHeight) / 2;  // y는 ascent를 고려해 세팅
+
+            g.drawString(text, x, y);
         }
     }
 
@@ -56,8 +65,8 @@ public class PieceButton extends JButton {
         return switch (playerId) {
             case 0 -> Color.RED;
             case 1 -> Color.BLUE;
-            case 2 -> Color.GREEN;
-            case 3 -> Color.YELLOW;
+            case 2 -> new Color(0, 128, 0);
+            case 3 -> new Color(255, 165, 0);
             default -> Color.GRAY;
         };
     }
@@ -69,6 +78,19 @@ public class PieceButton extends JButton {
         int adjustedX = center.x - width / 2;
         int adjustedY = center.y - height / 2;
         setLocation(adjustedX, adjustedY);
+        repaint();
     }
 
+    public void GetoutColor() {
+        this.currentColor = Color.GRAY;
+        repaint();
+    }
+
+    public void setPos(int x, int y) {
+        this.Pos = new int[]{x, y};
+    }
+
+    public int[] getPos() {
+        return Pos;
+    }
 }
