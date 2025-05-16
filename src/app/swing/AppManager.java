@@ -1,8 +1,8 @@
-package app;
+package app.swing;
 
-import controller.YutController;
-import view.GameSetupView;
-import view.YutBoardV2;
+import controller.swing.YutController;
+import view.swing.GameSetupView;
+import view.swing.YutBoard;
 
 public class AppManager {
     public void start() {
@@ -10,7 +10,7 @@ public class AppManager {
     }
 
     public void startGame(int sides, int playerCount, int pieceCount) {
-        YutBoardV2 board = new YutBoardV2();
+        YutBoard board = new YutBoard();
         YutController yutController = new YutController(this, sides, playerCount, pieceCount, board);
         yutController.initializeGameUI();
     }

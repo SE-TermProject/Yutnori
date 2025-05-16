@@ -1,9 +1,10 @@
-package view;
+package view.swing;
 
-import controller.YutController;
 import model.Board;
 import model.Piece;
 import model.YutResult;
+import view.CandidatePieceButton;
+import view.PieceButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class YutBoardV2 extends JPanel {
+public class YutBoard extends JPanel {
 
     private final JLabel resultLabel;
     private final JButton throwButton;
@@ -29,7 +30,7 @@ public class YutBoardV2 extends JPanel {
     private int numSides = 4;  // 기본값, 실제 값은 controller에서 설정
     private Board board;
 
-    public YutBoardV2() {
+    public YutBoard() {
         setLayout(null);
 
         throwButton = new JButton("랜덤 윷 던지기");

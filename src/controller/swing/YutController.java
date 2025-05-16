@@ -1,10 +1,10 @@
-package controller;
+package controller.swing;
 
-import app.AppManager;
+import app.swing.AppManager;
 import model.*;
 import view.CandidatePieceButton;
 import view.PieceButton;
-import view.YutBoardV2;
+import view.swing.YutBoard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,11 +19,11 @@ import java.util.List;
 public class YutController {
     private final AppManager appManager;
     private final Game game;
-    private final YutBoardV2 board;
+    private final YutBoard board;
     private boolean hasNonBonusYut = false; // 일반 윷이 한 번이라도 나왔는지 추적
     private final Map<Piece, PieceButton> pieceToButtonMap = new HashMap<>();
 
-    public YutController(AppManager appManager, int sides, int playerCount, int pieceCount, YutBoardV2 board) {
+    public YutController(AppManager appManager, int sides, int playerCount, int pieceCount, YutBoard board) {
         this.appManager = appManager;
         this.game = new Game(sides, playerCount, pieceCount);
         this.board = board;
