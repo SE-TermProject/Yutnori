@@ -1,6 +1,6 @@
-package view.Swing;
+package view.swing;
 
-import app.Swing.AppManager;
+import app.swing.AppManager;
 
 import javax.swing.*;
 import java.awt.*;

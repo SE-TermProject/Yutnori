@@ -1,4 +1,4 @@
-package app.Swing;
+package app.fx;
 
 public class Main {
     public static void main(String[] args) {

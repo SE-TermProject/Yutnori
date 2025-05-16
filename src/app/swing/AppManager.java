@@ -1,8 +1,8 @@
-package app.FX;
+package app.swing;
 
-import controller.FX.YutController;
-import view.Swing.GameSetupView;
-import view.Swing.YutBoard;
+import controller.swing.YutController;
+import view.swing.GameSetupView;
+import view.swing.YutBoard;
 
 public class AppManager {
     public void start() {

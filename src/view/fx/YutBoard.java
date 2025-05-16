@@ -1,4 +1,4 @@
-package view.FX;
+package view.fx;
 
 public class YutBoard {
 }

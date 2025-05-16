@@ -1,10 +1,10 @@
-package controller.Swing;
+package controller.swing;
 
-import app.Swing.AppManager;
+import app.swing.AppManager;
 import model.*;
 import view.CandidatePieceButton;
 import view.PieceButton;
-import view.Swing.YutBoard;
+import view.swing.YutBoard;
 
 import javax.swing.*;
 import java.awt.*;

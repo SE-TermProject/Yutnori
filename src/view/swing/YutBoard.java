@@ -1,4 +1,4 @@
-package view.Swing;
+package view.swing;
 
 import model.Board;
 import model.Piece;

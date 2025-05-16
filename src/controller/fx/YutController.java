@@ -1,4 +1,4 @@
-package controller.FX;
+package controller.fx;
 
 public class YutController {
 }
