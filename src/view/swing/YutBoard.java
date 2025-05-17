@@ -359,7 +359,7 @@ public class YutBoard extends JPanel {
             for (int i = 0; i < path.size(); i++) {
                 BoardPoint point = path.get(i);
                 SwingUtilities.invokeLater(() -> {
-                    pieceButton.setPixelPosition(point.toAwtPoint());
+                    pieceButton.setPixelPosition(point);
                     repaint();
                 });
 
@@ -384,7 +384,7 @@ public class YutBoard extends JPanel {
 
                 SwingUtilities.invokeLater(() -> {
                     for (PieceButton btn : groupButtons) {
-                        btn.setPixelPosition(point.toAwtPoint());
+                        btn.setPixelPosition(point);
                     }
                     repaint();
                 });
@@ -447,6 +447,6 @@ public class YutBoard extends JPanel {
     public void showPieceAsFinished(PieceButton btn) {
         int[] pos = btn.getPos();
         btn.setBounds(pos[0], pos[1], 20, 20);
-        btn.GetoutColor();
+        btn.setOutColor();
     }
 }

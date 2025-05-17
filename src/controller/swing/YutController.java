@@ -467,14 +467,14 @@ public class YutController {
         if(groupedPieces.size() == 0) {
             btn.getPiece().setFinished(true);
             btn.setBounds(btn.getPos()[0], btn.getPos()[1], 20, 20);
-            btn.GetoutColor();
+            btn.setOutColor();
             return;
         }
         for (int i = 0; i <  groupedPieces.size(); i++) {
             PieceButton _btn = pieceToButtonMap.get(groupedPieces.get(i));
             _btn.getPiece().setFinished(true);
             _btn.setBounds(_btn.getPos()[0], _btn.getPos()[1], 20, 20);
-            _btn.GetoutColor();
+            _btn.setOutColor();
         }
     }
 

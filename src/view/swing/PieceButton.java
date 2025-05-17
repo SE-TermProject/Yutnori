@@ -1,11 +1,13 @@
-package view;
+package view.swing;
 
 import model.Piece;
+import model.BoardPoint;
+import view.PieceButtonBase;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class PieceButton extends JButton {
+public class PieceButton extends JButton implements PieceButtonBase {
     private final Piece piece;
     private final int playerId;  // 플레이어 식별용
     private Color currentColor;
@@ -25,15 +27,25 @@ public class PieceButton extends JButton {
         setOpaque(false);
     }
 
+    @Override
     public Piece getPiece() {
         return piece;
     }
+    @Override
     public int getPlayerId() {
         return playerId;
     }
-
     public int[] getPosition() {
         return piece.getPosition();
+    }
+    @Override
+    public int[] getPos() {
+        return Pos;
+    }
+
+    @Override
+    public void setPos(int x, int y) {
+        this.Pos = new int[]{x, y};
     }
 
     @Override
@@ -71,7 +83,8 @@ public class PieceButton extends JButton {
         };
     }
 
-    public void setPixelPosition(Point center) {
+    @Override
+    public void setPixelPosition(BoardPoint center) {
         // 버튼 크기를 고려해서 중심에 배치되도록 보정
         int width = getPreferredSize().width;
         int height = getPreferredSize().height;
@@ -81,16 +94,9 @@ public class PieceButton extends JButton {
         repaint();
     }
 
-    public void GetoutColor() {
+    @Override
+    public void setOutColor() {
         this.currentColor = Color.GRAY;
         repaint();
-    }
-
-    public void setPos(int x, int y) {
-        this.Pos = new int[]{x, y};
-    }
-
-    public int[] getPos() {
-        return Pos;
     }
 }
