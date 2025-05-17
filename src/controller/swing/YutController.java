@@ -211,7 +211,7 @@ public class YutController {
                 BoardPoint point = game.getBoard().indexToPoint(pos);
 
                 CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), yutResult);
-                btn.setPixelPosition(point.toAwtPoint());
+                btn.setPixelPosition(point);
                 btn.setEnabled(true);
                 possiblePosButtons.add(btn);
             }
