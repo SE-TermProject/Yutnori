@@ -1,15 +1,19 @@
 package app.fx;
 
 import controller.fx.YutController;
-import view.swing.GameSetupView;
-import view.swing.YutBoard;
+import javafx.stage.Stage;
+import view.fx.GameSetupView;
+import view.fx.YutBoard;
 
 public class AppManager {
-    public void start() {
-        new GameSetupView(this);
+    private Stage primaryStage;
+
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        new GameSetupView(primaryStage, this);
     }
 
-    public void startGame(int sides, int playerCount, int pieceCount) {
+    private void startGame(int sides, int playerCount, int pieceCount) {
         YutBoard board = new YutBoard();
         YutController yutController = new YutController(this, sides, playerCount, pieceCount, board);
         yutController.initializeGameUI();
