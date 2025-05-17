@@ -20,7 +20,7 @@ public class AppManager {
     }
 
     public void restartGame() {
-        start();
+        start(this.primaryStage);
     }
 
     public void exitGame() {
