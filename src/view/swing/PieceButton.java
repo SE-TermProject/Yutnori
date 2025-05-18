@@ -11,7 +11,7 @@ public class PieceButton extends JButton implements PieceButtonBase {
     private final Piece piece;
     private final int playerId;  // 플레이어 식별용
     private Color currentColor;
-    private int[] Pos; // 초기 위치
+    private int[] pos; // 초기 위치
 
     public PieceButton(Piece piece, int playerId) {
         this.piece = piece;
@@ -40,12 +40,12 @@ public class PieceButton extends JButton implements PieceButtonBase {
     }
     @Override
     public int[] getPos() {
-        return Pos;
+        return pos;
     }
 
     @Override
     public void setPos(int x, int y) {
-        this.Pos = new int[]{x, y};
+        this.pos = new int[]{x, y};
     }
 
     @Override
