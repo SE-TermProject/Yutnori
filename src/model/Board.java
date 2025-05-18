@@ -1,12 +1,11 @@
 package model;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class Board {
     private final int numSides;
-    private final Map<Point, int[][]> coordinateToIndexMap = new HashMap<>();
+    private final Map<BoardPoint, int[][]> coordinateToIndexMap = new HashMap<>();
     private final List<Player> players;
 
     public Board(int numSides, List<Player> players) {
@@ -31,7 +30,7 @@ public class Board {
     }
 
     /* getter */
-    public int[][] getIndicesAt(Point point) {
+    public int[][] getIndicesAt(BoardPoint point) {
         return coordinateToIndexMap.get(point);
     }
 
@@ -85,16 +84,16 @@ public class Board {
             data = new int[0][];
         }
 
-        Map<Point, List<int[]>> tempMap = new HashMap<>();
+        Map<BoardPoint, List<int[]>> tempMap = new HashMap<>();
 
         for (int[] entry : data) {
-            Point point = new Point(entry[0], entry[1]);
+            BoardPoint point = new BoardPoint(entry[0], entry[1]);
             tempMap
                     .computeIfAbsent(point, k -> new ArrayList<>())
                     .add(new int[]{entry[2], entry[3]});
         }
 
-        for (Map.Entry<Point, List<int[]>> e : tempMap.entrySet()) {
+        for (Map.Entry<BoardPoint, List<int[]>> e : tempMap.entrySet()) {
             List<int[]> list = e.getValue();
             int[][] array = list.toArray(new int[0][]);
             coordinateToIndexMap.put(e.getKey(), array);
@@ -102,8 +101,8 @@ public class Board {
     }
 
     /* index -> point 변환 */
-    public Point indexToPoint(int[] index) {
-        for (Map.Entry<Point, int[][]> entry : coordinateToIndexMap.entrySet()) {
+    public BoardPoint indexToPoint(int[] index) {
+        for (Map.Entry<BoardPoint, int[][]> entry : coordinateToIndexMap.entrySet()) {
             for (int[] idx : entry.getValue()) {
                 if (idx[0] == index[0] && idx[1] == index[1]) {
                     return entry.getKey();  // 일치하는 좌표 반환
@@ -217,7 +216,7 @@ public class Board {
     }
 
     /* 한 칸씩 이동하기 위한 이동 경로 계산 */
-    public List<Point> calculatePath(int[] from, int[] to, YutResult yutResult) {
+    public List<BoardPoint> calculatePath(int[] from, int[] to, YutResult yutResult) {
         List<int[]> path = new ArrayList<>();
 
         // 1. 빽도인 경우
@@ -359,11 +358,11 @@ public class Board {
     }
 
     /* path index list -> point list 변환 */
-    private List<Point> pathIndexToPoint(List<int[]> pathIdx) {
-        List<Point> result = new ArrayList<>();
+    private List<BoardPoint> pathIndexToPoint(List<int[]> pathIdx) {
+        List<BoardPoint> result = new ArrayList<>();
 
         for (int[] targetIdx : pathIdx) {
-            Point point = indexToPoint(targetIdx);
+            BoardPoint point = indexToPoint(targetIdx);
             if (point != null) {
                 result.add(point);
             }
@@ -371,7 +370,7 @@ public class Board {
 
         System.out.println("말의 이동 경로: ");
         for (int i = 0; i < result.size(); i++) {
-            Point p = result.get(i);
+            BoardPoint p = result.get(i);
             int[] idx = pathIdx.get(i);
             System.out.printf("%d번째: (%d, %d) || (%d, %d)%n", i, idx[0], idx[1], p.x, p.y);
         }

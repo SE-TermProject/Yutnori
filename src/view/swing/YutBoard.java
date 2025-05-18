@@ -1,10 +1,9 @@
 package view.swing;
 
 import model.Board;
+import model.BoardPoint;
 import model.Piece;
 import model.YutResult;
-import view.CandidatePieceButton;
-import view.PieceButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -314,7 +313,7 @@ public class YutBoard extends JPanel {
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
         if (board == null) return;
 
-        Point point = new Point(x, y);
+        BoardPoint point = new BoardPoint(x, y);
         int[][] indices = board.getIndicesAt(point);
 
         boolean isSpecial = isSpecialIndex(indices);
@@ -355,10 +354,10 @@ public class YutBoard extends JPanel {
     }
 
     /* 말이 한 칸씩 이동 */
-    public void animatePieceMovement(PieceButton pieceButton, List<Point> path, Runnable onComplete) {
+    public void animatePieceMovement(PieceButton pieceButton, List<BoardPoint> path, Runnable onComplete) {
         new Thread(() -> {
             for (int i = 0; i < path.size(); i++) {
-                Point point = path.get(i);
+                BoardPoint point = path.get(i);
                 SwingUtilities.invokeLater(() -> {
                     pieceButton.setPixelPosition(point);
                     repaint();
@@ -378,10 +377,10 @@ public class YutBoard extends JPanel {
     }
 
     /* 그룹화된 말들 한번에 이동 */
-    public void animateGroupedMovement(List<PieceButton> groupButtons, List<Point> path, Runnable onComplete) {
+    public void animateGroupedMovement(List<PieceButton> groupButtons, List<BoardPoint> path, Runnable onComplete) {
         new Thread(() -> {
             for (int i = 0; i < path.size(); i++) {
-                Point point = path.get(i);
+                BoardPoint point = path.get(i);
 
                 SwingUtilities.invokeLater(() -> {
                     for (PieceButton btn : groupButtons) {
@@ -448,6 +447,6 @@ public class YutBoard extends JPanel {
     public void showPieceAsFinished(PieceButton btn) {
         int[] pos = btn.getPos();
         btn.setBounds(pos[0], pos[1], 20, 20);
-        btn.GetoutColor();
+        btn.setOutColor();
     }
 }

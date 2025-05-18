@@ -2,12 +2,11 @@ package controller.swing;
 
 import app.swing.AppManager;
 import model.*;
-import view.CandidatePieceButton;
-import view.PieceButton;
+import view.swing.CandidatePieceButton;
+import view.swing.PieceButton;
 import view.swing.YutBoard;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -209,7 +208,7 @@ public class YutController {
         List<YutResult> results = game.getYutResults();
         for (YutResult yutResult : results) {
             for (int[] pos : piecePossiblePos.get(yutResult)) {
-                Point point = game.getBoard().indexToPoint(pos);
+                BoardPoint point = game.getBoard().indexToPoint(pos);
 
                 CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), yutResult);
                 btn.setPixelPosition(point);
@@ -239,13 +238,13 @@ public class YutController {
             int[] to = destinationBtn.getPosition(game.getBoard().getNumSides()); // 도착 지점의 index
             destinationBtn.setPosition(to);
             /* 말 이동 로직 */
-            List<Point> piecePath = game.getBoard().calculatePath(from, to, destinationBtn.getYutResult());
+            List<BoardPoint> piecePath = game.getBoard().calculatePath(from, to, destinationBtn.getYutResult());
 
             performMove(selectedPiece, possiblePosButtons, destinationBtn, from, piecePath, destinationBtn);
         });
     }
 
-    private void performMove(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons, CandidatePieceButton destinationBtn, int[] from, List<Point> piecePath, CandidatePieceButton btn) {
+    private void performMove(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons, CandidatePieceButton destinationBtn, int[] from, List<BoardPoint> piecePath, CandidatePieceButton btn) {
         board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
 
         // 이동 후 실행할 공통 로직 정의
@@ -397,23 +396,23 @@ public class YutController {
         // 비어있는 위치는 비교하지 않음
         if (currentPosition.length < 2 || otherPosition.length < 2) return false;
 
-        Point current = new Point(currentPosition[0], currentPosition[1]);
-        Point other = new Point(otherPosition[0], otherPosition[1]);
+        BoardPoint current = new BoardPoint(currentPosition[0], currentPosition[1]);
+        BoardPoint other = new BoardPoint(otherPosition[0], otherPosition[1]);
 
-        Set<Point> centerPoint = Set.of(  // 중심점 인덱스
-                new Point(1, 8),
-                new Point(2, 13),
-                new Point(3, 18)
+        Set<BoardPoint> centerPoint = Set.of(  // 중심점 인덱스
+                new BoardPoint(1, 8),
+                new BoardPoint(2, 13),
+                new BoardPoint(3, 18)
         );
-        Set<Point> destinationPoint = switch (numSides) { // 도착지점 인덱스
-            case 4 -> Set.of(new Point(0, 0), new Point(0, 20), new Point(2, 16));
-            case 5 -> Set.of(new Point(0, 0), new Point(0, 25), new Point(2, 16));
-            case 6 -> Set.of(new Point(0, 0), new Point(0, 30), new Point(3, 21));
+        Set<BoardPoint> destinationPoint = switch (numSides) { // 도착지점 인덱스
+            case 4 -> Set.of(new BoardPoint(0, 0), new BoardPoint(0, 20), new BoardPoint(2, 16));
+            case 5 -> Set.of(new BoardPoint(0, 0), new BoardPoint(0, 25), new BoardPoint(2, 16));
+            case 6 -> Set.of(new BoardPoint(0, 0), new BoardPoint(0, 30), new BoardPoint(3, 21));
             default -> Set.of();
         };
-        Set<Point> finalCornerPoint = Set.of(  // 마지막 점
-                new Point(0, 5 * (numSides - 1)),
-                new Point(numSides / 3, (numSides / 2) * 5 + 1)
+        Set<BoardPoint> finalCornerPoint = Set.of(  // 마지막 점
+                new BoardPoint(0, 5 * (numSides - 1)),
+                new BoardPoint(numSides / 3, (numSides / 2) * 5 + 1)
         );
 
         // 1. 두 개가 동일한 piece가 아니어야 함
@@ -468,14 +467,14 @@ public class YutController {
         if(groupedPieces.size() == 0) {
             btn.getPiece().setFinished(true);
             btn.setBounds(btn.getPos()[0], btn.getPos()[1], 20, 20);
-            btn.GetoutColor();
+            btn.setOutColor();
             return;
         }
         for (int i = 0; i <  groupedPieces.size(); i++) {
             PieceButton _btn = pieceToButtonMap.get(groupedPieces.get(i));
             _btn.getPiece().setFinished(true);
             _btn.setBounds(_btn.getPos()[0], _btn.getPos()[1], 20, 20);
-            _btn.GetoutColor();
+            _btn.setOutColor();
         }
     }
 
