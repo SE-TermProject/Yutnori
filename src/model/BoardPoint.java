@@ -11,6 +11,13 @@ public class BoardPoint {
         this.y = y;
     }
 
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+
     public java.awt.Point toAwtPoint() {
         return new java.awt.Point(x, y);
     }
