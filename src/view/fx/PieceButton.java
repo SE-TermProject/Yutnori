@@ -3,14 +3,15 @@ package view.fx;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import model.BoardPoint;
 import model.Piece;
+import view.PieceButtonBase;
 
-import java.awt.*;
-
-public class PieceButton extends Button {
+public class PieceButton extends Button implements PieceButtonBase {
     private final Piece piece;
     private final int playerId;
     private Color currentColor;
+    private int[] pos;  // 초기 위치
 
     public PieceButton(Piece piece, int playerId) {
         this.piece = piece;
@@ -23,13 +24,23 @@ public class PieceButton extends Button {
         setStyle("-fx-background-color: " + toRgbString(currentColor));
     }
 
+    @Override
     public Piece getPiece() {
         return piece;
     }
+    @Override
     public int getPlayerId() {
         return playerId;
     }
-    public void setPixelPosition(Point center) {
+    @Override
+    public int[] getPos() { return pos; }
+
+    @Override
+    public void setPos(int x, int y) {
+        this.pos = new int[]{x, y};
+    }
+    @Override
+    public void setPixelPosition(BoardPoint center) {
         setLayoutX(center.x - 10);
         setLayoutY(center.y - 10);
     }
@@ -48,5 +59,10 @@ public class PieceButton extends Button {
         return "rgb(" + (int)(color.getRed() * 255) + "," +
                 (int)(color.getGreen() * 255) + "," +
                 (int)(color.getBlue() * 255) + ")";
+    }
+
+    @Override
+    public void setOutColor() {
+        this.setStyle("-fx-background-color: gray;");
     }
 }
