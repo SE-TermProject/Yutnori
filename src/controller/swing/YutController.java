@@ -7,6 +7,7 @@ import view.swing.PieceButton;
 import view.swing.YutBoard;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class YutController {
     private final AppManager appManager;
@@ -26,21 +28,37 @@ public class YutController {
         this.appManager = appManager;
         this.game = new Game(sides, playerCount, pieceCount);
         this.board = board;
+
+
+
+        initializeGameUI();
     }
 
     private void initializeGameUI() {
         board.setNumSides(game.getBoard().getNumSides());
-        board.setBoard(game.getBoard());
+
+        Set<Point> specialUIPoints = game.getBoard().getSpecialPoints()
+                .stream()
+                .map(BoardPoint::toAwtPoint)
+                .collect(Collectors.toSet());
+        board.setSpecialPoints(specialUIPoints);
 
         setupThrowButtons();
         setupInitialPieceButtons();
         board.setupFrame();
     }
 
+    private void updateResultPanel(List<YutResult> results) {
+        List<String> names = results.stream()
+                .map(YutResult::getKoreanName)
+                .toList();
+        board.updateResultList(names);
+    }
+
     private void setupThrowButtons() {
         board.setOnThrowButton(() -> {
             YutResult result = game.throwYut();
-            board.updateResultList(game.getYutResults());
+            updateResultPanel(game.getYutResults());
 
             if (!result.isBonusTurn()) hasNonBonusYut = true;
 
@@ -58,7 +76,8 @@ public class YutController {
         });
 
         for (YutResult result : YutResult.values()) {
-            board.setOnManualThrowButton(result, () -> handleManualThrow(result));
+            String name = result.name();
+            board.setOnManualThrowButton(name, () -> handleManualThrow(result));
         }
     }
 
@@ -123,7 +142,7 @@ public class YutController {
                                 if (possibleGetout(piece)) {
                                     YutResult useYut = getYutResult(piece);
 
-                                    board.showGetoutButton(useYut, () -> {
+                                    board.showGetoutButton(() -> {
                                         System.out.println(useYut + " 으로 나가기 가능"+ "\n");
 
                                         handleGetoutButtonClick(btn);
@@ -151,9 +170,9 @@ public class YutController {
                                             hasNonBonusYut = false;
                                             enableManualThrowButtons(true);
                                             board.getThrowButton().setEnabled(true);
-                                            board.updateResultList(game.getYutResults());
+                                            updateResultPanel(game.getYutResults());
                                         } else {
-                                            board.updateResultList(game.getYutResults());
+                                            updateResultPanel(game.getYutResults());
                                         }
                                         btn.getPiece().removeGroupedPiece();
                                     });
@@ -180,7 +199,7 @@ public class YutController {
     // 지정 윷 결과 처리 메서드
     private void handleManualThrow(YutResult result) {
         game.setManualYutResult(result);
-        board.updateResultList(game.getYutResults());
+        updateResultPanel(game.getYutResults());
 
         if (!result.isBonusTurn()) {
             hasNonBonusYut = true;
@@ -244,6 +263,16 @@ public class YutController {
         });
     }
 
+    private List<Point> boardPointToPoint(List<BoardPoint> piecePath) {
+        List<Point> piecePointPath = new ArrayList<>();
+
+        for (BoardPoint piecePoint : piecePath) {
+            piecePointPath.add(piecePoint.toAwtPoint());
+        }
+
+        return piecePointPath;
+    }
+
     private void performMove(PieceButton selectedPiece, List<CandidatePieceButton> possiblePosButtons, CandidatePieceButton destinationBtn, int[] from, List<BoardPoint> piecePath, CandidatePieceButton btn) {
         board.deletePieceButton(possiblePosButtons);  // 모든 이동 가능한 경로에 있던 버튼 제거
 
@@ -293,9 +322,9 @@ public class YutController {
                 }
             }
 
-            board.animateGroupedMovement(groupButtons, piecePath, onComplete);
+            board.animateGroupedMovement(groupButtons, boardPointToPoint(piecePath), onComplete);
         } else {
-            board.animatePieceMovement(selectedPiece, piecePath, onComplete);
+            board.animatePieceMovement(selectedPiece, boardPointToPoint(piecePath), onComplete);
         }
     }
 
@@ -304,7 +333,7 @@ public class YutController {
         boolean catchPieces = false;
 
         game.consumeResult(selectedBtn.getYutResult());
-        board.updateResultList(game.getYutResults());
+        updateResultPanel(game.getYutResults());
 
         System.out.println("=== 현재 모든 말의 위치와 소유자 ===");
         for (Player player : game.getPlayers()) {
@@ -325,7 +354,7 @@ public class YutController {
                         System.out.println("자기 팀의 말을 업습니다.");
                         groupedPiece.add(otherPiece);
                         //그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
-                        PieceButton pieceButton = board.getPieceButton(selectedPiece.getPiece());
+                        PieceButton pieceButton = pieceToButtonMap.get(selectedPiece.getPiece());
                         if (pieceButton != null) {
                             pieceButton.repaint();  // PieceButton을 다시 그려서 그룹 크기를 업데이트
                         }
@@ -493,7 +522,7 @@ public class YutController {
 
         System.out.println("빽도 나옴 -> 낙 처리");
         game.consumeResult(YutResult.BackDo);
-        board.updateResultList(game.getYutResults());
+        updateResultPanel(game.getYutResults());
 
         game.nextTurn();
         board.updateTurnLabel(game.getCurrentPlayer().getId());

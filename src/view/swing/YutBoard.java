@@ -1,16 +1,12 @@
 package view.swing;
 
-import model.Board;
-import model.BoardPoint;
-import model.Piece;
-import model.YutResult;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class YutBoard extends JPanel {
@@ -27,7 +23,7 @@ public class YutBoard extends JPanel {
     private final List<PieceButton> pieceButtons = new ArrayList<>();
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
     private int numSides = 4;  // 기본값, 실제 값은 controller에서 설정
-    private Board board;
+    private Set<Point> specialPoints = new HashSet<>();
 
     public YutBoard() {
         setLayout(null);
@@ -102,12 +98,16 @@ public class YutBoard extends JPanel {
         gameFrame.setVisible(true);
     }
 
+    public void setSpecialPoints(Set<Point> specialUIPoints) {
+        this.specialPoints = specialUIPoints;
+    }
+
     // 결과 리스트 업데이트 메서드
-    public void updateResultList(List<YutResult> results) {
+    public void updateResultList(List<String> resultName) {
         resultPanel.removeAll();
 
-        for (YutResult result : results) {
-            JLabel label = new JLabel(result.getKoreanName());
+        for (String name : resultName) {
+            JLabel label = new JLabel(name);
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             resultPanel.add(label);
         }
@@ -129,14 +129,15 @@ public class YutBoard extends JPanel {
         throwButton.addActionListener(e -> callback.run());
     }
 
-    public void setOnManualThrowButton(YutResult result, Runnable callback) {
-        JButton button = switch (result) {
-            case BackDo -> throwBackdo;
-            case DO -> throwDo;
-            case GAE -> throwGae;
-            case GUL -> throwGeol;
-            case YUT -> throwYut;
-            case MO -> throwMo;
+    public void setOnManualThrowButton(String resultName, Runnable callback) {
+        JButton button = switch (resultName) {
+            case "BackDo" -> throwBackdo;
+            case "DO" -> throwDo;
+            case "GAE" -> throwGae;
+            case "GUL" -> throwGeol;
+            case "YUT" -> throwYut;
+            case "MO" -> throwMo;
+            default -> throw new IllegalArgumentException("알 수 없는 윷 결과: " + resultName);
         };
         button.addActionListener(e -> callback.run());
     }
@@ -150,19 +151,6 @@ public class YutBoard extends JPanel {
         setComponentZOrder(label, 0);
     }
 
-    public void updateResult(List<YutResult> results) {
-        resultPanel.removeAll();
-
-        for (YutResult result : results) {
-            JLabel label = new JLabel(result.toString());
-            label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            resultPanel.add(label);
-        }
-
-        resultPanel.revalidate();
-        resultPanel.repaint();
-    }
-
     public void updateTurnLabel(int playerId) {
         turnLabel.setText((char)('A' + playerId) + "님의 차례입니다.");
     }
@@ -173,10 +161,6 @@ public class YutBoard extends JPanel {
     }
 
     public int getNumSides() { return numSides; }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
 
     public void setPieceButtons(List<PieceButton> pieceButtons) {
         for (PieceButton pieceButton : pieceButtons) {
@@ -232,14 +216,14 @@ public class YutBoard extends JPanel {
         }
     }
 
-    public PieceButton getPieceButton(Piece piece) {
-        for (PieceButton button : this.pieceButtons) {
-            if (Arrays.equals(button.getPiece().getPosition(), piece.getPosition())) {
-                return button;
-            }
-        }
-        return null;
-    }
+//    public PieceButton getPieceButton(Piece piece) {
+//        for (PieceButton button : this.pieceButtons) {
+//            if (Arrays.equals(button.getPiece().getPosition(), piece.getPosition())) {
+//                return button;
+//            }
+//        }
+//        return null;
+//    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -320,12 +304,8 @@ public class YutBoard extends JPanel {
 //       g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
 //    }
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
-        if (board == null) return;
-
-        BoardPoint point = new BoardPoint(x, y);
-        int[][] indices = board.getIndicesAt(point);
-
-        boolean isSpecial = isSpecialIndex(indices);
+        Point point = new Point(x, y);
+        boolean isSpecial = specialPoints.contains(point);
 
         // 중심점/꼭짓점이면 사이즈 키우기
         int drawSize = size;
@@ -351,22 +331,11 @@ public class YutBoard extends JPanel {
 //        }
     }
 
-    private boolean isSpecialIndex(int[][] indices) {
-        if (indices == null) return false;
-        for (int[] idx : indices) {
-            if ((idx[0] == 1 && idx[1] == 8) || (idx[0] == 2 && idx[1] == 13) ||
-                    (idx[0] == 3 && idx[1] == 18) || (idx[0] == 0 && idx[1] % 5 == 0)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /* 말이 한 칸씩 이동 */
-    public void animatePieceMovement(PieceButton pieceButton, List<BoardPoint> path, Runnable onComplete) {
+    public void animatePieceMovement(PieceButton pieceButton, List<Point> path, Runnable onComplete) {
         new Thread(() -> {
             for (int i = 0; i < path.size(); i++) {
-                BoardPoint point = path.get(i);
+                Point point = path.get(i);
                 SwingUtilities.invokeLater(() -> {
                     pieceButton.setPixelPosition(point);
                     repaint();
@@ -386,10 +355,10 @@ public class YutBoard extends JPanel {
     }
 
     /* 그룹화된 말들 한번에 이동 */
-    public void animateGroupedMovement(List<PieceButton> groupButtons, List<BoardPoint> path, Runnable onComplete) {
+    public void animateGroupedMovement(List<PieceButton> groupButtons, List<Point> path, Runnable onComplete) {
         new Thread(() -> {
             for (int i = 0; i < path.size(); i++) {
-                BoardPoint point = path.get(i);
+                Point point = path.get(i);
 
                 SwingUtilities.invokeLater(() -> {
                     for (PieceButton btn : groupButtons) {
@@ -439,7 +408,7 @@ public class YutBoard extends JPanel {
         repaint();
     }
 
-    public void showGetoutButton(YutResult useYut, Runnable onClick) {
+    public void showGetoutButton(Runnable onClick) {
         JButton btn = getEndPiece();
         btn.setEnabled(true);
         // 기존 리스너 제거
