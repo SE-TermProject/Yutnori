@@ -38,7 +38,7 @@ public class YutController {
     }
 
     private void setupThrowButtons() {
-        board.onThrowYutButtonClicked(() -> {
+        board.setOnThrowButton(() -> {
             YutResult result = game.throwYut();
             board.updateResultList(game.getYutResults());
 
@@ -58,7 +58,7 @@ public class YutController {
         });
 
         for (YutResult result : YutResult.values()) {
-            board.onManualThrowButtonClicked(result, () -> handleManualThrow(result));
+            board.setOnManualThrowButton(result, () -> handleManualThrow(result));
         }
     }
 

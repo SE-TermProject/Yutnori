@@ -36,7 +36,7 @@ public class YutBoard extends JPanel {
 
     private void initializeUI() {
         createThrowButtons();
-        createSelectedThrowButtons();
+        createManualThrowButtons();
         createEndPieceButton();
         createTurnInfoPanel();
         createResultPanel();
@@ -48,20 +48,20 @@ public class YutBoard extends JPanel {
         add(throwButton);
     }
 
-    private void createSelectedThrowButtons() {
+    private void createManualThrowButtons() {
         int y = 420;
         int w = 60;
         int h = 35;
 
-        throwBackdo = createSelectedThrowButton("빽도", 605, y, w, h);
-        throwDo = createSelectedThrowButton("도", 665, y, w, h);
-        throwGae = createSelectedThrowButton("개", 725, y, w, h);
-        throwGeol = createSelectedThrowButton("걸", 785, y, w, h);
-        throwYut = createSelectedThrowButton("윷", 845, y, w, h);
-        throwMo = createSelectedThrowButton("모", 905, y, w, h);
+        throwBackdo = createManualThrowButton("빽도", 605, y, w, h);
+        throwDo = createManualThrowButton("도", 665, y, w, h);
+        throwGae = createManualThrowButton("개", 725, y, w, h);
+        throwGeol = createManualThrowButton("걸", 785, y, w, h);
+        throwYut = createManualThrowButton("윷", 845, y, w, h);
+        throwMo = createManualThrowButton("모", 905, y, w, h);
     }
 
-    private JButton createSelectedThrowButton(String text, int x, int y, int w, int h) {
+    private JButton createManualThrowButton(String text, int x, int y, int w, int h) {
         JButton button = new JButton(text);
         button.setBounds(x, y, w, h);
         add(button);
@@ -125,11 +125,11 @@ public class YutBoard extends JPanel {
     public JButton getThrowMo() { return throwMo; }
     public JButton getEndPiece() { return endPiece; }
 
-    public void onThrowYutButtonClicked(Runnable callback) {
+    public void setOnThrowButton(Runnable callback) {
         throwButton.addActionListener(e -> callback.run());
     }
 
-    public void onManualThrowButtonClicked(YutResult result, Runnable callback) {
+    public void setOnManualThrowButton(YutResult result, Runnable callback) {
         JButton button = switch (result) {
             case BackDo -> throwBackdo;
             case DO -> throwDo;
