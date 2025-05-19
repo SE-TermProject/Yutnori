@@ -30,6 +30,7 @@ public class YutBoard extends JPanel {
         initializeUI();
     }
 
+    /* 초기 UI 구축 */
     private void initializeUI() {
         createThrowButtons();
         createManualThrowButtons();
@@ -38,12 +39,14 @@ public class YutBoard extends JPanel {
         createResultPanel();
     }
 
+    /* 랜덤 윷 던지기 버튼 생성 */
     private void createThrowButtons() {
         throwButton = new JButton("랜덤 윷 던지기");
         throwButton.setBounds(605, 370, 360, 45);
         add(throwButton);
     }
 
+    /* 지정 윷 던지기 버튼 생성 */
     private void createManualThrowButtons() {
         int y = 420;
         int w = 60;
@@ -56,7 +59,6 @@ public class YutBoard extends JPanel {
         throwYut = createManualThrowButton("윷", 845, y, w, h);
         throwMo = createManualThrowButton("모", 905, y, w, h);
     }
-
     private JButton createManualThrowButton(String text, int x, int y, int w, int h) {
         JButton button = new JButton(text);
         button.setBounds(x, y, w, h);
@@ -64,6 +66,7 @@ public class YutBoard extends JPanel {
         return button;
     }
 
+    /* 내보내기 버튼 생성 */
     private void createEndPieceButton() {
         endPiece = new JButton("내보내기");
         endPiece.setBounds(480, 550, 90, 40);
@@ -71,6 +74,7 @@ public class YutBoard extends JPanel {
         add(endPiece);
     }
 
+    /* 현재 플레이어 순서 라벨 생성 */
     private void createTurnInfoPanel() {
         turnLabel = new JLabel("A님의 차례입니다.");
         turnLabel.setBounds(610, 470, 200, 30);
@@ -81,6 +85,7 @@ public class YutBoard extends JPanel {
         add(resultLabel);
     }
 
+    /* 현재 시점까지 던진&남은 윷 결과 표시 */
     private void createResultPanel() {
         resultPanel = new JPanel();
         resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -98,6 +103,7 @@ public class YutBoard extends JPanel {
         gameFrame.setVisible(true);
     }
 
+    /* setter */
     public void setSpecialPoints(Set<Point> specialUIPoints) {
         this.specialPoints = specialUIPoints;
     }
@@ -116,6 +122,7 @@ public class YutBoard extends JPanel {
         resultPanel.repaint();
     }
 
+    /* getter */
     public JButton getThrowButton() { return throwButton; }
     public JButton getThrowBackdo() { return throwBackdo; }
     public JButton getThrowDo() { return throwDo; }
@@ -125,10 +132,29 @@ public class YutBoard extends JPanel {
     public JButton getThrowMo() { return throwMo; }
     public JButton getEndPiece() { return endPiece; }
 
+    /* setter */
+    public void setNumSides(int numSides) {
+        this.numSides = numSides;
+    }
+
+    public int getNumSides() { return numSides; }
+
+    /* setter */
+    public void setPieceButtons(List<PieceButton> pieceButtons) {
+        for (PieceButton pieceButton : pieceButtons) {
+            this.add(pieceButton);
+        }
+        this.pieceButtons.clear();
+        this.pieceButtons.addAll(pieceButtons);
+        repaint();
+    }
+
+    /* 랜덤 윷 던지기 버튼 클릭 시 실행할 동작 등록 */
     public void setOnThrowButton(Runnable callback) {
         throwButton.addActionListener(e -> callback.run());
     }
 
+    /* 지정 윷 던지기 버튼 클릭 시 실행할 동작 등록 */
     public void setOnManualThrowButton(String resultName, Runnable callback) {
         JButton button = switch (resultName) {
             case "BackDo" -> throwBackdo;
@@ -142,6 +168,7 @@ public class YutBoard extends JPanel {
         button.addActionListener(e -> callback.run());
     }
 
+    /* 말 옆에 player 라벨 달기 */
     public void addPlayerLabel(int playerId, int x, int y) {
         char playerChar = (char) ('A' + playerId);
         JLabel label = new JLabel(String.valueOf(playerChar));
@@ -151,27 +178,12 @@ public class YutBoard extends JPanel {
         setComponentZOrder(label, 0);
     }
 
+    /* 현재 player에 따른 순서 표시 변경 */
     public void updateTurnLabel(int playerId) {
         turnLabel.setText((char)('A' + playerId) + "님의 차례입니다.");
     }
 
-
-    public void setNumSides(int numSides) {
-        this.numSides = numSides;
-    }
-
-    public int getNumSides() { return numSides; }
-
-    public void setPieceButtons(List<PieceButton> pieceButtons) {
-        for (PieceButton pieceButton : pieceButtons) {
-            this.add(pieceButton);
-        }
-        this.pieceButtons.clear();
-        this.pieceButtons.addAll(pieceButtons);
-        repaint();
-
-    }
-
+    /* 윷 던지기 버튼 및 수동 윷 던지기 버튼의 활성화 여부 선택 */
     public void setThrowButtonsEnabled(boolean enabled) {
         throwButton.setEnabled(enabled);
         throwBackdo.setEnabled(enabled);
@@ -196,6 +208,7 @@ public class YutBoard extends JPanel {
         this.repaint();
     }
 
+    /* 후보 칸 버튼들을 화면에서 제거하고, 내부 리스트에서도 제거 */
     public void deletePieceButton(List<CandidatePieceButton> possiblePieceButtons) {
         for (CandidatePieceButton btn : new ArrayList<>(possiblePieceButtons)) {
             this.remove(btn);                          // 화면에서 제거
@@ -206,6 +219,7 @@ public class YutBoard extends JPanel {
         repaint();     // 화면 다시 그리기
     }
 
+    /* 이동하는 말(pieceButton)의 위치를 업데이트하며 화면에 반영 */
     public void updatePiecePosition(PieceButton btn) {
         System.out.println("호출");
         int startX, startY;
@@ -235,6 +249,7 @@ public class YutBoard extends JPanel {
         drawBoard(g);
     }
 
+    /* 윷놀이 판 그리기 */
     private void drawBoard(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -270,7 +285,8 @@ public class YutBoard extends JPanel {
         g2.setColor(Color.BLACK);
         g2.drawString(label, start.x - textWidth / 2, start.y + textHeight / 2 - 6);
     }
-    
+
+    /* 윷놀이 판의 각 칸 그리기 */
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
         Point point = new Point(x, y);
         boolean isSpecial = specialPoints.contains(point);
@@ -317,6 +333,7 @@ public class YutBoard extends JPanel {
         }).start();
     }
 
+    /* player 우승 시 게임 재시작 및 종료 선택창 띄우기 */
     public int showGameOverDialog(String winnerName) {
         return JOptionPane.showOptionDialog(
                 this,
@@ -330,21 +347,12 @@ public class YutBoard extends JPanel {
         );
     }
 
+    /* 메시지 창 띄우기 */
     public void showMessageDialog(String message, String title) {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
     }
 
-    public void showCandidateButtons(List<CandidatePieceButton> buttons, Consumer<CandidatePieceButton> onClick) {
-        for (CandidatePieceButton button : buttons) {
-            this.add(button);
-            this.setComponentZOrder(button, 0);
-            button.addActionListener(e -> onClick.accept(button));
-        }
-
-        revalidate();
-        repaint();
-    }
-
+    /* 말이 도착 지점에 도착할 수 있는 경우 내보내기 버튼 활성화 */
     public void showGetoutButton(Runnable onClick) {
         JButton btn = getEndPiece();
         btn.setEnabled(true);
