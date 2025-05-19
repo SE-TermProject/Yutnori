@@ -28,7 +28,7 @@ public class YutController {
         this.board = board;
     }
 
-    public void initializeGameUI() {
+    private void initializeGameUI() {
         board.setNumSides(game.getBoard().getNumSides());
         board.setBoard(game.getBoard());
 
