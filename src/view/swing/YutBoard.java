@@ -1,5 +1,7 @@
 package view.swing;
 
+import controller.swing.BoardLayoutCalculator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -236,65 +238,35 @@ public class YutBoard extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int size = 30;
-        int centerX = 350, centerY = 350, radius = 200;
+        Point center = new Point(350, 350);
+        int radius = 200;
 
-        Point center = new Point(centerX, centerY);
         drawCircle(g2, center.x, center.y, size);
 
-        double startAngle;
-        switch (numSides) {
-            case 4: startAngle = Math.PI / 4; break;
-            case 5: startAngle = Math.PI / 2 + Math.PI / 5; break;
-            case 6: startAngle = 0; break;
-            default: startAngle = -Math.PI / 2;
-        }
-
-        List<Point> vertices = new ArrayList<Point>();
-        for (int i = 0; i < numSides; i++) {
-            double angle = 2 * Math.PI * i / numSides + startAngle;
-            int x = centerX + (int) (radius * Math.cos(angle));
-            int y = centerY + (int) (radius * Math.sin(angle));
-            vertices.add(new Point(x, y));
-        }
+        BoardLayoutCalculator layout = new BoardLayoutCalculator(numSides, center, radius);
+        List<Point> vertices = layout.calculateVertices();
 
         for (Point vertex : vertices) {
-            drawBetween(g2, vertex, center, 3, size, false);
+            List<Point> mids = layout.calculateIntermediatePoints(vertex, center, 3, false);
+            for (Point p : mids) drawCircle(g2, p.x, p.y, size);
         }
 
         for (int i = 0; i < vertices.size(); i++) {
-            drawBetween(g2, vertices.get(i), vertices.get((i + 1) % vertices.size()), 5, size, true);
+            List<Point> mids = layout.calculateIntermediatePoints(
+                    vertices.get(i), vertices.get((i + 1) % vertices.size()), 5, true);
+            for (Point p : mids) drawCircle(g2, p.x, p.y, size);
         }
 
-        Point start = vertices.get(0);
-        for (Point p : vertices) {
-            if ((numSides == 6 && p.y > start.y) ||
-                    (numSides == 5 && p.y >= start.y && p.x >= start.x) ||
-                    (numSides != 5 && numSides != 6 && p.y >= start.y && p.x >= start.x)) {
-                start = p;
-            }
-        }
-
+        // 출발 텍스트 표시
+        Point start = layout.findStartPoint(vertices);
         String label = "출발";
         Font font = new Font("SansSerif", Font.BOLD, 16);
         g2.setFont(font);
-
         FontMetrics fm = g2.getFontMetrics(font);
         int textWidth = fm.stringWidth(label);
         int textHeight = fm.getHeight();
-
         g2.setColor(Color.BLACK);
         g2.drawString(label, start.x - textWidth / 2, start.y + textHeight / 2 - 6);
-    }
-
-    private void drawBetween(Graphics2D g2, Point from, Point to, int divisions, int size, boolean includeEnds) {
-        int start = includeEnds ? 0 : 1;
-        int end = includeEnds ? divisions : divisions - 1;
-        for (int i = start; i <= end; i++) {
-            double t = i / (double) divisions;
-            int x = (int) (from.x * (1 - t) + to.x * t);
-            int y = (int) (from.y * (1 - t) + to.y * t);
-            drawCircle(g2, x, y, size);
-        }
     }
 
 //    private void drawCircle(Graphics2D g2, int x, int y, int size) {
