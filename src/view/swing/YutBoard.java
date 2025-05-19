@@ -331,31 +331,8 @@ public class YutBoard extends JPanel {
 //        }
     }
 
-    /* 말이 한 칸씩 이동 */
-    public void animatePieceMovement(PieceButton pieceButton, List<Point> path, Runnable onComplete) {
-        new Thread(() -> {
-            for (int i = 0; i < path.size(); i++) {
-                Point point = path.get(i);
-                SwingUtilities.invokeLater(() -> {
-                    pieceButton.setPixelPosition(point);
-                    repaint();
-                });
-
-                try {
-                    Thread.sleep(300);  // 이동 간 딜레이
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-
-                if (onComplete != null && i == path.size() - 1) {
-                    SwingUtilities.invokeLater(onComplete);  // 애니메이션 끝난 후 실행
-                }
-            }
-        }).start();
-    }
-
-    /* 그룹화된 말들 한번에 이동 */
-    public void animateGroupedMovement(List<PieceButton> groupButtons, List<Point> path, Runnable onComplete) {
+    /* 말&그룹화된 말들 한 칸씩 이동 */
+    public void animatePieceMovement(List<PieceButton> groupButtons, List<Point> path, Runnable onComplete) {
         new Thread(() -> {
             for (int i = 0; i < path.size(); i++) {
                 Point point = path.get(i);

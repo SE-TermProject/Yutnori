@@ -311,21 +311,17 @@ public class YutController {
             handleAfterMove(btn, selectedPiece);
         };
 
-        if (selectedPiece.getPiece().isGrouped()) {
-            List<PieceButton> groupButtons = new ArrayList<>();
-            groupButtons.add(selectedPiece);
+        List<PieceButton> groupButtons = new ArrayList<>();
+        groupButtons.add(selectedPiece);
 
-            for (Piece grouped : selectedPiece.getPiece().getPieceGroup()) {
-                PieceButton groupedBtn = pieceToButtonMap.get(grouped);
-                if (groupedBtn != null) {
-                    groupButtons.add(groupedBtn);
-                }
+        for (Piece grouped : selectedPiece.getPiece().getPieceGroup()) {
+            PieceButton groupedBtn = pieceToButtonMap.get(grouped);
+            if (groupedBtn != null) {
+                groupButtons.add(groupedBtn);
             }
-
-            board.animateGroupedMovement(groupButtons, boardPointToPoint(piecePath), onComplete);
-        } else {
-            board.animatePieceMovement(selectedPiece, boardPointToPoint(piecePath), onComplete);
         }
+
+        board.animatePieceMovement(groupButtons, boardPointToPoint(piecePath), onComplete);
     }
 
     private void handleAfterMove(CandidatePieceButton selectedBtn, PieceButton selectedPiece) {
