@@ -20,8 +20,6 @@ public class YutBoard extends JPanel {
     private JLabel turnLabel;
     private JPanel resultPanel;
 
-//    private final Map<Point, int[]> coordinateToIndexMap = new HashMap<>();
-//    private final List<Player> players;
     private final List<PieceButton> pieceButtons = new ArrayList<>();
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
     private int numSides = 4;  // 기본값, 실제 값은 controller에서 설정
@@ -218,15 +216,6 @@ public class YutBoard extends JPanel {
         }
     }
 
-//    public PieceButton getPieceButton(Piece piece) {
-//        for (PieceButton button : this.pieceButtons) {
-//            if (Arrays.equals(button.getPiece().getPosition(), piece.getPosition())) {
-//                return button;
-//            }
-//        }
-//        return null;
-//    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -268,13 +257,7 @@ public class YutBoard extends JPanel {
         g2.setColor(Color.BLACK);
         g2.drawString(label, start.x - textWidth / 2, start.y + textHeight / 2 - 6);
     }
-
-//    private void drawCircle(Graphics2D g2, int x, int y, int size) {
-//        g2.drawOval(x - size / 2, y - size / 2, size, size);
-//        int[] index = coordinateToIndexMap.getOrDefault(new Point(x, y), new int[]{-1, -1});
-//        g2.drawString("[" + index[0] + ", " + index[1] + "]", x + size / 2, y + size / 2);
-//       g2.drawString("(" + x + ", " + y + ")", x - size / 2, y - size / 2 - 5);
-//    }
+    
     private void drawCircle(Graphics2D g2, int x, int y, int size) {
         Point point = new Point(x, y);
         boolean isSpecial = specialPoints.contains(point);
@@ -293,14 +276,6 @@ public class YutBoard extends JPanel {
         }
 
         g2.drawOval(x - drawSize / 2, y - drawSize / 2, drawSize, drawSize);
-
-//        if (indices != null) {
-//            int offsetY = 0;
-//            for (int[] idx : indices) {
-//                g2.drawString("[" + idx[0] + ", " + idx[1] + "]", x + size / 2, y + size / 2 + offsetY);
-//                offsetY += 12; // 여러 개 있을 경우 줄바꿈
-//            }
-//        }
     }
 
     /* 말&그룹화된 말들 한 칸씩 이동 */
