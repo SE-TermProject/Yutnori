@@ -182,7 +182,8 @@ public class YutBoard extends JPanel {
         throwMo.setEnabled(enabled);
     }
 
-    public void setPossiblePieceButtons(List<CandidatePieceButton> possiblePieceButtons) {
+    /* 선택한 말이 이동할 수 있는 후보 칸들을 화면에 표시 */
+    public void showCandidateButtons(List<CandidatePieceButton> possiblePieceButtons) {
         deletePieceButton(candidatePieceButtons);
         for (CandidatePieceButton pieceButton : possiblePieceButtons) {
             this.add(pieceButton);
@@ -214,6 +215,18 @@ public class YutBoard extends JPanel {
             btn.setBounds(startX, startY, 20, 20);
             repaint();
         }
+    }
+
+    /* 선택한 말이 이동할 수 있는 후보 칸 버튼 클릭 시 동작 연결 */
+    public void moveActionToCandidates(List<CandidatePieceButton> buttons, Consumer<CandidatePieceButton> onClick) {
+        for (CandidatePieceButton button : buttons) {
+            this.add(button);
+            this.setComponentZOrder(button, 0);
+            button.addActionListener(e -> onClick.accept(button));
+        }
+
+        revalidate();
+        repaint();
     }
 
     @Override
