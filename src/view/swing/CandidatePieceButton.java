@@ -1,12 +1,14 @@
-package view;
+package view.swing;
 
+import model.BoardPoint;
 import model.YutResult;
+import view.CandidatePieceButtonBase;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
-public class CandidatePieceButton extends JButton {
+public class CandidatePieceButton extends JButton implements CandidatePieceButtonBase {
     private final int[] position;
     private final int playerId;  // 플레이어 식별용
     private final YutResult yutResult;
@@ -25,24 +27,26 @@ public class CandidatePieceButton extends JButton {
         setOpaque(false);
     }
 
+    @Override
     public int[] getPosition() {
         return position;
     }
-
+    @Override
     public int[] getPosition(int numSides) {
         if (position[0] == 0 && position[1] == 0) { // 시작점으로 도착하면
             return new int[]{0, numSides * 5};
         }
         return position;
     }
+    @Override
+    public YutResult getYutResult() {
+        return yutResult;
+    }
 
+    @Override
     public void setPosition(int[] position) {
         this.position[0] = position[0];
         this.position[1] = position[1];
-    }
-
-    public YutResult getYutResult() {
-        return yutResult;
     }
 
     @Override
@@ -62,7 +66,8 @@ public class CandidatePieceButton extends JButton {
         };
     }
 
-    public void setPixelPosition(Point center) {
+    @Override
+    public void setPixelPosition(BoardPoint center) {
         // 버튼 크기를 고려해서 중심에 배치되도록 보정
         int width = getPreferredSize().width;
         int height = getPreferredSize().height;
