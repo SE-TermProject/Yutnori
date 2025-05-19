@@ -15,10 +15,10 @@ import java.util.function.Consumer;
 
 public class YutBoard extends JPanel {
 
-    private final JLabel resultLabel;
-    private final JButton throwButton;
-    private final JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
-    private final JButton endPiece;
+    private JLabel resultLabel;
+    private JButton throwButton;
+    private JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
+    private JButton endPiece;
     private JLabel turnLabel;
     private JPanel resultPanel;
 
@@ -31,44 +31,51 @@ public class YutBoard extends JPanel {
 
     public YutBoard() {
         setLayout(null);
+        initializeUI();
+    }
 
+    private void initializeUI() {
+        createThrowButtons();
+        createSelectedThrowButtons();
+        createEndPieceButton();
+        createTurnInfoPanel();
+        createResultPanel();
+    }
+
+    private void createThrowButtons() {
         throwButton = new JButton("랜덤 윷 던지기");
         throwButton.setBounds(605, 370, 360, 45);
         add(throwButton);
+    }
 
+    private void createSelectedThrowButtons() {
         int y = 420;
         int w = 60;
         int h = 35;
 
-        throwBackdo = new JButton("빽도");
-        throwBackdo.setBounds(605, y, w, h);
-        add(throwBackdo);
+        throwBackdo = createSelectedThrowButton("빽도", 605, y, w, h);
+        throwDo = createSelectedThrowButton("도", 665, y, w, h);
+        throwGae = createSelectedThrowButton("개", 725, y, w, h);
+        throwGeol = createSelectedThrowButton("걸", 785, y, w, h);
+        throwYut = createSelectedThrowButton("윷", 845, y, w, h);
+        throwMo = createSelectedThrowButton("모", 905, y, w, h);
+    }
 
-        throwDo = new JButton("도");
-        throwDo.setBounds(665, y, w, h);
-        add(throwDo);
+    private JButton createSelectedThrowButton(String text, int x, int y, int w, int h) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, w, h);
+        add(button);
+        return button;
+    }
 
-        throwGae = new JButton("개");
-        throwGae.setBounds(725, y, w, h);
-        add(throwGae);
-
-        throwGeol = new JButton("걸");
-        throwGeol.setBounds(785, y, w, h);
-        add(throwGeol);
-
-        throwYut = new JButton("윷");
-        throwYut.setBounds(845, y, w, h);
-        add(throwYut);
-
-        throwMo = new JButton("모");
-        throwMo.setBounds(905, y, w, h);
-        add(throwMo);
-
+    private void createEndPieceButton() {
         endPiece = new JButton("내보내기");
         endPiece.setBounds(480, 550, 90, 40);
         endPiece.setEnabled(false);
         add(endPiece);
+    }
 
+    private void createTurnInfoPanel() {
         turnLabel = new JLabel("A님의 차례입니다.");
         turnLabel.setBounds(610, 470, 200, 30);
         add(turnLabel);
@@ -76,7 +83,9 @@ public class YutBoard extends JPanel {
         resultLabel = new JLabel("윷 결과 🐎");
         resultLabel.setBounds(610, 500, 180, 30);
         add(resultLabel);
+    }
 
+    private void createResultPanel() {
         resultPanel = new JPanel();
         resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         resultPanel.setBounds(605, 530, 300, 100);
