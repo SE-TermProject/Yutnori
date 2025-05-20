@@ -136,7 +136,7 @@ public class YutController {
 
                                 // 이동 가능 위치 버튼 생성 및 표시
                                 List<CandidatePieceButton> previewButtons = generatePossiblePieceButtons(piece);
-                                board.setPossiblePieceButtons(previewButtons);
+                                board.showCandidateButtons(previewButtons);
 
                                 // 내보내기가 가능할 때, 버튼 켜기
                                 if (possibleGetout(piece)) {
@@ -248,7 +248,7 @@ public class YutController {
         }
         System.out.println("말의 출발 지점: [" + from[0] + ", " + from[1] + "]");
 
-        board.showCandidateButtons(possiblePosButtons, destinationBtn -> {
+        board.moveActionToCandidates(possiblePosButtons, destinationBtn -> {
             board.getEndPiece().setEnabled(false);
             if (game.getYutResults().isEmpty()) return;
 
