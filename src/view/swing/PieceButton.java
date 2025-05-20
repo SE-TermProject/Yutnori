@@ -1,7 +1,6 @@
 package view.swing;
 
 import model.Piece;
-import model.BoardPoint;
 import view.PieceButtonBase;
 
 import javax.swing.*;
@@ -83,8 +82,7 @@ public class PieceButton extends JButton implements PieceButtonBase {
         };
     }
 
-    @Override
-    public void setPixelPosition(BoardPoint center) {
+    public void setPixelPosition(Point center) {
         // 버튼 크기를 고려해서 중심에 배치되도록 보정
         int width = getPreferredSize().width;
         int height = getPreferredSize().height;
