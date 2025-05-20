@@ -42,8 +42,8 @@ public class PieceButton extends Button implements PieceButtonBase {
     }
 
     public void setPixelPosition(Point2D center) {
-        setLayoutX(center.x - 10);
-        setLayoutY(center.y - 10);
+        setLayoutX(center.getX() - 10);
+        setLayoutY(center.getY() - 10);
     }
 
     private Color getColorByPlayer(int playerId) {
