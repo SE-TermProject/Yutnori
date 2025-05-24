@@ -29,11 +29,6 @@ public class Board {
         return numSides;
     }
 
-    /* getter */
-    public int[][] getIndicesAt(BoardPoint point) {
-        return coordinateToIndexMap.get(point);
-    }
-
     /* 각 칸 좌표 초기 설정 */
     public void initializeCoordinateMap() {
         int[][] data;
@@ -110,6 +105,28 @@ public class Board {
             }
         }
         return null;
+    }
+
+    /* 특수 좌표(꼭짓점, 중심점) 리스트 반환 */
+    public Set<BoardPoint> getSpecialPoints() {
+        Set<BoardPoint> specialPoints = new HashSet<>();
+        for (Map.Entry<BoardPoint, int[][]> entry : coordinateToIndexMap.entrySet()) {
+            if (isSpecialIndex(entry.getValue())) {
+                specialPoints.add(entry.getKey());
+            }
+        }
+        return specialPoints;
+    }
+
+    private boolean isSpecialIndex(int[][] indices) {
+        if (indices == null) return false;
+        for (int[] idx : indices) {
+            if ((idx[0] == 1 && idx[1] == 8) || (idx[0] == 2 && idx[1] == 13) ||
+                    (idx[0] == 3 && idx[1] == 18) || (idx[0] == 0 && idx[1] % 5 == 0)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /* 이동 가능한 위치 계산 */

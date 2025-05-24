@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Stack;
 
 public class Piece {
-
     private int[] position;
     private boolean isGrouped;
     private boolean isFinished;
