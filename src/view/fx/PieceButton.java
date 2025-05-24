@@ -1,5 +1,6 @@
 package view.fx;
 
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -39,8 +40,8 @@ public class PieceButton extends Button implements PieceButtonBase {
     public void setPos(int x, int y) {
         this.pos = new int[]{x, y};
     }
-    @Override
-    public void setPixelPosition(BoardPoint center) {
+
+    public void setPixelPosition(Point2D center) {
         setLayoutX(center.x - 10);
         setLayoutY(center.y - 10);
     }
