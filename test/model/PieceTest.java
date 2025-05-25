@@ -11,12 +11,10 @@ import org.junit.jupiter.api.Test;
 class PieceTest {
 
     private Piece piece;
-    private Player owner;
 
     @BeforeEach
     void setUp() {
         piece = new Piece();
-        owner = new Player(1, List.of(piece));
     }
 
     @AfterEach
