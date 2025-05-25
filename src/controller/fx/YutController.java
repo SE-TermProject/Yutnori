@@ -13,7 +13,6 @@ import view.fx.PieceButton;
 import view.fx.CandidatePieceButton;
 
 import javafx.event.ActionEvent;
-import javafx.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +20,7 @@ public class YutController {
     private final AppManager appManager;
     private final Game game;
     private final YutBoard board;
+    private boolean hasNonBonusYut = false;
 
     public YutController(AppManager appManager, int sides, int playerCount, int pieceCount, YutBoard board) {
         this.appManager = appManager;
@@ -34,6 +34,13 @@ public class YutController {
 
         setupThrowButtons();
         setupInitialPieceButtons();
+    }
+
+    private void updateResultPanel(List<YutResult> results) {
+        List<String> names = results.stream()
+                .map(YutResult::getKoreanName)
+                .toList();
+        board.updateResultList(names);
     }
 
     private void setupThrowButtons() {
@@ -67,8 +74,8 @@ public class YutController {
         board.setPieceButtons(pieceButtons);
     }
 
-    private List<view.swing.PieceButton> generateInitialPieceButtons() {
-        List<view.swing.PieceButton> pieceButtons = new ArrayList<>();
+    private List<PieceButton> generateInitialPieceButtons() {
+        List<PieceButton> pieceButtons = new ArrayList<>();
         int startX = 630, startY = 200;
         int playerGapY = 40, pieceGapX = 30;
 
@@ -90,7 +97,7 @@ public class YutController {
                 btn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        board.getEndPiece().setEnabled(false);
+                        board.getEndPiece().setDisabled(true);
                         /* 말 선택 */
                         System.out.print("Piece clicked - " );
                         if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
@@ -113,7 +120,7 @@ public class YutController {
                             if(game.getCurrentPlayer().getPieces().contains(piece)) { // 현재 차례인 사용자의 말이라면
                                 System.out.println("말이 선택되었습니다.");
 
-                                board.getThrowButton().setEnabled(false);
+                                board.getThrowButton().setDisabled(true);
 
                                 // 이동 가능 위치 버튼 생성 및 표시
                                 List<CandidatePieceButton> previewButtons = generatePossiblePieceButtons(piece);
@@ -136,9 +143,9 @@ public class YutController {
                                             System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
                                             String winnerName = "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex());
                                             int choice = board.showGameOverDialog(winnerName);
-                                            SwingUtilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
+                                            Utilities.getWindowAncestor(board).dispose(); // 현재 게임 창 닫기
 
-                                            if (choice == JOptionPane.YES_OPTION) {
+                                            if (choice == OptionPane.YES_OPTION) {
                                                 appManager.restartGame();  // 다시 시작
                                             } else {
                                                 appManager.exitGame(); // 완전 종료
@@ -150,7 +157,7 @@ public class YutController {
                                             board.updateTurnLabel(game.getCurrentPlayer().getId());
                                             hasNonBonusYut = false;
                                             enableManualThrowButtons(true);
-                                            board.getThrowButton().setEnabled(true);
+                                            board.getThrowButton().setDisabled(false);
                                             updateResultPanel(game.getYutResults());
                                         } else {
                                             updateResultPanel(game.getYutResults());
