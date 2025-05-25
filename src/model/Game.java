@@ -39,11 +39,6 @@ public class Game {
         return currentPlayerIndex;
     }
 
-    /* 게임 시작 로그 출력 */
-    public void startGame() {
-        System.out.println("게임 시작합니다.");
-    }
-
     /* 현재 플레이어 반환 */
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);

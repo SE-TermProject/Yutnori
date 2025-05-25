@@ -340,11 +340,6 @@ public class Board {
         return pathIndexToPoint(path);
     }
 
-    /* 실제 말 이동 처리 */
-    public void movePieceTo() {
-
-    }
-
     /* 중심점인지 확인 */
     private boolean isCenterPoint(int x, int y) {
         List<int[]> centerPoints = new ArrayList<>(); // 중심점 인덱스

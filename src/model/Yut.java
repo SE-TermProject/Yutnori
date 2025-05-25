@@ -27,11 +27,6 @@ public class Yut {
         return result.toString();
     }
 
-    /* 마지막으로 던진 윷 결과 반환 */
-    public YutResult getResult() {
-        return result;
-    }
-
     /* 지정 윷 던지기 -> 결과 반환 */
     public void setManualResult(YutResult result) {
         this.result = result;
