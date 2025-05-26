@@ -360,7 +360,7 @@ public class Board {
     }
 
     /* 중심점인지 확인 */
-    private boolean isCenterPoint(int x, int y) {
+    public boolean isCenterPoint(int x, int y) {
         List<int[]> centerPoints = new ArrayList<>(); // 중심점 인덱스
         for(int i = 1; i <= numSides - 2; i++) {
             centerPoints.add(new int[]{i, i * 5 + 3});
@@ -375,7 +375,7 @@ public class Board {
     }
 
     /* path index list -> point list 변환 */
-    private List<BoardPoint> pathIndexToPoint(List<int[]> pathIdx) {
+    public List<BoardPoint> pathIndexToPoint(List<int[]> pathIdx) {
         List<BoardPoint> result = new ArrayList<>();
 
         for (int[] targetIdx : pathIdx) {
