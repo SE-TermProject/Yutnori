@@ -3,6 +3,7 @@ package view.fx;
 import controller.fx.BoardLayoutCalculator;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.geometry.*;
 import javafx.scene.canvas.*;
 import javafx.scene.control.*;
@@ -337,11 +338,13 @@ public class YutBoard extends Pane {
 
     /* 메시지 창 띄우기 */
     public void showMessageDialog(String message, String title) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 
     /* 말이 도착 지점에 도착할 수 있는 경우 내보내기 버튼 활성화 */
