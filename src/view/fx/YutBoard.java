@@ -2,32 +2,18 @@ package view.fx;
 
 import controller.fx.BoardLayoutCalculator;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.animation.*;
+import javafx.geometry.*;
+import javafx.scene.canvas.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.text.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import model.Board;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
-import java.util.Optional;
 
 public class YutBoard extends BorderPane {
     private Pane boardLayer;
@@ -43,12 +29,14 @@ public class YutBoard extends BorderPane {
     private final List<PieceButton> pieceButtons = new ArrayList<>();
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
     private Set<Point2D> specialPoints = new HashSet<>();
-    private int numSides;
+    private final int numSides;
     private Board board;
+    private Canvas boardCanvas;
 
-    public YutBoard() {
+    public YutBoard(int numSides) {
         this.setPrefSize(1100, 700);
 
+        this.numSides = numSides;
         setupBoardLayer();
         setupSidePanel();
         this.setCenter(boardLayer);
@@ -58,6 +46,11 @@ public class YutBoard extends BorderPane {
     private void setupBoardLayer() {
         boardLayer = new Pane();
         boardLayer.setPrefSize(700, 700);
+
+        boardCanvas = new Canvas(700, 700);
+        boardLayer.getChildren().add(boardCanvas);
+
+        drawBoard(boardCanvas.getGraphicsContext2D());
     }
 
     private void setupSidePanel() {
@@ -126,20 +119,14 @@ public class YutBoard extends BorderPane {
     public Button getEndPiece() { return endPiece; }
     public Button getOutButton() { return outButton; }
 
-    public void setNumSides(int numSides) {
-        this.numSides = numSides;
-    }
-
-    public int getNumSides() { return numSides; }
-
     public void setBoard(Board board) {
         this.board = board;
     }
 
     /* setter */
     public void setPieceButtons(List<PieceButton> pieceButtons) {
-        this.getChildren().removeAll(this.pieceButtons);
-        this.getChildren().addAll(pieceButtons);
+        boardLayer.getChildren().removeAll(this.pieceButtons);
+        boardLayer.getChildren().addAll(pieceButtons);
         this.pieceButtons.clear();
         this.pieceButtons.addAll(pieceButtons);
     }
@@ -196,7 +183,7 @@ public class YutBoard extends BorderPane {
     public void showCandidateButtons(List<CandidatePieceButton> possiblePieceButtons) {
         deletePieceButton(candidatePieceButtons);
         for (CandidatePieceButton pieceButton : possiblePieceButtons) {
-            this.getChildren().add(pieceButton);
+            boardLayer.getChildren().add(pieceButton);
         }
         this.candidatePieceButtons.clear();
         this.candidatePieceButtons.addAll(possiblePieceButtons);
@@ -228,7 +215,7 @@ public class YutBoard extends BorderPane {
     /* 선택한 말이 이동할 수 있는 후보 칸 버튼 클릭 시 동작 연결 */
     public void moveActionToCandidates(List<CandidatePieceButton> buttons, Consumer<CandidatePieceButton> onClick) {
         for (CandidatePieceButton button : buttons) {
-            this.getChildren().add(button);
+            boardLayer.getChildren().add(button);
             button.toFront();
             button.setOnAction(e -> onClick.accept(button));
         }
@@ -257,8 +244,10 @@ public class YutBoard extends BorderPane {
             for (Point2D p : mids) drawCircle(g, p.getX(), p.getY(), size);
         }
 
+
         // 출발 텍스트 표시
         Point2D start = layout.findStartPoint(vertices);
+        System.err.println("666");
         String label = "출발";
 
         Font font = new Font("SansSerif", 16);

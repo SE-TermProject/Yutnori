@@ -15,8 +15,8 @@ public class BoardLayoutCalculator {
         this.radius = radius;
     }
 
-    public java.util.List<Point2D> calculateVertices() {
-        java.util.List<Point2D> vertices = new ArrayList<>();
+    public List<Point2D> calculateVertices() {
+        List<Point2D> vertices = new ArrayList<>();
         double startAngle;
         switch (numSides) {
             case 4: startAngle = Math.PI / 4; break;
@@ -35,8 +35,8 @@ public class BoardLayoutCalculator {
         return vertices;
     }
 
-    public java.util.List<Point2D> calculateIntermediatePoints(Point2D from, Point2D to, int divisions, boolean includeEnds) {
-        java.util.List<Point2D> points = new ArrayList<>();
+    public List<Point2D> calculateIntermediatePoints(Point2D from, Point2D to, int divisions, boolean includeEnds) {
+        List<Point2D> points = new ArrayList<>();
         int start = includeEnds ? 0 : 1;
         int end = includeEnds ? divisions : divisions - 1;
 
@@ -51,7 +51,12 @@ public class BoardLayoutCalculator {
     }
 
     public Point2D findStartPoint(List<Point2D> vertices) {
-        Point2D start = vertices.get(0);
+        if (vertices.isEmpty()) {
+            System.err.println("startPoint를 찾을 수 없습니다. 리스트가 비어 있습니다.");
+        }
+
+        Point2D start = vertices.getFirst();
+
         for (Point2D point : vertices) {
             if ((numSides == 6 && point.getY() > start.getY()) ||
                     (numSides == 5 && point.getY() >= start.getY() && point.getX() >= start.getX()) ||
