@@ -164,7 +164,7 @@ public class YutBoard extends BorderPane {
     }
 
     /* 말 옆에 player 라벨 달기 */
-    public void addPlayerLabel(int playerId, int x, int y, Pane boardLayer) {
+    public void addPlayerLabel(int playerId, double x, double y, Pane boardLayer) {
         char playerChar = (char) ('A' + playerId);
         Label label = new Label(String.valueOf(playerChar));
 
