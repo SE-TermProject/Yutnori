@@ -97,4 +97,10 @@ public class PieceButton extends JButton implements PieceButtonBase {
         this.currentColor = Color.GRAY;
         repaint();
     }
+
+    public void initializeView(int currentX, int startY) {
+        this.setBounds(currentX, startY, 20, 20);
+        this.setPos(currentX, startY);
+        this.setEnabled(true);
+    }
 }

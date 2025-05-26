@@ -180,9 +180,7 @@ public class YutController {
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 pieceToButtonMap.put(piece, btn);
-                btn.setBounds(currentX, startY, 20, 20);
-                btn.setPos(currentX, startY);
-                btn.setEnabled(true);
+                btn.initializeView(currentX, startY);
 
                 if (leftmostBtn == null) {
                     leftmostBtn = btn;
@@ -509,17 +507,16 @@ public class YutController {
 
     private void handleGetoutButtonClick(PieceButton btn) {
         List<Piece> groupedPieces = btn.getPiece().getPieceGroup();
-        if(groupedPieces.size() == 0) {
+
+        if(groupedPieces.isEmpty()) {
             btn.getPiece().setFinished(true);
-            btn.setBounds(btn.getPos()[0], btn.getPos()[1], 20, 20);
-            btn.setOutColor();
+            board.showPieceAsFinished(btn);
             return;
         }
-        for (int i = 0; i <  groupedPieces.size(); i++) {
-            PieceButton _btn = pieceToButtonMap.get(groupedPieces.get(i));
-            _btn.getPiece().setFinished(true);
-            _btn.setBounds(_btn.getPos()[0], _btn.getPos()[1], 20, 20);
-            _btn.setOutColor();
+        for (Piece piece : groupedPieces) {
+            piece.setFinished(true);
+            PieceButton groupedBtn = pieceToButtonMap.get(piece);
+            board.showPieceAsFinished(groupedBtn);
         }
     }
 

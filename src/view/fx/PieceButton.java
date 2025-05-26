@@ -76,4 +76,11 @@ public class PieceButton extends Button implements PieceButtonBase {
         applyCss();
         layout();
     }
+
+    public void initializeView(int currentX, int startY) {
+        this.setLayoutX(currentX);
+        this.setLayoutY(startY);
+        this.setPos(currentX, startY);
+        this.setDisable(false);
+    }
 }
