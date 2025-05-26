@@ -15,7 +15,7 @@ import model.Board;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class YutBoard extends BorderPane {
+public class YutBoard extends Pane {
     private Pane boardLayer;
     private VBox sidePanel;
     private HBox resultPanel;
@@ -35,12 +35,17 @@ public class YutBoard extends BorderPane {
 
     public YutBoard(int numSides) {
         this.setPrefSize(1100, 700);
-
         this.numSides = numSides;
         setupBoardLayer();
         setupSidePanel();
-        this.setCenter(boardLayer);  // 윷놀이 말판
-        this.setRight(sidePanel);  // 플레이어 말
+
+        boardLayer.setLayoutX(50);
+        boardLayer.setLayoutY(50);
+
+        sidePanel.setLayoutX(650);  // ← 왼쪽으로 더 당기고 싶으면 숫자 줄이기
+        sidePanel.setLayoutY(400);  // 이미 아래로 내렸으니 유지
+
+        this.getChildren().addAll(boardLayer, sidePanel);
     }
 
     private void setupBoardLayer() {
@@ -54,9 +59,10 @@ public class YutBoard extends BorderPane {
     }
 
     private void setupSidePanel() {
-        sidePanel = new VBox(20);
-        sidePanel.setPadding(new Insets(300, 20, 20, -90));
-        sidePanel.setPrefWidth(400);
+        sidePanel = new VBox(5);                  // 간격 줄이기
+        sidePanel.setPrefWidth(280);              // 폭 조정
+        sidePanel.setPrefHeight(260);             // 높이 제한
+        sidePanel.setPadding(new Insets(10));     // 여백 최소화
 
         // 윷 던지기 버튼
         throwButton = createButton("랜덤 윷 던지기", 300);
