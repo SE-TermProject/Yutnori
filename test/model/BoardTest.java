@@ -15,7 +15,7 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board(5, new ArrayList<>());
+        board = new Board(5);
         List<Player> players = new ArrayList<>();
 
         for (int i = 0; i < 2; i++) {
