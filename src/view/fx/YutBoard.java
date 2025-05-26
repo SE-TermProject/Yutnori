@@ -140,8 +140,8 @@ public class YutBoard extends BorderPane {
 
     /* setter */
     public void setPieceButtons(List<PieceButton> pieceButtons) {
-        this.getChildren().removeAll(this.pieceButtons);
-        this.getChildren().addAll(pieceButtons);
+        boardLayer.getChildren().removeAll(this.pieceButtons);
+        boardLayer.getChildren().addAll(pieceButtons);
         this.pieceButtons.clear();
         this.pieceButtons.addAll(pieceButtons);
     }
@@ -198,7 +198,7 @@ public class YutBoard extends BorderPane {
     public void showCandidateButtons(List<CandidatePieceButton> possiblePieceButtons) {
         deletePieceButton(candidatePieceButtons);
         for (CandidatePieceButton pieceButton : possiblePieceButtons) {
-            this.getChildren().add(pieceButton);
+            boardLayer.getChildren().add(pieceButton);
         }
         this.candidatePieceButtons.clear();
         this.candidatePieceButtons.addAll(possiblePieceButtons);
@@ -230,7 +230,7 @@ public class YutBoard extends BorderPane {
     /* 선택한 말이 이동할 수 있는 후보 칸 버튼 클릭 시 동작 연결 */
     public void moveActionToCandidates(List<CandidatePieceButton> buttons, Consumer<CandidatePieceButton> onClick) {
         for (CandidatePieceButton button : buttons) {
-            this.getChildren().add(button);
+            boardLayer.getChildren().add(button);
             button.toFront();
             button.setOnAction(e -> onClick.accept(button));
         }
