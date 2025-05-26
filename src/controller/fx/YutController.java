@@ -69,11 +69,11 @@ public class YutController {
 
     private List<PieceButton> generateInitialPieceButtons() {
         List<PieceButton> pieceButtons = new ArrayList<>();
-        double startX = 630, startY = 200;
+        int startX = 630, startY = 200;
         double playerGapY = 40, pieceGapX = 30;
 
         for (Player player : game.getPlayers()) {
-            double currentX = startX;
+            int currentX = startX;
             PieceButton leftmostBtn = null;
 
             for (Piece piece : player.getPieces()) {
@@ -83,6 +83,7 @@ public class YutController {
                 btn.setLayoutY(startY);
                 btn.setPrefWidth(20);
                 btn.setPrefHeight(20);
+                btn.setPos(currentX, startY);
                 btn.setDisable(false);
 
                 if (leftmostBtn == null) {
