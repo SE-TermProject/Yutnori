@@ -362,6 +362,24 @@ public class YutController {
         }
     }
 
+    /* 상대방의 말을 잡기 */
+    private void catchPiece(Piece otherPiece) {
+        if (otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
+            List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
+            for (Piece grouped : group) {
+                System.out.println("그룹화 풀기");
+                grouped.removeGroupedPiece();
+                grouped.resetPosition();
+                board.updatePiecePosition(pieceToButtonMap.get(grouped));
+            }
+            game.getBoard().catchPiece(group);
+        } else {
+            otherPiece.resetPosition();
+            board.updatePiecePosition(pieceToButtonMap.get(otherPiece));
+            game.getBoard().catchPiece(otherPiece);
+        }
+    }
+
     private boolean isGroupedOrCatched(Piece otherPiece, PieceButton selectedPiece) {
         // 둘 중 하나 이상이 이미 끝난 말이라면 false
         if (otherPiece.isFinished() || selectedPiece.getPiece().isFinished()) return false;
