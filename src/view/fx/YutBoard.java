@@ -182,7 +182,9 @@ public class YutBoard extends BorderPane {
     public void showCandidateButtons(List<CandidatePieceButton> possiblePieceButtons) {
         deletePieceButton(candidatePieceButtons);
         for (CandidatePieceButton pieceButton : possiblePieceButtons) {
-            boardLayer.getChildren().add(pieceButton);
+            if (!boardLayer.getChildren().contains(pieceButton)) {
+                boardLayer.getChildren().add(pieceButton);
+            }
         }
         this.candidatePieceButtons.clear();
         this.candidatePieceButtons.addAll(possiblePieceButtons);
@@ -191,14 +193,14 @@ public class YutBoard extends BorderPane {
     /* 후보 칸 버튼들을 화면에서 제거하고, 내부 리스트에서도 제거 */
     public void deletePieceButton(List<CandidatePieceButton> possiblePieceButtons) {
         for (CandidatePieceButton btn : new ArrayList<>(possiblePieceButtons)) {
-            this.getChildren().remove(btn);                          // 화면에서 제거
-            this.candidatePieceButtons.remove(btn);             // 실제 말 리스트에서도 제거 시도
+            boardLayer.getChildren().remove(btn);                          // 화면에서 제거
         }
         // JavaFX는 자동으로 레이아웃 및 화면 갱신하므로 repaint() 별도 호출 불필요
+        this.candidatePieceButtons.clear();
     }
 
     /* 이동하는 말(pieceButton)의 위치를 업데이트하며 화면에 반영 */
-    public void updatePiecePosition(view.fx.PieceButton btn) {
+    public void updatePiecePosition(PieceButton btn) {
         System.out.println("호출");
         int startX, startY;
         if(btn != null){
@@ -214,9 +216,14 @@ public class YutBoard extends BorderPane {
     /* 선택한 말이 이동할 수 있는 후보 칸 버튼 클릭 시 동작 연결 */
     public void moveActionToCandidates(List<CandidatePieceButton> buttons, Consumer<CandidatePieceButton> onClick) {
         for (CandidatePieceButton button : buttons) {
-            boardLayer.getChildren().add(button);
+            if (!boardLayer.getChildren().contains(button)) {
+                boardLayer.getChildren().add(button);
+            }
             button.toFront();
-            button.setOnAction(e -> onClick.accept(button));
+            button.setOnAction(e -> {
+                onClick.accept(button);                       // 말 이동 등 로직 실행
+                deletePieceButton(candidatePieceButtons);     // 후보 칸 버튼 제거
+            });
         }
     }
 
