@@ -16,8 +16,7 @@ public class AppManager {
 
     public void startGame(int sides, int playerCount, int pieceCount) {
         YutBoard board = new YutBoard(sides);
-        YutController yutController = new YutController(this, sides, playerCount, pieceCount, board);
-        yutController.initializeGameUI();
+        new YutController(this, sides, playerCount, pieceCount, board);
 
         Scene scene = new Scene(board, 1100, 700);
         primaryStage.setScene(scene);
