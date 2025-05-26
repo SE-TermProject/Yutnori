@@ -39,8 +39,8 @@ public class YutBoard extends BorderPane {
         this.numSides = numSides;
         setupBoardLayer();
         setupSidePanel();
-        this.setCenter(boardLayer);
-        this.setRight(sidePanel);
+        this.setCenter(boardLayer);  // 윷놀이 말판
+        this.setRight(sidePanel);  // 플레이어 말
     }
 
     private void setupBoardLayer() {
@@ -54,8 +54,8 @@ public class YutBoard extends BorderPane {
     }
 
     private void setupSidePanel() {
-        sidePanel = new VBox(10);
-        sidePanel.setPadding(new Insets(20));
+        sidePanel = new VBox(20);
+        sidePanel.setPadding(new Insets(300, 20, 20, -90));
         sidePanel.setPrefWidth(400);
 
         // 윷 던지기 버튼
@@ -232,8 +232,6 @@ public class YutBoard extends BorderPane {
 
         BoardLayoutCalculator layout = new BoardLayoutCalculator(numSides, center, radius);
         List<Point2D> vertices = layout.calculateVertices();
-        System.out.println(vertices.size());
-        System.out.println(vertices);
 
         for (Point2D vertex : vertices) {
             List<Point2D> mids = layout.calculateIntermediatePoints(vertex, center, 3, false);
