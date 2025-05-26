@@ -17,16 +17,18 @@ class YutTest {
 
     @Test
     void getRandomResult() {
-        String resultStr = yut.getRandomResult();
+        YutResult resultStr = yut.getRandomResult();
         assertNotNull(resultStr);
     }
 
     @Test
     void setManualResult() {
-        yut.setManualResult(YutResult.GUL);
-        assertEquals(YutResult.GUL, yut.getResult());
+        YutResult yutResult;
 
-        yut.setManualResult(YutResult.MO);
-        assertEquals(YutResult.MO, yut.getResult());
+        yutResult = yut.setManualResult(YutResult.GUL);
+        assertEquals(YutResult.GUL, yutResult);
+
+        yutResult = yut.setManualResult(YutResult.MO);
+        assertEquals(YutResult.MO, yutResult);
     }
 }

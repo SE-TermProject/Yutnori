@@ -33,8 +33,9 @@ class BoardTest {
 
     @Test
     void indexToPoint() {
+        // 존재하는 점이어야 함
         BoardPoint point = board.indexToPoint(new int[]{0, 5});
-        assertNotNull(point);  // 존재하는 점이어야 함
+        assertNotNull(point);
 
         point = board.indexToPoint(new int[]{2, 14});
         assertNotNull(point);
@@ -44,6 +45,19 @@ class BoardTest {
 
         point = board.indexToPoint(new int[]{2, 16});
         assertNotNull(point);
+
+        // 존재하지 않는 점이어야 함
+        point = board.indexToPoint(new int[]{0, -1});
+        assertNull(point);
+
+        point = board.indexToPoint(new int[]{0, 27});
+        assertNull(point);
+
+        point = board.indexToPoint(new int[]{2, 17});
+        assertNull(point);
+
+        point = board.indexToPoint(new int[]{3, 19});
+        assertNull(point);
     }
 
     @Test

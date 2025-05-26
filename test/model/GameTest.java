@@ -27,7 +27,10 @@ class GameTest {
         // 윷을 두 번 던짐
         game.throwYut();
         game.throwYut();
-        assertTrue(game.getYutResults().size() == 2);
+        assertEquals(2, game.getYutResults().size());
+
+        game.throwYut();
+        assertEquals(3, game.getYutResults().size());
     }
 
     @Test
