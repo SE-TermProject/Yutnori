@@ -22,10 +22,6 @@ class YutTest {
     }
 
     @Test
-    void getResult() {
-    }
-
-    @Test
     void setManualResult() {
         yut.setManualResult(YutResult.GUL);
         assertEquals(YutResult.GUL, yut.getResult());
