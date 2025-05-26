@@ -48,7 +48,7 @@ public class YutController {
 
             if (!result.isBonusTurn()) hasNonBonusYut = true;
 
-            if (game.getYutResults().get(0) == YutResult.BackDo
+            if (game.getYutResults().getFirst() == YutResult.BackDo
                     && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
                 int[] pos = p.getPosition();
                 return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
@@ -108,7 +108,7 @@ public class YutController {
                         System.out.println("아직 이동할 수 없습니다. 보너스 턴이 끝날 때까지 기다려야 합니다.");
                     }
                     else {
-                        if (game.getYutResults().get(0) == YutResult.BackDo
+                        if (game.getYutResults().getFirst() == YutResult.BackDo
                                 && game.getCurrentPlayer().getPieces().stream()
                                     .filter(p -> !p.isFinished())
                                     .allMatch(p -> {
@@ -142,25 +142,15 @@ public class YutController {
                                         btn.getPiece().removeGroupedPiece();
                                         System.out.println("현재 플레이어가 모든 말을 도착시켰습니다! 승리!");
                                         String winnerName = "플레이어 " + (char) ('A' + game.getCurrentPlayerIndex());
-
-                                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                        alert.setTitle("게임 종료");
-                                        alert.setHeaderText(winnerName + "승리!");
-                                        alert.setContentText("게임을 다시 시작하시겠습니까?");
-
-                                        ButtonType restartButton = new ButtonType("재시작", ButtonBar.ButtonData.YES);
-                                        ButtonType exitButton = new ButtonType("종료", ButtonBar.ButtonData.NO);
-                                        alert.getButtonTypes().setAll(restartButton, exitButton);
-
-                                        Optional<ButtonType> result = alert.showAndWait();
+                                        int result = board.showGameOverDialog(winnerName);
 
                                         Stage stage = (Stage) board.getScene().getWindow();
                                         stage.close();
 
-                                        if (result.isPresent() && result.get() == restartButton) {
-                                            appManager.restartGame();  // 다시 시작
+                                        if (result == 0) {
+                                            appManager.restartGame();  // 재시작
                                         } else {
-                                            appManager.exitGame(); // 완전 종료
+                                            appManager.exitGame();     // 종료
                                         }
                                     }
 
@@ -441,7 +431,7 @@ public class YutController {
             hasNonBonusYut = true;
         }
 
-        if (game.getYutResults().get(0) == YutResult.BackDo
+        if (game.getYutResults().getFirst() == YutResult.BackDo
                 && game.getCurrentPlayer().getPieces().stream().filter(p -> !p.isFinished()).allMatch(p -> {
             int[] pos = p.getPosition();
             return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);

@@ -6,6 +6,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -45,6 +46,7 @@ public class YutBoard extends BorderPane {
     private Set<Point2D> specialPoints = new HashSet<>();
     private int numSides;
     private Board board;
+    private Canvas boardCanvas;
 
     public YutBoard() {
         this.setPrefSize(1100, 700);
@@ -58,6 +60,11 @@ public class YutBoard extends BorderPane {
     private void setupBoardLayer() {
         boardLayer = new Pane();
         boardLayer.setPrefSize(700, 700);
+
+        boardCanvas = new Canvas(700, 700);
+        boardLayer.getChildren().add(boardCanvas);
+
+        drawBoard(boardCanvas.getGraphicsContext2D());
     }
 
     private void setupSidePanel() {
@@ -243,13 +250,17 @@ public class YutBoard extends BorderPane {
 
         drawCircle(g, center.getX(), center.getY(), size);
 
+        System.err.println("111");
         BoardLayoutCalculator layout = new BoardLayoutCalculator(numSides, center, radius);
+        System.err.println("222");
         List<Point2D> vertices = layout.calculateVertices();
 
+        System.err.println("333");
         for (Point2D vertex : vertices) {
             List<Point2D> mids = layout.calculateIntermediatePoints(vertex, center, 3, false);
             for (Point2D p : mids) drawCircle(g, p.getX(), p.getY(), size);
         }
+        System.err.println("444");
 
         for (int i = 0; i < vertices.size(); i++) {
             List<Point2D> mids = layout.calculateIntermediatePoints(
@@ -257,8 +268,11 @@ public class YutBoard extends BorderPane {
             for (Point2D p : mids) drawCircle(g, p.getX(), p.getY(), size);
         }
 
+        System.err.println("555");
+
         // 출발 텍스트 표시
         Point2D start = layout.findStartPoint(vertices);
+        System.err.println("666");
         String label = "출발";
 
         Font font = new Font("SansSerif", 16);
