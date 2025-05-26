@@ -22,6 +22,7 @@ public class AppManager {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Yutnori");
         primaryStage.show();
+        primaryStage.centerOnScreen();
     }
 
     public void restartGame() {
