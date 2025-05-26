@@ -527,7 +527,7 @@ public class YutController {
         board.getThrowBackdo().setEnabled(enabled);
         board.getThrowDo().setEnabled(enabled);
         board.getThrowGae().setEnabled(enabled);
-        board.getThrowGeol().setEnabled(enabled);
+        board.getThrowGul().setEnabled(enabled);
         board.getThrowYut().setEnabled(enabled);
         board.getThrowMo().setEnabled(enabled);
     }
