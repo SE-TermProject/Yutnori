@@ -22,7 +22,11 @@ public class PieceButton extends Button implements PieceButtonBase {
         setShape(new Circle(10));
         setMinSize(20, 20);
         setMaxSize(20, 20);
-        setStyle("-fx-background-color: " + toRgbString(currentColor));
+        setStyle("-fx-background-color: " + toRgbString(currentColor) + ";" +
+                "-fx-text-fill: black;" +  // 텍스트 색상
+                "-fx-font-weight: bold;" +
+                "-fx-alignment: center;" +
+                "-fx-padding: 0;");
     }
 
     @Override
@@ -71,8 +75,11 @@ public class PieceButton extends Button implements PieceButtonBase {
     }
 
     public void updateGroupVisual(int groupSize) {
-        setText("그룹 " + groupSize); // 예: 텍스트 변경
-        setStyle("-fx-background-color: lightblue;"); // 스타일 변경
+        if (groupSize > 1) {
+            this.setText(String.valueOf(groupSize));  // 가운데에 숫자 표시
+        } else {
+            this.setText("");  // 혼자일 땐 숫자 제거
+        }
         applyCss();
         layout();
     }
