@@ -6,22 +6,10 @@ import java.util.List;
 public class Board {
     private final int numSides;
     private final Map<BoardPoint, int[][]> coordinateToIndexMap = new HashMap<>();
-    private final List<Player> players;
 
-    public Board(int numSides, List<Player> players) {
+    public Board(int numSides) {
         this.numSides = numSides;
-        this.players = new ArrayList<>(players);
         initializeCoordinateMap();
-    }
-
-    /* getter */
-    public int getPlayerCount() {
-        return players.size();
-    }
-
-    /* getter */
-    public List<Player> getPlayers() {
-        return players;
     }
 
     /* getter */
@@ -121,10 +109,8 @@ public class Board {
     private boolean isSpecialIndex(int[][] indices) {
         if (indices == null) return false;
         for (int[] idx : indices) {
-            if ((idx[0] == 1 && idx[1] == 8) || (idx[0] == 2 && idx[1] == 13) ||
-                    (idx[0] == 3 && idx[1] == 18) || (idx[0] == 0 && idx[1] % 5 == 0)) {
+            if (idx[1] == 5 * idx[0] + 3 || idx[0] == 0 && idx[1] % 5 == 0)
                 return true;
-            }
         }
         return false;
     }
@@ -352,11 +338,6 @@ public class Board {
         }
 
         return pathIndexToPoint(path);
-    }
-
-    /* 실제 말 이동 처리 */
-    public void movePieceTo() {
-
     }
 
     /* 중심점인지 확인 */

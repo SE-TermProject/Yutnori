@@ -15,22 +15,6 @@ public class Player {
         }
     }
 
-    /* index로 사용자의 piece 선택 */
-    public Piece selectPiece(int index) {
-        return pieces.get(index);
-    }
-
-    /* 아직 도착하지 않은 piece의 개수를 반환 */
-    public int checkRemainPieceNum() {
-        int count = 0;
-        for (Piece piece : pieces) {
-            if (!piece.isFinished()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     /* getter */
     public int getId() {
         return id;

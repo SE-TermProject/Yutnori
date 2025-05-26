@@ -10,7 +10,7 @@ public class Game {
     private final Yut yut = new Yut();
 
     public Game(int numSides, int playerCount, int pieceCount) {
-        this.board = new Board(numSides, new ArrayList<>());
+        this.board = new Board(numSides);
         this.players = new ArrayList<>();
         this.yutResults = new ArrayList<>();
         this.currentPlayerIndex = 0;
@@ -37,11 +37,6 @@ public class Game {
     /* getter */
     public int getCurrentPlayerIndex() {
         return currentPlayerIndex;
-    }
-
-    /* 게임 시작 로그 출력 */
-    public void startGame() {
-        System.out.println("게임 시작합니다.");
     }
 
     /* 현재 플레이어 반환 */
