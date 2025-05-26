@@ -22,9 +22,11 @@ public class YutController {
         this.appManager = appManager;
         this.game = new Game(sides, playerCount, pieceCount);
         this.board = board;
+
+        initializeGameUI();
     }
 
-    public void initializeGameUI() {
+    private void initializeGameUI() {
         setupThrowButtons();
         setupInitialPieceButtons();
     }
@@ -81,6 +83,7 @@ public class YutController {
                 pieceToButtonMap.put(piece, btn);
                 btn.setLayoutX(currentX);
                 btn.setLayoutY(startY);
+                btn.setPos(currentX, startY);
                 btn.setPrefWidth(20);
                 btn.setPrefHeight(20);
                 btn.setPos(currentX, startY);
@@ -472,17 +475,17 @@ public class YutController {
 
     private void handleGetoutButtonClick(PieceButton btn) {
         List<Piece> groupedPieces = btn.getPiece().getPieceGroup();
-        if(groupedPieces.isEmpty()) {
+
+        if (groupedPieces.isEmpty()) {
             btn.getPiece().setFinished(true);
-            btn.setPos(btn.getPos()[0], btn.getPos()[1]);
-            btn.setOutColor();
+            board.showPieceAsFinished(btn);
             return;
         }
+
         for (Piece piece : groupedPieces) {
-            PieceButton _btn = pieceToButtonMap.get(piece);
-            _btn.getPiece().setFinished(true);
-            _btn.setPos(_btn.getPos()[0], _btn.getPos()[1]);
-            _btn.setOutColor();
+            piece.setFinished(true);
+            PieceButton groupedBtn = pieceToButtonMap.get(piece);
+            board.showPieceAsFinished(groupedBtn);
         }
     }
 
