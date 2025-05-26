@@ -371,6 +371,7 @@ public class YutController {
                 grouped.removeGroupedPiece();
                 grouped.resetPosition();
                 board.updatePiecePosition(pieceToButtonMap.get(grouped));
+                pieceToButtonMap.get(grouped).updateGroupVisual(0);
             }
             game.getBoard().catchPiece(group);
         } else {
