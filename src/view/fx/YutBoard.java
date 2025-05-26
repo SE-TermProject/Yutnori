@@ -30,7 +30,6 @@ public class YutBoard extends Pane {
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
     private Set<Point2D> specialPoints = new HashSet<>();
     private final int numSides;
-    private Board board;
     private Canvas boardCanvas;
 
     public YutBoard(int numSides) {
@@ -123,10 +122,6 @@ public class YutBoard extends Pane {
     public Button getThrowYut() { return throwYut; }
     public Button getThrowMo() { return throwMo; }
     public Button getOutButton() { return outButton; }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
 
     /* setter */
     public void setPieceButtons(List<PieceButton> pieceButtons) {

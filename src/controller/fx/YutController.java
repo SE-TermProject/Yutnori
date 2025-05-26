@@ -25,8 +25,6 @@ public class YutController {
     }
 
     public void initializeGameUI() {
-        board.setBoard(game.getBoard());
-
         setupThrowButtons();
         setupInitialPieceButtons();
     }
