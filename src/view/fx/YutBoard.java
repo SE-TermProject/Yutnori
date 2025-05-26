@@ -44,13 +44,14 @@ public class YutBoard extends BorderPane {
     private final List<PieceButton> pieceButtons = new ArrayList<>();
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
     private Set<Point2D> specialPoints = new HashSet<>();
-    private int numSides;
+    private final int numSides;
     private Board board;
     private Canvas boardCanvas;
 
-    public YutBoard() {
+    public YutBoard(int numSides) {
         this.setPrefSize(1100, 700);
 
+        this.numSides = numSides;
         setupBoardLayer();
         setupSidePanel();
         this.setCenter(boardLayer);
@@ -132,12 +133,6 @@ public class YutBoard extends BorderPane {
     public Button getThrowMo() { return throwMo; }
     public Button getEndPiece() { return endPiece; }
     public Button getOutButton() { return outButton; }
-
-    public void setNumSides(int numSides) {
-        this.numSides = numSides;
-    }
-
-    public int getNumSides() { return numSides; }
 
     public void setBoard(Board board) {
         this.board = board;
@@ -250,17 +245,13 @@ public class YutBoard extends BorderPane {
 
         drawCircle(g, center.getX(), center.getY(), size);
 
-        System.err.println("111");
         BoardLayoutCalculator layout = new BoardLayoutCalculator(numSides, center, radius);
-        System.err.println("222");
         List<Point2D> vertices = layout.calculateVertices();
 
-        System.err.println("333");
         for (Point2D vertex : vertices) {
             List<Point2D> mids = layout.calculateIntermediatePoints(vertex, center, 3, false);
             for (Point2D p : mids) drawCircle(g, p.getX(), p.getY(), size);
         }
-        System.err.println("444");
 
         for (int i = 0; i < vertices.size(); i++) {
             List<Point2D> mids = layout.calculateIntermediatePoints(
@@ -268,7 +259,6 @@ public class YutBoard extends BorderPane {
             for (Point2D p : mids) drawCircle(g, p.getX(), p.getY(), size);
         }
 
-        System.err.println("555");
 
         // 출발 텍스트 표시
         Point2D start = layout.findStartPoint(vertices);
