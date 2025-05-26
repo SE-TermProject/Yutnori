@@ -27,8 +27,8 @@ public class BoardLayoutCalculator {
 
         for (int i = 0; i < numSides; i++) {
             double angle = 2 * Math.PI * i / numSides + startAngle;
-            double x = center.getX() + (radius * Math.cos(angle));
-            double y = center.getY() + (radius * Math.sin(angle));
+            double x = center.getX() + (int) (radius * Math.cos(angle));
+            double y = center.getY() + (int) (radius * Math.sin(angle));
             vertices.add(new Point2D(x, y));
         }
 
@@ -51,10 +51,6 @@ public class BoardLayoutCalculator {
     }
 
     public Point2D findStartPoint(List<Point2D> vertices) {
-        if (vertices.isEmpty()) {
-            System.err.println("startPoint를 찾을 수 없습니다. 리스트가 비어 있습니다.");
-        }
-
         Point2D start = vertices.getFirst();
 
         for (Point2D point : vertices) {
@@ -64,6 +60,7 @@ public class BoardLayoutCalculator {
                 start = point;
             }
         }
+
         return start;
     }
 }

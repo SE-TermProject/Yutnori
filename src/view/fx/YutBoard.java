@@ -232,6 +232,8 @@ public class YutBoard extends BorderPane {
 
         BoardLayoutCalculator layout = new BoardLayoutCalculator(numSides, center, radius);
         List<Point2D> vertices = layout.calculateVertices();
+        System.out.println(vertices.size());
+        System.out.println(vertices);
 
         for (Point2D vertex : vertices) {
             List<Point2D> mids = layout.calculateIntermediatePoints(vertex, center, 3, false);
@@ -247,7 +249,6 @@ public class YutBoard extends BorderPane {
 
         // 출발 텍스트 표시
         Point2D start = layout.findStartPoint(vertices);
-        System.err.println("666");
         String label = "출발";
 
         Font font = new Font("SansSerif", 16);
@@ -256,10 +257,10 @@ public class YutBoard extends BorderPane {
         Text text = new Text(label);
         text.setFont(font);
         double textWidth = text.getLayoutBounds().getWidth();
-        double textHeight = text.getLayoutBounds().getHeight();
+        double baselineOffset = text.getBaselineOffset();
 
         g.setFill(Color.BLACK);
-        g.fillText(label, start.getX() - textWidth / 2, start.getY() + textHeight / 2 - 6);
+        g.fillText(label, start.getX() - textWidth / 2, start.getY() + baselineOffset / 2 - 6);
     }
 
     /* 윷놀이 판의 각 칸 그리기 */
