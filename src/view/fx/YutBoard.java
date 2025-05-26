@@ -15,7 +15,7 @@ import model.Board;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class YutBoard extends BorderPane {
+public class YutBoard extends Pane {
     private Pane boardLayer;
     private VBox sidePanel;
     private HBox resultPanel;
@@ -30,17 +30,21 @@ public class YutBoard extends BorderPane {
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
     private Set<Point2D> specialPoints = new HashSet<>();
     private final int numSides;
-    private Board board;
     private Canvas boardCanvas;
 
     public YutBoard(int numSides) {
         this.setPrefSize(1100, 700);
-
         this.numSides = numSides;
         setupBoardLayer();
         setupSidePanel();
-        this.setCenter(boardLayer);
-        this.setRight(sidePanel);
+
+        boardLayer.setLayoutX(50);
+        boardLayer.setLayoutY(50);
+
+        sidePanel.setLayoutX(650);  // ← 왼쪽으로 더 당기고 싶으면 숫자 줄이기
+        sidePanel.setLayoutY(400);  // 이미 아래로 내렸으니 유지
+
+        this.getChildren().addAll(boardLayer, sidePanel);
     }
 
     private void setupBoardLayer() {
@@ -54,9 +58,10 @@ public class YutBoard extends BorderPane {
     }
 
     private void setupSidePanel() {
-        sidePanel = new VBox(10);
-        sidePanel.setPadding(new Insets(20));
-        sidePanel.setPrefWidth(400);
+        sidePanel = new VBox(5);                  // 간격 줄이기
+        sidePanel.setPrefWidth(280);              // 폭 조정
+        sidePanel.setPrefHeight(260);             // 높이 제한
+        sidePanel.setPadding(new Insets(10));     // 여백 최소화
 
         // 윷 던지기 버튼
         throwButton = createButton("랜덤 윷 던지기", 300);
@@ -117,10 +122,6 @@ public class YutBoard extends BorderPane {
     public Button getThrowYut() { return throwYut; }
     public Button getThrowMo() { return throwMo; }
     public Button getOutButton() { return outButton; }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
 
     /* setter */
     public void setPieceButtons(List<PieceButton> pieceButtons) {
@@ -261,10 +262,10 @@ public class YutBoard extends BorderPane {
         Text text = new Text(label);
         text.setFont(font);
         double textWidth = text.getLayoutBounds().getWidth();
-        double textHeight = text.getLayoutBounds().getHeight();
+        double baselineOffset = text.getBaselineOffset();
 
         g.setFill(Color.BLACK);
-        g.fillText(label, start.getX() - textWidth / 2, start.getY() + textHeight / 2 - 6);
+        g.fillText(label, start.getX() - textWidth / 2, start.getY() + baselineOffset / 2 - 6);
     }
 
     /* 윷놀이 판의 각 칸 그리기 */

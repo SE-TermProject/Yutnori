@@ -15,7 +15,7 @@ public class YutBoard extends JPanel {
 
     private JLabel resultLabel;
     private JButton throwButton;
-    private JButton throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
+    private JButton throwBackdo, throwDo, throwGae, throwGul, throwYut, throwMo;
     private JButton endPiece;
     private JLabel turnLabel;
     private JPanel resultPanel;
@@ -55,7 +55,7 @@ public class YutBoard extends JPanel {
         throwBackdo = createManualThrowButton("빽도", 605, y, w, h);
         throwDo = createManualThrowButton("도", 665, y, w, h);
         throwGae = createManualThrowButton("개", 725, y, w, h);
-        throwGeol = createManualThrowButton("걸", 785, y, w, h);
+        throwGul = createManualThrowButton("걸", 785, y, w, h);
         throwYut = createManualThrowButton("윷", 845, y, w, h);
         throwMo = createManualThrowButton("모", 905, y, w, h);
     }
@@ -127,7 +127,7 @@ public class YutBoard extends JPanel {
     public JButton getThrowBackdo() { return throwBackdo; }
     public JButton getThrowDo() { return throwDo; }
     public JButton getThrowGae() { return throwGae; }
-    public JButton getThrowGeol() { return throwGeol; }
+    public JButton getThrowGul() { return throwGul; }
     public JButton getThrowYut() { return throwYut; }
     public JButton getThrowMo() { return throwMo; }
     public JButton getEndPiece() { return endPiece; }
@@ -160,7 +160,7 @@ public class YutBoard extends JPanel {
             case "BackDo" -> throwBackdo;
             case "DO" -> throwDo;
             case "GAE" -> throwGae;
-            case "GUL" -> throwGeol;
+            case "GUL" -> throwGul;
             case "YUT" -> throwYut;
             case "MO" -> throwMo;
             default -> throw new IllegalArgumentException("알 수 없는 윷 결과: " + resultName);
@@ -189,7 +189,7 @@ public class YutBoard extends JPanel {
         throwBackdo.setEnabled(enabled);
         throwDo.setEnabled(enabled);
         throwGae.setEnabled(enabled);
-        throwGeol.setEnabled(enabled);
+        throwGul.setEnabled(enabled);
         throwYut.setEnabled(enabled);
         throwMo.setEnabled(enabled);
     }

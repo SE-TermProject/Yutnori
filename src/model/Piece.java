@@ -185,13 +185,4 @@ public class Piece {
         }
         System.out.println();
     }
-
-    /* 가장 최근 위치 반환 -> stack peek */
-    public int[] peekPrePosition() { return prePositions.peek(); }
-
-    /* 이동 이력 추가 -> stack push */
-    public void pushPrePosition(int[] prePosition) { this.prePositions.push(prePosition); }
-
-    /* 이동 이력 제거 -> stack pop */
-    public int[] popPrePosition(int prePosition) { return this.prePositions.pop(); }
 }
