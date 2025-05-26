@@ -1,7 +1,6 @@
 package controller.fx;
 
 import javafx.geometry.Point2D;
-import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import app.fx.AppManager;
@@ -11,7 +10,6 @@ import view.fx.PieceButton;
 import view.fx.CandidatePieceButton;
 
 import java.util.*;
-import java.util.List;
 
 public class YutController {
     private final AppManager appManager;
