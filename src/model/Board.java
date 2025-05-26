@@ -109,7 +109,8 @@ public class Board {
     private boolean isSpecialIndex(int[][] indices) {
         if (indices == null) return false;
         for (int[] idx : indices) {
-            if (idx[1] == 5 * idx[0] + 3 || idx[0] == 0 && idx[1] % 5 == 0)
+            if ((idx[0] != 0 && idx[1] == 5 * idx[0] + 3) ||
+                (idx[0] == 0 && idx[1] % 5 == 0))
                 return true;
         }
         return false;
