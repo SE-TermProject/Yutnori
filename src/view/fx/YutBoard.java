@@ -116,7 +116,6 @@ public class YutBoard extends BorderPane {
     public Button getThrowGeol() { return throwGeol; }
     public Button getThrowYut() { return throwYut; }
     public Button getThrowMo() { return throwMo; }
-    public Button getEndPiece() { return endPiece; }
     public Button getOutButton() { return outButton; }
 
     public void setBoard(Board board) {
@@ -247,7 +246,6 @@ public class YutBoard extends BorderPane {
 
         // 출발 텍스트 표시
         Point2D start = layout.findStartPoint(vertices);
-        System.err.println("666");
         String label = "출발";
 
         Font font = new Font("SansSerif", 16);
@@ -340,7 +338,7 @@ public class YutBoard extends BorderPane {
 
     /* 말이 도착 지점에 도착할 수 있는 경우 내보내기 버튼 활성화 */
     public void showGetoutButton(Runnable onClick) {
-        Button btn = getEndPiece(); // JavaFX Button 반환한다고 가정
+        Button btn = getOutButton(); // JavaFX Button 반환한다고 가정
         btn.setDisable(false); // 활성화
 
         // 기존 이벤트 핸들러 제거
