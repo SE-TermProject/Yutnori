@@ -322,20 +322,7 @@ public class YutController {
                     } else {
                         System.out.println("상대 팀의 말을 잡습니다.");
 
-                        if (otherPiece.isGrouped() && !otherPiece.getPieceGroup().isEmpty()) {
-                            List<Piece> group = new ArrayList<>(otherPiece.getPieceGroup());
-                            for (Piece grouped : group) {
-                                System.out.println("그룹화 풀기");
-                                grouped.removeGroupedPiece();
-                                grouped.resetPosition();
-                                board.updatePiecePosition(pieceToButtonMap.get(grouped));
-                            }
-                            game.getBoard().catchPiece(group);
-                        } else {
-                            otherPiece.resetPosition();
-                            board.updatePiecePosition(pieceToButtonMap.get(otherPiece));
-                            game.getBoard().catchPiece(otherPiece);
-                        }
+                        catchPiece(otherPiece);
                         board.showMessageDialog("타 플레이어의 말을 잡았네요! 윷을 한 번 더 던지세요!", "타 플레이어의 말 잡기");
                         catchPieces = true;
                     }
