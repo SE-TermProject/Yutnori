@@ -33,6 +33,9 @@ public class PieceButton extends Button implements PieceButtonBase {
     public int getPlayerId() {
         return playerId;
     }
+    public int[] getPosition() {
+        return piece.getPosition();
+    }
     @Override
     public int[] getPos() { return pos; }
 
@@ -65,5 +68,12 @@ public class PieceButton extends Button implements PieceButtonBase {
     @Override
     public void setOutColor() {
         this.setStyle("-fx-background-color: gray;");
+    }
+
+    public void updateGroupVisual(int groupSize) {
+        setText("그룹 " + groupSize); // 예: 텍스트 변경
+        setStyle("-fx-background-color: lightblue;"); // 스타일 변경
+        applyCss();
+        layout();
     }
 }
