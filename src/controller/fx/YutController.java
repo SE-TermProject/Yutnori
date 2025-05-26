@@ -22,11 +22,11 @@ public class YutController {
         this.appManager = appManager;
         this.game = new Game(sides, playerCount, pieceCount);
         this.board = board;
+
+        initializeGameUI();
     }
 
-    public void initializeGameUI() {
-        board.setBoard(game.getBoard());
-
+    private void initializeGameUI() {
         setupThrowButtons();
         setupInitialPieceButtons();
     }
@@ -71,11 +71,11 @@ public class YutController {
 
     private List<PieceButton> generateInitialPieceButtons() {
         List<PieceButton> pieceButtons = new ArrayList<>();
-        double startX = 630, startY = 200;
+        int startX = 630, startY = 200;
         double playerGapY = 40, pieceGapX = 30;
 
         for (Player player : game.getPlayers()) {
-            double currentX = startX;
+            int currentX = startX;
             PieceButton leftmostBtn = null;
 
             for (Piece piece : player.getPieces()) {
@@ -83,6 +83,7 @@ public class YutController {
                 pieceToButtonMap.put(piece, btn);
                 btn.setLayoutX(currentX);
                 btn.setLayoutY(startY);
+                btn.setPos(currentX, startY);
                 btn.setPrefWidth(20);
                 btn.setPrefHeight(20);
                 btn.setDisable(false);
@@ -92,7 +93,7 @@ public class YutController {
                 }
 
                 btn.setOnAction(event -> {
-                    board.getEndPiece().setDisable(true);
+                    board.getOutButton().setDisable(true);
                     /* 말 선택 */
                     System.out.print("Piece clicked - " );
                     if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
@@ -212,7 +213,7 @@ public class YutController {
         System.out.println("말의 출발 지점: [" + from[0] + ", " + from[1] + "]");
 
         board.moveActionToCandidates(possiblePosButtons, destinationBtn -> {
-            board.getEndPiece().setDisable(true);
+            board.getOutButton().setDisable(true);
             if (game.getYutResults().isEmpty()) return;
 
             board.deletePieceButton(possiblePosButtons);  // 버튼 제거
@@ -473,17 +474,17 @@ public class YutController {
 
     private void handleGetoutButtonClick(PieceButton btn) {
         List<Piece> groupedPieces = btn.getPiece().getPieceGroup();
-        if(groupedPieces.isEmpty()) {
+
+        if (groupedPieces.isEmpty()) {
             btn.getPiece().setFinished(true);
-            btn.setPos(btn.getPos()[0], btn.getPos()[1]);
-            btn.setOutColor();
+            board.showPieceAsFinished(btn);
             return;
         }
+
         for (Piece piece : groupedPieces) {
-            PieceButton _btn = pieceToButtonMap.get(piece);
-            _btn.getPiece().setFinished(true);
-            _btn.setPos(_btn.getPos()[0], _btn.getPos()[1]);
-            _btn.setOutColor();
+            piece.setFinished(true);
+            PieceButton groupedBtn = pieceToButtonMap.get(piece);
+            board.showPieceAsFinished(groupedBtn);
         }
     }
 

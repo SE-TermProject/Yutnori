@@ -20,7 +20,7 @@ public class CandidatePieceButton extends Button implements CandidatePieceButton
         this.yutResult = yutResult;
 
         setPrefSize(30, 30);
-        setStyle("-fx-background-color: transparent;");
+        setStyle("-fx-background-color: transparent; -fx-padding: 0; -fx-border-insets: 0; -fx-background-insets: 0;");
         setGraphic(createCircle());
     }
 
