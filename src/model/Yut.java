@@ -8,7 +8,7 @@ public class Yut {
     private YutResult result;
 
     /* 랜덤 윷 던지기 -> 결과 반환 */
-    public String getRandomResult() {
+    public YutResult getRandomResult() {
         int rand = random.nextInt(100); // 0부터 31까지의 랜덤 값 생성
 
         if (rand < 6.25) {
@@ -24,11 +24,12 @@ public class Yut {
         } else {
             result = YutResult.MO;
         }
-        return result.toString();
+        return result;
     }
 
     /* 지정 윷 던지기 -> 결과 반환 */
-    public void setManualResult(YutResult result) {
+    public YutResult setManualResult(YutResult result) {
         this.result = result;
+        return result;
     }
 }
