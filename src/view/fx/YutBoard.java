@@ -299,13 +299,6 @@ public class YutBoard extends Pane {
         g2.strokeOval(x - drawSize / 2, y - drawSize / 2, drawSize, drawSize);
     }
 
-    private boolean containsApproximately(Set<Point2D> points, Point2D target, double tolerance) {
-        for (Point2D p : points) {
-            if (p.distance(target) < tolerance) return true;
-        }
-        return false;
-    }
-
     /* 말&그룹화된 말들 한 칸씩 이동 */
     public void animatePieceMovement(List<PieceButton> groupButtons, List<Point2D> path, Runnable onComplete) {
         Timeline timeline = new Timeline();
