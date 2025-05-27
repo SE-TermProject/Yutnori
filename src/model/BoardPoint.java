@@ -3,8 +3,8 @@ package model;
 import java.util.Objects;
 
 public class BoardPoint {
-    public final int x;
-    public final int y;
+    private final int x;
+    private final int y;
 
     public BoardPoint(int x, int y) {
         this.x = x;
