@@ -4,7 +4,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import model.BoardPoint;
 import model.Piece;
 import view.PieceButtonBase;
 
