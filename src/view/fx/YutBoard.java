@@ -35,6 +35,9 @@ public class YutBoard extends Pane {
     public YutBoard(int numSides) {
         this.setPrefSize(1100, 700);
         this.numSides = numSides;
+    }
+
+    public void setupPane() {
         setupBoardLayer();
         setupSidePanel();
 
