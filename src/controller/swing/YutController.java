@@ -32,8 +32,6 @@ public class YutController {
     }
 
     private void initializeGameUI() {
-        board.setNumSides(game.getBoard().getNumSides());
-
         Set<Point> specialUIPoints = game.getBoard().getSpecialPoints()
                 .stream()
                 .map(BoardPoint::toAwtPoint)

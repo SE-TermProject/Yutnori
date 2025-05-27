@@ -10,7 +10,7 @@ public class AppManager {
     }
 
     public void startGame(int sides, int playerCount, int pieceCount) {
-        YutBoard board = new YutBoard();
+        YutBoard board = new YutBoard(sides);
         new YutController(this, sides, playerCount, pieceCount, board);
     }
 
