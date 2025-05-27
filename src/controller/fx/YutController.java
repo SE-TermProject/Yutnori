@@ -10,6 +10,8 @@ import view.fx.PieceButton;
 import view.fx.CandidatePieceButton;
 
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class YutController {
     private final AppManager appManager;
@@ -27,6 +29,13 @@ public class YutController {
     }
 
     private void initializeGameUI() {
+        Set<Point2D> specialUIPoints = game.getBoard().getSpecialPoints()
+                .stream()
+                .map(BoardPoint::toJavaPoint)
+                .collect(Collectors.toSet());
+        System.out.println("initializeGameUI - special: " + specialUIPoints);
+        board.setSpecialPoints(specialUIPoints);
+
         board.setupPane();
         setupThrowButtons();
         setupInitialPieceButtons();
@@ -233,7 +242,7 @@ public class YutController {
         List<Point2D> piecePointPath = new ArrayList<>();
 
         for (BoardPoint piecePoint : piecePath) {
-            piecePointPath.add(new Point2D(piecePoint.getX(), piecePoint.getY()));
+            piecePointPath.add(piecePoint.toJavaPoint());
         }
 
         return piecePointPath;

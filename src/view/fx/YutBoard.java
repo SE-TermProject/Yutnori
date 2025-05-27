@@ -107,6 +107,10 @@ public class YutBoard extends Pane {
         return boardLayer;
     }
 
+    public void setSpecialPoints(Set<Point2D> specialUIPoints) {
+        this.specialPoints = specialUIPoints;
+    }
+
     public void updateResultList(List<String> resultName) {
         resultPanel.getChildren().clear();
 
@@ -273,8 +277,9 @@ public class YutBoard extends Pane {
 
     /* 윷놀이 판의 각 칸 그리기 */
     private void drawCircle(GraphicsContext g2, double x, double y, double size) {
-        Point2D point = new Point2D(x, y);
+        Point2D point = new Point2D(Math.round(x), Math.round(y));
         boolean isSpecial = specialPoints.contains(point);
+        System.out.println("special: " + specialPoints);
 
         // 중심점/꼭짓점이면 사이즈 키우기
         double drawSize = size;
@@ -292,6 +297,13 @@ public class YutBoard extends Pane {
 
         g2.setStroke(Color.BLACK);
         g2.strokeOval(x - drawSize / 2, y - drawSize / 2, drawSize, drawSize);
+    }
+
+    private boolean containsApproximately(Set<Point2D> points, Point2D target, double tolerance) {
+        for (Point2D p : points) {
+            if (p.distance(target) < tolerance) return true;
+        }
+        return false;
     }
 
     /* 말&그룹화된 말들 한 칸씩 이동 */
