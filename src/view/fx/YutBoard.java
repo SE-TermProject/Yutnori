@@ -35,6 +35,9 @@ public class YutBoard extends Pane {
     public YutBoard(int numSides) {
         this.setPrefSize(1100, 700);
         this.numSides = numSides;
+    }
+
+    public void setupPane() {
         setupBoardLayer();
         setupSidePanel();
 
@@ -102,6 +105,10 @@ public class YutBoard extends Pane {
 
     public Pane getBoardLayer() {
         return boardLayer;
+    }
+
+    public void setSpecialPoints(Set<Point2D> specialUIPoints) {
+        this.specialPoints = specialUIPoints;
     }
 
     public void updateResultList(List<String> resultName) {
@@ -270,8 +277,9 @@ public class YutBoard extends Pane {
 
     /* 윷놀이 판의 각 칸 그리기 */
     private void drawCircle(GraphicsContext g2, double x, double y, double size) {
-        Point2D point = new Point2D(x, y);
+        Point2D point = new Point2D(Math.round(x), Math.round(y));
         boolean isSpecial = specialPoints.contains(point);
+        System.out.println("special: " + specialPoints);
 
         // 중심점/꼭짓점이면 사이즈 키우기
         double drawSize = size;
