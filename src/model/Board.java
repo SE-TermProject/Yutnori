@@ -371,7 +371,7 @@ public class Board {
         for (int i = 0; i < result.size(); i++) {
             BoardPoint p = result.get(i);
             int[] idx = pathIdx.get(i);
-            System.out.printf("%d번째: (%d, %d) || (%d, %d)%n", i, idx[0], idx[1], p.x, p.y);
+            System.out.printf("%d번째: (%d, %d) || (%d, %d)%n", i, idx[0], idx[1], p.getX(), p.getY());
         }
 
         return result;

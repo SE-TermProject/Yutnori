@@ -22,10 +22,11 @@ public class YutBoard extends JPanel {
 
     private final List<PieceButton> pieceButtons = new ArrayList<>();
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
-    private int numSides = 4;  // 기본값, 실제 값은 controller에서 설정
+    private final int numSides;
     private Set<Point> specialPoints = new HashSet<>();
 
-    public YutBoard() {
+    public YutBoard(int numSides) {
+        this.numSides = numSides;
         setLayout(null);
         initializeUI();
     }
@@ -131,13 +132,6 @@ public class YutBoard extends JPanel {
     public JButton getThrowYut() { return throwYut; }
     public JButton getThrowMo() { return throwMo; }
     public JButton getEndPiece() { return endPiece; }
-
-    /* setter */
-    public void setNumSides(int numSides) {
-        this.numSides = numSides;
-    }
-
-    public int getNumSides() { return numSides; }
 
     /* setter */
     public void setPieceButtons(List<PieceButton> pieceButtons) {
