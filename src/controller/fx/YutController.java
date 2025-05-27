@@ -55,7 +55,7 @@ public class YutController {
 
             if (!result.isBonusTurn()) hasNonBonusYut = true;
 
-            if (game.getYutResults().getFirst() == YutResult.BackDo
+            if (game.getYutResults().get(0) == YutResult.BackDo
                     && game.getCurrentPlayer().getPieces().stream().allMatch(p -> {
                 int[] pos = p.getPosition();
                 return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
@@ -117,7 +117,7 @@ public class YutController {
                         System.out.println("아직 이동할 수 없습니다. 보너스 턴이 끝날 때까지 기다려야 합니다.");
                     }
                     else {
-                        if (game.getYutResults().getFirst() == YutResult.BackDo
+                        if (game.getYutResults().get(0) == YutResult.BackDo
                                 && game.getCurrentPlayer().getPieces().stream()
                                     .filter(p -> !p.isFinished())
                                     .allMatch(p -> {
@@ -446,7 +446,7 @@ public class YutController {
             hasNonBonusYut = true;
         }
 
-        if (game.getYutResults().getFirst() == YutResult.BackDo
+        if (game.getYutResults().get(0) == YutResult.BackDo
                 && game.getCurrentPlayer().getPieces().stream().filter(p -> !p.isFinished()).allMatch(p -> {
             int[] pos = p.getPosition();
             return pos.length == 0 || (pos[0] == 0 && pos[1] == 0);
