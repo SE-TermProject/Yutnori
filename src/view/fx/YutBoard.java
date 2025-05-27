@@ -11,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import model.Board;
 
 import java.util.*;
 import java.util.function.Consumer;

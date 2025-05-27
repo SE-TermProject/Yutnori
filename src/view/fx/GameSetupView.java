@@ -36,6 +36,7 @@ public class GameSetupView {
         primaryStage.setScene(scene);
         primaryStage.setTitle("게임 설정");
         primaryStage.show();
+        primaryStage.centerOnScreen();
     }
 
     private ComboBox<Integer> shapeBox;
