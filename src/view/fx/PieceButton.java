@@ -33,9 +33,6 @@ public class PieceButton extends Button implements PieceButtonBase {
         return piece;
     }
     @Override
-    public int getPlayerId() {
-        return playerId;
-    }
     public int[] getPosition() {
         return piece.getPosition();
     }
@@ -83,6 +80,7 @@ public class PieceButton extends Button implements PieceButtonBase {
         layout();
     }
 
+    @Override
     public void initializeView(int currentX, int startY) {
         this.setLayoutX(currentX);
         this.setLayoutY(startY);

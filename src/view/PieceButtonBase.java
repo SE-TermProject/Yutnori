@@ -4,10 +4,9 @@ import model.Piece;
 
 public interface PieceButtonBase {
     Piece getPiece();
-    int getPlayerId();
-
+    int[] getPosition();
     void setPos(int x, int y);
     int[] getPos();
-
     void setOutColor();
+    void initializeView(int currentX, int startY);
 }

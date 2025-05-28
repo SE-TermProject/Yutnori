@@ -31,9 +31,6 @@ public class PieceButton extends JButton implements PieceButtonBase {
         return piece;
     }
     @Override
-    public int getPlayerId() {
-        return playerId;
-    }
     public int[] getPosition() {
         return piece.getPosition();
     }
@@ -98,6 +95,7 @@ public class PieceButton extends JButton implements PieceButtonBase {
         repaint();
     }
 
+    @Override
     public void initializeView(int currentX, int startY) {
         this.setBounds(currentX, startY, 20, 20);
         this.setPos(currentX, startY);
