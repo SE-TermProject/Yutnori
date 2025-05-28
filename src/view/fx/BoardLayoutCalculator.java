@@ -51,7 +51,7 @@ public class BoardLayoutCalculator {
     }
 
     public Point2D findStartPoint(List<Point2D> vertices) {
-        Point2D start = vertices.getFirst();
+        Point2D start = vertices.get(0);
 
         for (Point2D point : vertices) {
             if ((numSides == 6 && point.getY() > start.getY()) ||
