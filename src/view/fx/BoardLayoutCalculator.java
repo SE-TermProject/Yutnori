@@ -1,4 +1,4 @@
-package controller.fx;
+package view.fx;
 
 import javafx.geometry.Point2D;
 import java.util.ArrayList;

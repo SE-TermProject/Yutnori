@@ -1,7 +1,5 @@
 package view.fx;
 
-import controller.fx.BoardLayoutCalculator;
-
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.geometry.*;

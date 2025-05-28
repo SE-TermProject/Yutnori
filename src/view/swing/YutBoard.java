@@ -1,7 +1,5 @@
 package view.swing;
 
-import controller.swing.BoardLayoutCalculator;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
