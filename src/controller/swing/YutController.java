@@ -82,7 +82,7 @@ public class YutController {
     }
 
     private void pieceClick(PieceButton btn, Piece piece) {
-        board.getEndPiece().setEnabled(false);
+        board.getOutButton().setEnabled(false);
         /* 말 선택 */
         System.out.print("Piece clicked - " );
         if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
@@ -252,7 +252,7 @@ public class YutController {
         System.out.println("말의 출발 지점: [" + from[0] + ", " + from[1] + "]");
 
         board.moveActionToCandidates(possiblePosButtons, destinationBtn -> {
-            board.getEndPiece().setEnabled(false);
+            board.getOutButton().setEnabled(false);
             if (game.getYutResults().isEmpty()) return;
 
             board.deletePieceButton(possiblePosButtons);  // 버튼 제거

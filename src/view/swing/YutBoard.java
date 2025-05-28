@@ -14,7 +14,7 @@ public class YutBoard extends JPanel {
     private JLabel resultLabel;
     private JButton throwButton;
     private JButton throwBackdo, throwDo, throwGae, throwGul, throwYut, throwMo;
-    private JButton endPiece;
+    private JButton outButton;
     private JLabel turnLabel;
     private JPanel resultPanel;
 
@@ -33,7 +33,7 @@ public class YutBoard extends JPanel {
     private void initializeUI() {
         createThrowButtons();
         createManualThrowButtons();
-        createEndPieceButton();
+        createOutButton();
         createTurnInfoPanel();
         createResultPanel();
     }
@@ -66,11 +66,11 @@ public class YutBoard extends JPanel {
     }
 
     /* 내보내기 버튼 생성 */
-    private void createEndPieceButton() {
-        endPiece = new JButton("내보내기");
-        endPiece.setBounds(480, 550, 90, 40);
-        endPiece.setEnabled(false);
-        add(endPiece);
+    private void createOutButton() {
+        outButton = new JButton("내보내기");
+        outButton.setBounds(480, 550, 90, 40);
+        outButton.setEnabled(false);
+        add(outButton);
     }
 
     /* 현재 플레이어 순서 라벨 생성 */
@@ -129,7 +129,7 @@ public class YutBoard extends JPanel {
     public JButton getThrowGul() { return throwGul; }
     public JButton getThrowYut() { return throwYut; }
     public JButton getThrowMo() { return throwMo; }
-    public JButton getEndPiece() { return endPiece; }
+    public JButton getOutButton() { return outButton; }
 
     /* setter */
     public void setPieceButtons(List<PieceButton> pieceButtons) {
@@ -346,7 +346,7 @@ public class YutBoard extends JPanel {
 
     /* 말이 도착 지점에 도착할 수 있는 경우 내보내기 버튼 활성화 */
     public void showGetoutButton(Runnable onClick) {
-        JButton btn = getEndPiece();
+        JButton btn = getOutButton();
         btn.setEnabled(true);
         // 기존 리스너 제거
         for (ActionListener el : btn.getActionListeners()) {
