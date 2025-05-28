@@ -334,7 +334,7 @@ public class YutController {
         //그룹에 말이 추가된 후, 해당 PieceButton을 다시 그리도록 요청
         PieceButton pieceButton = pieceToButtonMap.get(selectedPiece.getPiece());
         if (pieceButton != null) {
-            pieceButton.updateGroupVisual(groupedPiece.size()); // 커스텀 메서드 추천
+            pieceButton.updateGroupVisual(groupedPiece.size());
         }
     }
 
