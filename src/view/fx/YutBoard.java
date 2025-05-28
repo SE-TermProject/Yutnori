@@ -22,7 +22,6 @@ public class YutBoard extends Pane {
     private Button throwButton;
     private Button throwBackdo, throwDo, throwGae, throwGeol, throwYut, throwMo;
     private Button outButton;
-    private Button endPiece;
 
     private final List<PieceButton> pieceButtons = new ArrayList<>();
     private final List<CandidatePieceButton> candidatePieceButtons = new ArrayList<>();
