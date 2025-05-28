@@ -1,6 +1,5 @@
 package view.swing;
 
-import model.BoardPoint;
 import model.YutResult;
 import view.CandidatePieceButtonBase;
 
@@ -66,13 +65,12 @@ public class CandidatePieceButton extends JButton implements CandidatePieceButto
         };
     }
 
-    @Override
-    public void setPixelPosition(BoardPoint center) {
+    public void setPixelPosition(Point center) {
         // 버튼 크기를 고려해서 중심에 배치되도록 보정
         int width = getPreferredSize().width;
         int height = getPreferredSize().height;
-        int adjustedX = center.x - width / 2;
-        int adjustedY = center.y - height / 2;
+        int adjustedX = (int) (center.getX() - width / 2);
+        int adjustedY = (int) (center.getY() - height / 2);
         setBounds(adjustedX, adjustedY, width, height);
     }
 }

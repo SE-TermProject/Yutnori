@@ -1,9 +1,9 @@
 package view.fx;
 
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import model.BoardPoint;
 import model.YutResult;
 import view.CandidatePieceButtonBase;
 
@@ -61,8 +61,7 @@ public class CandidatePieceButton extends Button implements CandidatePieceButton
         this.position[1] = position[1];
     }
 
-    @Override
-    public void setPixelPosition(BoardPoint center) {
+    public void setPixelPosition(Point2D center) {
         double x = center.getX() - getPrefWidth() / 2;
         double y = center.getY() - getPrefWidth() / 2;
         setLayoutX(x);
