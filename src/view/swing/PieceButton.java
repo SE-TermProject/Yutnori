@@ -1,12 +1,11 @@
 package view.swing;
 
 import model.Piece;
-import view.PieceButtonBase;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class PieceButton extends JButton implements PieceButtonBase {
+public class PieceButton extends JButton {
     private final Piece piece;
     private final int playerId;  // 플레이어 식별용
     private Color currentColor;
@@ -26,20 +25,19 @@ public class PieceButton extends JButton implements PieceButtonBase {
         setOpaque(false);
     }
 
-    @Override
+
     public Piece getPiece() {
         return piece;
     }
-    @Override
     public int[] getPosition() {
         return piece.getPosition();
     }
-    @Override
+
     public int[] getPos() {
         return pos;
     }
 
-    @Override
+
     public void setPos(int x, int y) {
         this.pos = new int[]{x, y};
     }
@@ -89,13 +87,11 @@ public class PieceButton extends JButton implements PieceButtonBase {
         repaint();
     }
 
-    @Override
     public void setOutColor() {
         this.currentColor = Color.GRAY;
         repaint();
     }
 
-    @Override
     public void initializeView(int currentX, int startY) {
         this.setBounds(currentX, startY, 20, 20);
         this.setPos(currentX, startY);
