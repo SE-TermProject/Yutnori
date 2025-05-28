@@ -82,7 +82,7 @@ public class YutController {
     }
 
     private void pieceClick(PieceButton btn, Piece piece) {
-        board.getEndPiece().setEnabled(false);
+        board.getOutButton().setEnabled(false);
         /* 말 선택 */
         System.out.print("Piece clicked - " );
         if (game.getYutResults().isEmpty()) { // 윷 결과가 없다면
@@ -175,9 +175,7 @@ public class YutController {
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 pieceToButtonMap.put(piece, btn);
-                btn.setBounds(currentX, startY, 20, 20);
-                btn.setPos(currentX, startY);
-                btn.setEnabled(true);
+                btn.initializeView(currentX, startY);
 
                 if (leftmostBtn == null) {
                     leftmostBtn = btn;
@@ -235,7 +233,7 @@ public class YutController {
                 BoardPoint point = game.getBoard().indexToPoint(pos);
 
                 CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), yutResult);
-                btn.setPixelPosition(point);
+                btn.setPixelPosition(point.toAwtPoint());
                 btn.setEnabled(true);
                 possiblePosButtons.add(btn);
             }
@@ -254,7 +252,7 @@ public class YutController {
         System.out.println("말의 출발 지점: [" + from[0] + ", " + from[1] + "]");
 
         board.moveActionToCandidates(possiblePosButtons, destinationBtn -> {
-            board.getEndPiece().setEnabled(false);
+            board.getOutButton().setEnabled(false);
             if (game.getYutResults().isEmpty()) return;
 
             board.deletePieceButton(possiblePosButtons);  // 버튼 제거
@@ -504,17 +502,16 @@ public class YutController {
 
     private void handleGetoutButtonClick(PieceButton btn) {
         List<Piece> groupedPieces = btn.getPiece().getPieceGroup();
-        if(groupedPieces.size() == 0) {
+
+        if(groupedPieces.isEmpty()) {
             btn.getPiece().setFinished(true);
-            btn.setBounds(btn.getPos()[0], btn.getPos()[1], 20, 20);
-            btn.setOutColor();
+            board.showPieceAsFinished(btn);
             return;
         }
-        for (int i = 0; i <  groupedPieces.size(); i++) {
-            PieceButton _btn = pieceToButtonMap.get(groupedPieces.get(i));
-            _btn.getPiece().setFinished(true);
-            _btn.setBounds(_btn.getPos()[0], _btn.getPos()[1], 20, 20);
-            _btn.setOutColor();
+        for (Piece piece : groupedPieces) {
+            piece.setFinished(true);
+            PieceButton groupedBtn = pieceToButtonMap.get(piece);
+            board.showPieceAsFinished(groupedBtn);
         }
     }
 

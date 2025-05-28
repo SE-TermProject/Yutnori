@@ -5,9 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import model.Piece;
-import view.PieceButtonBase;
 
-public class PieceButton extends Button implements PieceButtonBase {
+public class PieceButton extends Button {
     private final Piece piece;
     private final int playerId;
     private Color currentColor;
@@ -28,21 +27,14 @@ public class PieceButton extends Button implements PieceButtonBase {
                 "-fx-padding: 0;");
     }
 
-    @Override
     public Piece getPiece() {
         return piece;
-    }
-    @Override
-    public int getPlayerId() {
-        return playerId;
     }
     public int[] getPosition() {
         return piece.getPosition();
     }
-    @Override
     public int[] getPos() { return pos; }
 
-    @Override
     public void setPos(int x, int y) {
         this.pos = new int[]{x, y};
     }
@@ -68,7 +60,6 @@ public class PieceButton extends Button implements PieceButtonBase {
                 (int)(color.getBlue() * 255) + ")";
     }
 
-    @Override
     public void setOutColor() {
         this.setStyle("-fx-background-color: gray;");
     }
@@ -81,5 +72,12 @@ public class PieceButton extends Button implements PieceButtonBase {
         }
         applyCss();
         layout();
+    }
+
+    public void initializeView(int currentX, int startY) {
+        this.setLayoutX(currentX);
+        this.setLayoutY(startY);
+        this.setPos(currentX, startY);
+        this.setDisable(false);
     }
 }

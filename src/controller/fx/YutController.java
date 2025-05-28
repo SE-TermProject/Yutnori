@@ -166,7 +166,7 @@ public class YutController {
     private List<PieceButton> generateInitialPieceButtons() {
         List<PieceButton> pieceButtons = new ArrayList<>();
         int startX = 630, startY = 200;
-        double playerGapY = 40, pieceGapX = 30;
+        int playerGapY = 40, pieceGapX = 30;
 
         for (Player player : game.getPlayers()) {
             int currentX = startX;
@@ -175,13 +175,7 @@ public class YutController {
             for (Piece piece : player.getPieces()) {
                 PieceButton btn = new PieceButton(piece, player.getId());
                 pieceToButtonMap.put(piece, btn);
-                btn.setLayoutX(currentX);
-                btn.setLayoutY(startY);
-                btn.setPos(currentX, startY);
-                btn.setPrefWidth(20);
-                btn.setPrefHeight(20);
-                btn.setPos(currentX, startY);
-                btn.setDisable(false);
+                btn.initializeView(currentX, startY);
 
                 if (leftmostBtn == null) {
                     leftmostBtn = btn;
@@ -234,7 +228,7 @@ public class YutController {
                 BoardPoint point = game.getBoard().indexToPoint(pos);
 
                 CandidatePieceButton btn = new CandidatePieceButton(pos, game.getCurrentPlayerIndex(), yutResult);
-                btn.setPixelPosition(point);
+                btn.setPixelPosition(point.toJavaPoint());
                 btn.setDisable(false);
                 possiblePosButtons.add(btn);
             }

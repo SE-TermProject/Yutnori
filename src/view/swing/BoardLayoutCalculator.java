@@ -1,4 +1,4 @@
-package controller.swing;
+package view.swing;
 
 import java.awt.*;
 import java.util.ArrayList;
