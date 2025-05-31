@@ -6,6 +6,7 @@
 2025.04.03 ~ 2025.05.28
 
 ## Files
+```
 📦src
  ┣ 📂app
  ┃ ┣ 📂fx
@@ -40,6 +41,7 @@
  ┃ ┃ ┣ 📜GameSetupView.java
  ┃ ┃ ┣ 📜PieceButton.java
  ┗ ┗ ┗ 📜YutBoard.java
+```
 
 ## Commit Convention
 타입(#이슈번호): 부연 설명 및 이유
