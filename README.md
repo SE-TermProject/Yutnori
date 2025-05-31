@@ -41,6 +41,13 @@
  ┃ ┃ ┣ 📜GameSetupView.java
  ┃ ┃ ┣ 📜PieceButton.java
  ┗ ┗ ┗ 📜YutBoard.java
+ 📦test
+ ┣ 📂model
+ ┃ ┣ 📜BoardTest.java
+ ┃ ┣ 📜GameTest.java
+ ┃ ┣ 📜PieceTest.java
+ ┃ ┗ 📜YutTest.java
+ ┗ 📜test.txt
 ```
 
 ## Commit Convention
