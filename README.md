@@ -3,7 +3,43 @@
 
 
 ## develop period
-2025.04.03 ~
+2025.04.03 ~ 2025.05.28
+
+## Files
+📦src
+ ┣ 📂app
+ ┃ ┣ 📂fx
+ ┃ ┃ ┣ 📜AppManager.java
+ ┃ ┃ ┗ 📜Main.java
+ ┃ ┗ 📂swing
+ ┃ ┃ ┣ 📜AppManager.java
+ ┃ ┃ ┗ 📜Main.java
+ ┣ 📂controller
+ ┃ ┣ 📂fx
+ ┃ ┃ ┗ 📜YutController.java
+ ┃ ┗ 📂swing
+ ┃ ┃ ┗ 📜YutController.java
+ ┣ 📂model
+ ┃ ┣ 📜Board.java
+ ┃ ┣ 📜BoardPoint.java
+ ┃ ┣ 📜Game.java
+ ┃ ┣ 📜Piece.java
+ ┃ ┣ 📜Player.java
+ ┃ ┣ 📜Yut.java
+ ┃ ┗ 📜YutResult.java
+ ┣ 📂view
+ ┃ ┣ 📂fx
+ ┃ ┃ ┣ 📜BoardLayoutCalculator.java
+ ┃ ┃ ┣ 📜CandidatePieceButton.java
+ ┃ ┃ ┣ 📜GameSetupView.java
+ ┃ ┃ ┣ 📜PieceButton.java
+ ┃ ┃ ┗ 📜YutBoard.java
+ ┃ ┗ 📂swing
+ ┃ ┃ ┣ 📜BoardLayoutCalculator.java
+ ┃ ┃ ┣ 📜CandidatePieceButton.java
+ ┃ ┃ ┣ 📜GameSetupView.java
+ ┃ ┃ ┣ 📜PieceButton.java
+ ┗ ┗ ┗ 📜YutBoard.java
 
 ## Commit Convention
 타입(#이슈번호): 부연 설명 및 이유
